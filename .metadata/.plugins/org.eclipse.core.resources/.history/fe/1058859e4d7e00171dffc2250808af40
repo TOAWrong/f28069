@@ -1,0 +1,88 @@
+#include	<header.h>
+#include	<extern.h>
+
+
+void SoftwareProtection()
+{
+	ErrCode.dword=0;
+	
+	// 소프트웨어 프로텍션 : 과전류 보호
+	if (Is_mag>OC_Level)
+	{
+		Err_SOC_Cnt++;
+		if (Err_SOC_Cnt>5)
+			ErrCode.dword=ERR_OC;
+	}	
+	else if (Is_mag>OC0_Level)
+	{
+			OC_Timer += Ts;
+			Err_SOC_Cnt=0;
+	}		
+	else
+	{
+			OC_Timer -= Ts;
+			Err_SOC_Cnt=0;
+	}		
+	if (OC_Timer<0.0)	
+		OC_Timer=0.0;
+	
+	if (OC_Timer>OC_TimeOut)
+		ErrCode.dword=ERR_OC0;
+		
+	// 소프트웨어 프로텍션 : 과전압 보호
+	if (Vdc>OV_Level)
+	{
+		Err_SOV_Cnt++;
+		if (Err_SOV_Cnt>5)
+			ErrCode.dword=ERR_OV;
+	}	
+	else if (Vdc>OV0_Level)
+	{
+		OV_Timer += Ts;
+		Err_SOV_Cnt=0;
+	}	
+	else
+	{
+		OV_Timer -= Ts;
+		Err_SOV_Cnt=0;
+	}	
+	if (OV_Timer<0.0)	
+		OV_Timer=0.0;
+	
+	if (OV_Timer>OV_TimeOut)
+		ErrCode.dword=ERR_OV0;
+
+	// 소프트웨어 프로텍션 :  저전압 보호
+	if (Vdc<UV_Level)
+	{
+		Err_SUV_Cnt++;
+		if (Err_SUV_Cnt>5)
+			ErrCode.dword=ERR_UV;
+	}	
+	else if (Vdc<UV0_Level)
+	{
+		UV_Timer += Ts;
+		Err_SUV_Cnt=0;
+	}	
+	else
+	{
+		UV_Timer -= Ts;
+		Err_SUV_Cnt=0;
+	}	
+	if (UV_Timer<0.0)	
+		UV_Timer=0.0;
+	
+	if (UV_Timer>UV_TimeOut)
+		ErrCode.dword=ERR_UV0;
+
+	// 소프트웨어 프로텍션 : 과속 보호
+	if (fabs(rpm)>OS_Level_rpm)
+			ErrCode.dword=ERR_OS;
+	else if (fabs(rpm)>OS0_Level_rpm)
+			OS_Timer += Ts;
+	else	OS_Timer -= Ts;				
+	if (OS_Timer<0.0)	
+			OS_Timer=0.0;
+	if (OS_Timer>OS_TimeOut)
+			ErrCode.dword=ERR_OS0;
+}	

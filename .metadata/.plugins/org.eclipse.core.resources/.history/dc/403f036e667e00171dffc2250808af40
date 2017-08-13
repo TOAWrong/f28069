@@ -1,0 +1,148 @@
+// Company 	: Eunwho Power Electonics  
+// FILE		: switching_irq.c
+// Project 	: KERI back2back inverter
+// PCB		: regen_dsp_110513 & regen_sen_110513
+// date		: 2011-0105	by Cheoung Soon-Gil
+// rev data : 2011.1013  cheoung soon gil
+
+#include        <header.h>
+#include        <extern.h>
+int dac_ch1 =0;
+int dac_ch2 =1;
+int dac_ch3 =3;
+int dac_ch4 =4;
+
+void MotorControlProc( )
+{
+	switch( motor_ctrl_mode )
+	{	
+	case 0:	vf_simple_control(); break;
+	case 1: slip_comp_scalar_ctrl();break;
+	default: break;
+	}
+}
+
+interrupt void MainPWM(void)
+{
+	unsigned int dac_data[4];
+	unsigned int xbus_in,temp; 
+	static int invt_PWM_Port_Set_flag = 0;
+	double scale1,scale2,scale3,scale4;
+
+#if TEST_ADC_CENTER
+	J8_2_SET;
+#endif
+
+	Speed_Calculation();
+
+//--- digital input
+	xbus_in = ZONE0_BUF[0x0050];   // debug
+
+	if(( protect_reg.bit.EX_TRIP == 1 )&&(( xbus_in & 0x0004 ) != 0 )) gPWMTripCode = TRIP_EXT_A;
+
+	xbus_in = ZONE0_BUF[0x0040] | 0xC0C0 ;   // 0x3f3f
+
+	temp = xbus_in & 0x00ff;
+	if((	protect_reg.bit.IGBT_FAULT  == 1)&& ( temp != 0x00ff )) 	gPWMTripCode = ERR_PWM_IGBT;	// debug_jsk
+
+	temp = xbus_in & 0xff00;
+	if((	protect_reg.bit.IGBT_FAULT2 == 1)&& ( temp != 0xff00 )) 	gPWMTripCode = ERR_PWM_IGBT;	// debug_jsk
+
+	if(gPWMTripCode){ 
+		gMachineState = STATE_TRIP; // trip_check시에 저장됨 
+		EPwm_All_Disable(); // converter PWM gate OFF
+	}
+
+	switch(gMachineState)
+	{
+	case STATE_READY:
+	case STATE_POWER_ON:
+	case STATE_TRIP:					
+		invt_PWM_Port_Set_flag = 0;
+		EPwm_All_Disable(); // converter PWM gate OFF
+		break;
+
+	case STATE_INIT_RUN:
+		if( invt_PWM_Port_Set_flag == 0 ){
+			EPwm_OSC_Enable();
+			invt_PWM_Port_Set_flag = 1;
+		}
+		else{
+			EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+			EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+			EPwm3Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+		}
+		break;
+
+	case STATE_RUN:
+	case STATE_GO_STOP:
+	case STATE_WAIT_BREAK_OFF:		
+
+		if( invt_PWM_Port_Set_flag == 0 ){
+			EPwm_OSC_Enable();
+			invt_PWM_Port_Set_flag = 1;
+		}
+		else{
+	    	VoltageEstimation();
+			MotorControlProc( );
+			SpaceVectorModulation(Vs_dq_ref);						
+			EPwm1Regs.CMPA.half.CMPA = DutyCount[u];
+			EPwm2Regs.CMPA.half.CMPA = DutyCount[v];
+			EPwm3Regs.CMPA.half.CMPA = DutyCount[w];
+		}
+		break;
+
+	default: 
+		invt_PWM_Port_Set_flag = 0;
+		EPwm_All_Disable(); // converter PWM gate OFF
+		break;
+	}
+
+//--- 	dac out 
+
+	ZONE7_BUF[0x60] = 7;
+	Nop();
+	ZONE7_BUF[0x60] = 3;
+	Nop();
+	Nop();
+
+    scale1 = 1/50.0;
+    scale2 = 1/50.0;
+    scale3 = 1/1.0;
+	scale4 = 1/1.0;
+
+//	dac_data[0] = (unsigned int )(( Is_abc[0] - 0.0 ) * scale1 * 204.8 + 2047); 
+//	dac_data[1] = (unsigned int )(( Is_abc[1] - 0.0 ) * scale2 * 204.8 + 2047); 
+//	dac_data[2] = (unsigned int )(( Vdc  - 500.0 ) * scale3  * 204.8 + 2047); 
+//	dac_data[3] = 0; 
+
+	dac_data[0] = adc_result[dac_ch1]; 
+	dac_data[1] = adc_result[dac_ch2]; 
+	dac_data[2] = adc_result[dac_ch3]; 
+	dac_data[3] = adc_result[dac_ch4]; 
+
+	ZONE0_BUF[0x60] = 7;
+	ZONE0_BUF[0x60] = 3; 
+	ZONE0_BUF[0x30] = dac_data[0] ;
+	ZONE0_BUF[0x32] = dac_data[1];
+	ZONE0_BUF[0x34] = dac_data[2];
+	ZONE0_BUF[0x36] = dac_data[3];
+	Nop(); Nop(); Nop();		// 지우지 말것 없으면 CH1과 CH4가 연동하여 작동함 
+	ZONE0_BUF[0x60] = 1;
+	ZONE0_BUF[0x60] = 7;
+
+//--- digital out
+
+	digital_out_proc();
+
+	EPwm1Regs.ETCLR.bit.INT = 1;	
+	PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;
+
+#if TEST_ADC_CENTER
+	J8_2_CLEAR;	// debug
+#endif
+
+}
+
+ // end of switching_irq.c 
+

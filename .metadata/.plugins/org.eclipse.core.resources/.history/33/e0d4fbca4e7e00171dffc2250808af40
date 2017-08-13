@@ -1,0 +1,3 @@
+fault_reset( union DIGITAL_FUNCTION function_flag )
+{
+	if( function_flag.bit.FAULT_RESET)

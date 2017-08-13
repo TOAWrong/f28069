@@ -1,0 +1,152 @@
+
+**** Build of configuration Debug for project singlePhaseInv ****
+
+/home/eunwho/ti/ccsv7/utils/bin/gmake -k all 
+Building file: ../Core_Speed_Calc.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="Core_Speed_Calc.d"  "../Core_Speed_Calc.c"
+Finished building: ../Core_Speed_Calc.c
+ 
+Building file: ../DS1307.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="DS1307.d"  "../DS1307.c"
+Finished building: ../DS1307.c
+ 
+Building file: ../I2C_eeprom.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="I2C_eeprom.d"  "../I2C_eeprom.c"
+Finished building: ../I2C_eeprom.c
+ 
+Building file: ../MonitorProc.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="MonitorProc.d"  "../MonitorProc.c"
+Finished building: ../MonitorProc.c
+ 
+Building file: ../ParameterSet.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="ParameterSet.d"  "../ParameterSet.c"
+Finished building: ../ParameterSet.c
+ 
+Building file: ../RefFunc.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="RefFunc.d"  "../RefFunc.c"
+Finished building: ../RefFunc.c
+ 
+Building file: ../Set_Par.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="Set_Par.d"  "../Set_Par.c"
+Finished building: ../Set_Par.c
+ 
+Building file: ../analog.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="analog.d"  "../analog.c"
+Finished building: ../analog.c
+ 
+Building file: ../code_group_all.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="code_group_all.d"  "../code_group_all.c"
+"../code_group_all.c", line 516: remark: parameter "cmd" was never referenced
+  int get_code_group8(int addr ,int cmd, CODE_INFO * codes)
+                                    ^
+
+Finished building: ../code_group_all.c
+ 
+Building file: ../code_proc.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="code_proc.d"  "../code_proc.c"
+"../code_proc.c", line 28: warning: statement is unreachable
+  	return 0;
+  	^
+
+"../code_proc.c", line 4: remark: parameter "cmd" was never referenced
+  int get_code_information(int address,int cmd , CODE_INFO *  codes)
+                                           ^
+
+"../code_proc.c", line 4: remark: parameter "codes" was never referenced
+  int get_code_information(int address,int cmd , CODE_INFO *  codes)
+                                                              ^
+
+Finished building: ../code_proc.c
+ 
+Building file: ../common_control.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="common_control.d"  "../common_control.c"
+"../common_control.c", line 10: remark: zero used for undefined preprocessing
+          identifier "MOTOR_CONTROL"
+  #if MOTOR_CONTROL
+      ^
+
+Finished building: ../common_control.c
+ 
+Building file: ../common_module.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="common_module.d"  "../common_module.c"
+Finished building: ../common_module.c
+ 
+Building file: ../digital_inout.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="digital_inout.d"  "../digital_inout.c"
+Finished building: ../digital_inout.c
+ 
+Building file: ../f28069GpioSetup.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="f28069GpioSetup.d"  "../f28069GpioSetup.c"
+Finished building: ../f28069GpioSetup.c
+ 
+Building file: ../main.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="main.d"  "../main.c"
+Finished building: ../main.c
+ 
+Building file: ../scia.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="scia.d"  "../scia.c"
+Finished building: ../scia.c
+ 
+Building file: ../serial_com.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="serial_com.d"  "../serial_com.c"
+Finished building: ../serial_com.c
+ 
+Building file: ../set_dac_point.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="set_dac_point.d"  "../set_dac_point.c"
+"../set_dac_point.c", line 4: remark: zero used for undefined preprocessing
+          identifier "USE_DAC_OUT"
+  #if USE_DAC_OUT
+      ^
+
+Finished building: ../set_dac_point.c
+ 
+Building file: ../svm.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="svm.d"  "../svm.c"
+Finished building: ../svm.c
+ 
+Building file: ../switching_irq.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="switching_irq.d"  "../switching_irq.c"
+Finished building: ../switching_irq.c
+ 
+Building file: ../trip_proc.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="trip_proc.d"  "../trip_proc.c"
+Finished building: ../trip_proc.c
+ 
+Building file: ../udd_timer_irq.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="udd_timer_irq.d"  "../udd_timer_irq.c"
+Finished building: ../udd_timer_irq.c
+ 
+Building file: ../vf_contol.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --include_path="/home/eunwho/f28069/singlePhaseInv/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="vf_contol.d"  "../vf_contol.c"
+Finished building: ../vf_contol.c
+ 
+Building target: singlePhaseInverter.out
+Invoking: C2000 Linker
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet -z -m"singlePhaseInverter.map" --stack_size=0x200 --warn_sections -i"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/lib" -i"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" -i"/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/lib" -i"/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/lib" -i"/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/lib" --priority --reread_libs --issue_remarks --verbose_diagnostics --xml_link_info="Example_2806xEPwmUpDownAQ_linkInfo.xml" --entry_point=code_start --rom_model -o "singlePhaseInverter.out" -lrts2800_fpu32_fast_supplement.lib -lrts2800_fpu32.lib "./Core_Speed_Calc.obj" "./DS1307.obj" "./F2806x_Adc.obj" "./F2806x_CodeStartBranch.obj" "./F2806x_CpuTimers.obj" "./F2806x_DefaultIsr.obj" "./F2806x_EPwm.obj" "./F2806x_GlobalVariableDefs.obj" "./F2806x_PieCtrl.obj" "./F2806x_PieVect.obj" "./F2806x_SysCtrl.obj" "./F2806x_usDelay.obj" "./I2C_eeprom.obj" "./MonitorProc.obj" "./ParameterSet.obj" "./RefFunc.obj" "./Set_Par.obj" "./analog.obj" "./code_group_all.obj" "./code_proc.obj" "./common_control.obj" "./common_module.obj" "./digital_inout.obj" "./f28069GpioSetup.obj" "./main.obj" "./scia.obj" "./serial_com.obj" "./set_dac_point.obj" "./svm.obj" "./switching_irq.obj" "./trip_proc.obj" "./udd_timer_irq.obj" "./vf_contol.obj" "../28065_RAM_lnk_jsk.cmd" "/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/cmd/F2806x_Headers_nonBIOS.cmd"  -lIQmath_fpu32.lib 
+Finished building target: singlePhaseInverter.out
+ 
+
+**** Build Finished ****

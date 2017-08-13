@@ -1,0 +1,21 @@
+
+**** Build of configuration Debug for project Example_2806xEPwmUpDownAQ ****
+
+/home/eunwho/ti/ccsv7/utils/bin/gmake -k all 
+Building file: ../sp28069GpioSetup.c
+Invoking: C2000 Compiler
+"/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --float_support=fpu32 --vcu_support=vcu0 --include_path="/home/eunwho/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.3.LTS/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/headers/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/IQmath/c28/include" --include_path="/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/libraries/math/FPUfastRTS/c28/include" --define="_DEBUG" --define="LARGE_MODEL" -g --diag_suppress=10063 --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --preproc_with_compile --preproc_dependency="sp28069GpioSetup.d"  "../sp28069GpioSetup.c"
+
+>> Compilation failure
+subdir_rules.mk:77: 'sp28069GpioSetup.obj' 타겟에 대한 명령이 실패했습니다
+"../sp28069GpioSetup.c", line 11: fatal error: cannot open source file
+          "header.h"
+  #include "header.h"
+                     ^
+
+1 catastrophic error detected in the compilation of "../sp28069GpioSetup.c".
+Compilation terminated.
+gmake: *** [sp28069GpioSetup.obj] 오류 1
+gmake: 오류로 'all' 타겟을 다시 만들지 못했습니다.
+
+**** Build Finished ****

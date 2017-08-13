@@ -1,0 +1,169 @@
+//
+// adc.c
+// 2012.04.12
+// Eunwho Power Electronics
+// by Cheoung Soon Gil
+
+#include	<header.h>
+#include	<extern.h>
+
+
+double ADC_Vdc;
+
+#if CONVERTER_ON
+double ADC_V_rs;
+double ADC_V_st;
+double ADC_V_tr;
+
+double ADC_I_r;
+double ADC_I_s;
+double ADC_I_t;
+#endif
+
+double ADC_I_u;
+double ADC_I_v;
+double ADC_V_w;
+
+void InitAdc()
+{
+   AdcRegs.ADCMAXCONV.all          = 15;     // 16 channel  
+   AdcRegs.ADCTRL1.bit.SUSMOD       = 0;
+   AdcRegs.ADCTRL1.bit.ACQ_PS       = 3;
+
+   AdcRegs.ADCTRL1.bit.CPS         = 1;
+   AdcRegs.ADCTRL1.bit.CONT_RUN    = 0;
+   AdcRegs.ADCTRL1.bit.SEQ_OVRD    = 0;
+   AdcRegs.ADCTRL1.bit.SEQ_CASC    = 1;   // Enable SOCA from ePWM to start SEQ1
+
+   AdcRegs.ADCCHSELSEQ1.bit.CONV00 = 0;    // I_U
+   AdcRegs.ADCCHSELSEQ1.bit.CONV01 = 1;    // I_V 
+
+   AdcRegs.ADCCHSELSEQ1.bit.CONV02 = 2;    //  AGND
+
+   AdcRegs.ADCCHSELSEQ1.bit.CONV03 = 3;    // I_R
+   AdcRegs.ADCCHSELSEQ2.bit.CONV04 = 4;    // I_S
+
+   AdcRegs.ADCCHSELSEQ2.bit.CONV05 = 5;    // AGND
+   
+   AdcRegs.ADCCHSELSEQ2.bit.CONV06 = 6;    // Ana_CMD_A
+   AdcRegs.ADCCHSELSEQ2.bit.CONV07 = 7;    // Ana_CMD_B
+
+   AdcRegs.ADCCHSELSEQ3.bit.CONV08 = 8;    // Vac-U
+   AdcRegs.ADCCHSELSEQ3.bit.CONV09 = 9;    // Vac-V
+   AdcRegs.ADCCHSELSEQ3.bit.CONV10 = 10;    // Vac-W
+
+   AdcRegs.ADCCHSELSEQ3.bit.CONV11 = 11;    // Vac_R
+   AdcRegs.ADCCHSELSEQ4.bit.CONV12 = 12;    // Vac_S
+   AdcRegs.ADCCHSELSEQ4.bit.CONV13 = 13;    // Vac_T
+
+   AdcRegs.ADCCHSELSEQ4.bit.CONV14 = 14;    // Vdc
+   AdcRegs.ADCCHSELSEQ4.bit.CONV15 = 15;    // Vdc
+
+   AdcRegs.ADCTRL2.bit.INT_ENA_SEQ1 = 1;  // Enable SEQ1 interrupt (every EOS)
+   AdcRegs.ADCTRL3.all = 0x00FE;  // Power up bandgap/reference/ADC circuits
+}
+
+#define ADC_CONST         0.00048828125   // 1/2048
+
+interrupt void  Adc_Isr(void)
+{
+	double ftemp1;
+
+#if TEST_ADC_CENTER
+   J8_1_SET;
+#endif
+
+   adc_result[0] = (int)(AdcRegs.ADCRESULT0 >> 4);    // I_U
+   adc_result[1] = (int)(AdcRegs.ADCRESULT1 >> 4);    // I_V
+   adc_result[2] = (int)(AdcRegs.ADCRESULT2 >> 4);    // AGND
+   adc_result[3] = (int)(AdcRegs.ADCRESULT3 >> 4);    // I_R
+   adc_result[4] = (int)(AdcRegs.ADCRESULT4 >> 4);    // I_S
+   adc_result[5] = (int)(AdcRegs.ADCRESULT5 >> 4);    // AGND
+   adc_result[6] = (int)(AdcRegs.ADCRESULT6 >> 4);    // ANA_CMD_A
+   adc_result[7] = (int)(AdcRegs.ADCRESULT7 >> 4);    // ANA_CMD_B
+
+   adc_result[8] = (int)(AdcRegs.ADCRESULT8 >> 4);    // Vac-U
+   adc_result[9] = (int)(AdcRegs.ADCRESULT9 >> 4);    // Vac-V
+   adc_result[10]= (int)(AdcRegs.ADCRESULT10 >> 4);    // Vac-W 
+   adc_result[11]= (int)(AdcRegs.ADCRESULT11 >> 4);    // Vac_R
+   adc_result[12]= (int)(AdcRegs.ADCRESULT12 >> 4);    // Vac_S
+   adc_result[13]= (int)(AdcRegs.ADCRESULT13 >> 4);    // Vac_T
+   adc_result[14]= (int)(AdcRegs.ADCRESULT14 >> 4);    // Vdc
+   adc_result[15]= (int)(AdcRegs.ADCRESULT15 >> 4);    // Vdc
+
+//	ADC_Vdc = Vdc_factor * (double) adc_result[14] * code_Vdc_scaler + Vdc_calc_offset + code_Vdc_offseter;  
+	ADC_Vdc = Vdc_factor * (double) adc_result[14] + Vdc_calc_offset ;  
+
+#if CONVERTER_ON
+
+	ADC_V_rs = Vs_R_factor * (double) adc_result[11] + Vs_R_calc_offset;  
+	ADC_V_st = Vs_S_factor * (double) adc_result[12] + Vs_S_calc_offset;  
+	ADC_V_tr = Vs_T_factor * (double) adc_result[13] + Vs_T_calc_offset;  
+
+	fTemp1 = (double)( adc_result[3] -adc_r_offset) * ADC_CONST;
+	fTemp2 = (double)( adc_result[4] -adc_s_offset) * ADC_CONST;
+
+	ADC_I_r = - I_sense_value * ((fTemp1) * r_phase_I_sense_span);
+	ADC_I_s = - I_sense_value * ((fTemp2) * s_phase_I_sense_span);
+
+#endif
+
+	giAdcUphase = adc_result[0];
+	giAdcVphase = adc_result[1];
+
+	ADC_I_u =  - I_sense_value * (double)( giAdcUphase -adc_u_offset)\
+	            * ADC_CONST * u_phase_I_sense_span;
+	ADC_I_v = - I_sense_value * (double)( giAdcVphase -adc_v_offset)\
+	            * ADC_CONST * v_phase_I_sense_span;
+
+	AD2LPF();
+	#if MAIN_POWER_OFF
+		Vdc = 300.0;
+	#endif 
+
+    Is_abc[cs]= -(Is_abc[as]+Is_abc[bs]);
+
+	Is_dq[ds] = Is_abc[as];
+	Is_dq[qs] = 0.577350 * Is_abc[as] + 1.15470 * Is_abc[bs];
+	Is_mag = sqrt( Is_abc[as] *Is_abc[as] + Is_abc[bs] *Is_abc[bs]);           // 전류크기
+	Is_mag_rms = 0.707106*Is_mag;     
+
+	ftemp1 = (double)(adc_result[6] - 2047) * ADC_CONST;
+	LPF1( Ts,20.0,ftemp1, & analog_ref_a);
+
+	AdcRegs.ADCST.bit.INT_SEQ1_CLR = 1;       // Clear INT SEQ1 bit
+	AdcRegs.ADCST.bit.INT_SEQ2_CLR = 1;       // Clear INT SEQ1 bit
+	PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;   // Acknowledge interrupt to PIE
+
+#if TEST_ADC_CENTER
+   J8_1_CLEAR;
+#endif
+
+}
+
+void analog_input_proc( double * referenc)
+{
+	* referenc = analog_ref_a * analog_cmd_in_span1 - analog_cmd_in_zero1;
+}
+
+void analog_out_proc( )
+{
+}
+
+int check_sensor_trip()
+{
+	int TripCode;
+
+	AdcRegs.ADCST.bit.INT_SEQ1_CLR = 1;
+	AdcRegs.ADCTRL2.bit.SOC_SEQ1 = 1;         // start of convertwion 
+	delay_msecs(2);		
+	Nop();
+
+	if( ( TripCode = CheckOverCurrent()) != 0 ) return TripCode ;	// debug
+	if( ( TripCode = CheckOverVolt()   ) != 0 ) return TripCode ;
+	if( ( TripCode = CheckUndeVolt()   ) != 0 ) return TripCode ;	// 최종적으로 점검을 한다. 
+	return 0;
+}
+	
+// end of file
+

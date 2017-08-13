@@ -1,0 +1,148 @@
+#include        <header.h>
+#include        <extern.h>
+
+	
+void MotorControlProc( )
+{
+	switch( motor_ctrl_mode )
+	{	
+	case 0:	vf_simple_control(); break;
+//	case 1:	vf_slip_compensation_speed_control(); 	break;
+	}
+}
+
+interrupt void MainPWM(void)
+{
+#if USE_GRAPH
+	static int i=0;
+	static unsigned long graph_samplig_msec = 0 ;
+	unsigned long graph_time_check = 0 ;
+#endif
+	unsigned int ChACount,ChBCount; 
+
+#if TEST_ADC_CENTER
+	SIGNAL2_SET;	// debug
+#endif
+
+//--- Init Charge SCR Gating   // added 2010.07.07
+	if(( gMachineState == STATE_POWER_ON)&&(gInitChargeFlag == 1)){
+			EPwm4Regs.CMPB = guiEpwmPeriodCount - (guiEpwmPeriodCount >> 1) ;
+	}
+	else	EPwm4Regs.CMPB = guiEpwmPeriodCount;
+
+//--- DB Chopper
+	if( gMachineState == STATE_RUN )
+	{
+		if( Vdc > ( over_volt_set - 30.0 ))
+			EPwm4Regs.CMPA.half.CMPA = guiEpwmPeriodCount >> 2 ; // 1/4 ��� 
+		else 
+			EPwm4Regs.CMPA.half.CMPA = guiEpwmPeriodCount;		// ��� off 
+	}
+	else 	
+		EPwm4Regs.CMPA.half.CMPA = guiEpwmPeriodCount;
+
+//--- Ana Monitor 1,2 
+	GetAnaMonitCount(&ChACount,&ChBCount);
+	EPwm5Regs.CMPA.half.CMPA 	= ChACount;
+	EPwm5Regs.CMPB  			= ChBCount;
+
+//	gPWMTripCode = trip_check();
+// adc irq ���� ������ �ʴ�. 
+	if(gPWMTripCode){
+		EPwm1Regs.CMPA.half.CMPA = 0;
+		EPwm2Regs.CMPA.half.CMPA = 0;
+		EPwm3Regs.CMPA.half.CMPA = 0;
+		goto _PWM_TRIP;
+	}
+
+	switch(gMachineState)
+	{
+	case STATE_READY:
+	case STATE_POWER_ON:
+	case STATE_TRIP:					
+		EPwm1Regs.CMPA.half.CMPA = 0;
+		EPwm2Regs.CMPA.half.CMPA = 0;
+		EPwm3Regs.CMPA.half.CMPA = 0;
+		break;
+
+	case STATE_INIT_RUN:
+		EPwm1Regs.CMPA.half.CMPA = guiEpwmPeriodCount>>1;
+		EPwm2Regs.CMPA.half.CMPA = guiEpwmPeriodCount>>1;
+		EPwm3Regs.CMPA.half.CMPA = guiEpwmPeriodCount>>1;
+		break;
+
+	case STATE_RUN:
+	case STATE_GO_STOP:
+	case STATE_WAIT_BREAK_OFF:		
+//		gPWMTripCode = trip_check();
+		if(gPWMTripCode !=0){
+			gTripSaveFlag = 1; // for Trip History Save to EEPROM in Out irq
+			EPwm1Regs.CMPA.half.CMPA = 0;
+			EPwm2Regs.CMPA.half.CMPA = 0;
+			EPwm3Regs.CMPA.half.CMPA = 0;
+		}
+		else{
+	    	VoltageEstimation();
+			MotorControlProc( );
+			SpaceVectorModulation(Vs_dq_ref);						
+			EPwm1Regs.CMPA.half.CMPA = DutyCount[u];
+			EPwm2Regs.CMPA.half.CMPA = DutyCount[v];
+			EPwm3Regs.CMPA.half.CMPA = DutyCount[w];
+		}
+		break;
+
+	default: 
+		EPwm1Regs.CMPA.half.CMPA = 0;
+		EPwm2Regs.CMPA.half.CMPA = 0;
+		EPwm3Regs.CMPA.half.CMPA = 0;
+		break;
+	}
+
+_PWM_TRIP:
+//	DELAY_US(100);		// debug
+
+#if USE_GRAPH
+	graph_time_check = ulGetTime_mSec( graph_samplig_msec);
+
+	if(graph_time_check > 0 ){
+		graph_samplig_msec = ulGetNow_mSec( );
+
+
+		y1_data[i] = DutyRatio[u];
+		y2_data[i] = DutyRatio[v];
+//		y1_data[i] = Is_abc[bs];
+//		y2_data[i] = Is_abc[as];
+//		y1_data[i] = analog_ref_a;
+//		y2_data[i] = reference_out;
+		if( i < 199 ) i++;
+		else		 i= 0;
+	}
+#endif
+
+	EPwm1Regs.ETCLR.bit.INT = 1;	
+	// Acknowledge interrupt to recieve more interrupts from PIE group 3
+	PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;
+
+#if TEST_ADC_CENTER
+	SIGNAL2_CLEAR;	// debug
+#endif
+}
+
+void GetAnaMonitCount(unsigned int * piChA, unsigned * piChB)
+{
+	double fTemp;
+	static double Theta=0;
+
+	fTemp = (double)(guiEpwmPeriodCount >> 1);
+
+	Theta += PI_2 * 20 * Ts;
+
+	if (Theta>PI)			Theta-=PI_2;
+	else if (Theta<-PI)	Theta+=PI_2;		
+
+	* piChA = (unsigned int) ( fTemp *  ( sin(Theta) + 1 ));
+	* piChB = (unsigned int) ( fTemp *  ( cos(Theta) + 1 ));
+}
+
+// end of file
+

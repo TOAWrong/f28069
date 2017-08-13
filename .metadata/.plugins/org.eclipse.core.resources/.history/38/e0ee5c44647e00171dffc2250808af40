@@ -1,0 +1,13 @@
+#include	<header.h>
+#include	<extern.h>
+
+#if USE_GRAPH
+void set_dac_point()
+{
+}
+#else
+void set_dac_point()
+{
+}
+#endif
+

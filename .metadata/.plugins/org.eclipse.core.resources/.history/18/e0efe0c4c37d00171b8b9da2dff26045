@@ -1,0 +1,286 @@
+#ifndef		__GLOBAL_VARIABLES_
+#define		__GLOBAL_VARIABLES_
+
+double reference_out = 0.0;
+				
+char MonitorMsg[21]={0};
+double reference_in;
+
+int gCommand;
+double ref_in0;
+
+int gPWMTripCode;
+
+int scia_cmd;
+double scia_ref;
+
+int scia_rx_msg_flag;
+char gStr1[41]={0};
+unsigned int adc_result[10]={0};
+
+// control variable
+double rpm; 
+double RMS_Ia;
+double RMS_Ib;
+
+double Freq_out;
+double Vs_rat;
+double Is_rat;
+double inv_Is_rat;
+double we_rat;
+double inv_Freq_rat;
+double inv_motor_rate_hz;
+double wr_rat;
+double wm_rat;
+double Te_rat;
+double inv_Te_rat;
+double Fs_rat;
+double Kt;
+double inv_Kt;
+double P_pair;
+double inv_P_pair;
+double rpm_Coeff;
+double S_rat;
+double S_lin;
+double Freq_slip_rat;
+double Ts;
+double inv_Ts;
+double Ts_max;
+double Is_max;
+double OverCurLimit;
+double Tr;
+double inv_Tr;
+double sigma_Ls;
+double inv_sigma_Ls;
+double sigma;
+double sigma_Tr;
+double inv_sigma_Tr;
+double sigma_minus_1_div_sigma_Ls;
+double sigma_Ls_div_1_plus_sigma;
+double Lm_div_Lr;
+double Lr_div_Lm;
+double inv_Ls_plus_sigma_Ls;
+double inv_GM_Is_square_minus_1;
+double inv_Ls;
+double SlipCoeff;
+double inv_GM_Is;
+double wp_Is_Coeff;
+double Kp_Is_Coeff;
+double wp_Is;
+double Kp_Is;
+double Ki_Is;
+double Fs_B;
+double inv_Fs_B;
+double Fs_ref;
+double I_QS_rat;
+double wr_FilterPole;
+double wn_wr;
+double Kp_wr;
+double Ki_wr;
+
+double I_rms=0.;
+
+TRIP_INFO TripInfo = {0,0,0,0,0,"2008:07:24  00:01:23"," No Trip Data       "};
+TRIP_INFO TripInfoNow = {0,0,0,0,0,"2013:05:20  00:01:23"," No Trip Data       "};
+
+int gRunFlag;
+int gTripSaveFlag;
+
+// code_proc.c
+int Flag_TripDataBackup;
+int EepromSaveFlag;
+
+int gMachineState;
+int code_protect_inhibit_on;
+double Vdc;
+double analog_ref;
+double analog_ref_a;
+
+
+union PROTECT_FLAG protect_reg;
+//Uint16 MAX_PWM_CNT=3000;		// 10khz
+//Uint16 MAX_PWM_CNT=12000;		// 2.5kHz
+Uint16 MAX_PWM_CNT;		
+
+double code_min_vf_ref =0.01;
+int command;
+int loop_ctrl;
+int trip_code;
+int runtime_count;
+
+int adc_I_u_phase;
+int adc_I_v_phase;
+int adc_Vdc;
+int adc_IGBT_Temp;
+int adc_Ex_sensor;
+
+
+double I_u_phase;
+double I_v_phase;
+
+Uint16 i;
+Uint32 Loop_cnt, CLA_cnt;
+
+
+int code_motor_ctrl_mode;		// CODE 1
+double code_accel_time1;
+double code_posi_duration_time;	//		10	
+double code_zero_duration_time;	//		11
+double code_nega_duration_time;	//		12
+double code_test_accel_time;	//		13	
+double code_test_decel_time;	//		14
+int	   code_set_Vdc_on;			//		15
+double code_Vdc_set_value;		//		16
+double code_set_pulse_number;	//		17
+
+
+int code_run_input_select;
+int code_motor_ctrl_mode;
+int code_motor_direction_change;
+int code_ramp_func_mode;
+
+double code_accel_time1;
+double code_decel_time1;
+double code_accel_time2;				// 12
+double code_decel_time2;				// 13
+double code_btn_start_ref;			// 14
+double code_jog_speed;				// 15
+double code_min_vf_ref;				// 109
+double code_digital_speed2;			//22
+
+///////////////////////////
+int code_protect_inhibit_on;	// 30
+int code_protect_uv_off;		// 31
+int code_protect_ov_off;		// 32
+int code_protect_Iadc_off;		// 33
+int code_protect_over_I_off;	// 34
+int code_protect_IGBT_off;		// 35
+int code_protect_ex_trip_off;	// 36
+int code_protect_IGBT2_off;		// 37
+int code_protect_CONV_adc_off;	// 38
+///////////////////////////
+
+int	   code_use_binary_input;		// 100
+double code_speed1;					// 101
+double code_speed2;					// 102
+
+// group2
+
+double analog_cmd_in_zero1;		// 200
+double analog_cmd_in_span1;		// 201
+
+// group3
+double over_current_level;		// 300
+double code_OC_convt_level;		// 301
+
+double over_volt_set;			// 302
+double code_under_volt_set;		// 303
+double over_speed_level;		// 304
+double e_thermal_level;			// 305
+double pre_charge_time;			// 306
+double Is_Max_Coeff;			// 307
+double over_I_time;				// 308
+
+double code_Vdc_scaler;			// 310  2011.0613
+double code_Vdc_offseter;		// 312
+double code_adc_vdc_low;		// 313
+double code_adc_vdc_high;		// 314
+double code_Vdc_calc_low;		// 315
+double code_Vdc_calc_high;		// 316
+
+//group 4
+double motor_rate_power;		// 400
+double motor_rate_volt;			// 401
+double motor_rate_current;		// 402
+double motor_rate_hz;			// 403
+double motor_rate_rpm;			// 404
+double motor_pole;				// 405
+double motor_rate_effiency;		// 406	
+
+double Rs;						// 407
+double Rr;						// 408
+double Ls;						// 409
+double Lr;						// 410
+double Lm;						// 411
+double Jm;						// 412
+
+// group5
+double I_sense_value;			// 500
+double u_phase_I_sense_span;	// 502
+double v_phase_I_sense_span;	// 504
+double vdc_sense_zero;			// 505
+double vdc_sense_span;			// 506
+double igbt_pwm_freq;			// 508
+
+int adc_u_offset;				// 510
+int adc_v_offset;				// 511
+
+// group6
+
+double VF_DeadTimeGain;
+double VF_ExcitationTime;
+double VF_Fs_Coeff;
+double VF_Freq_TrqBoost;
+double VF_Vs_Coeff_TrqBoost;
+double VF_Rs_ThermalCoeff;
+double VF_IR_Comp_FilterPole;
+double VF_Slip_Comp_FilterPole;
+double VF_Rs;
+
+double code_posi_duration_time;	// 624
+double code_zero_duration_time;	// 625
+double code_nega_duration_time;	// 626
+double code_test_accel_time;	// 627
+double code_test_decel_time;	// 628
+
+ 
+double code_Ki_Is_Coeff;		// 630
+double code_Kp_Is_Coeff;		// 631
+
+int code_set_Vdc_on;			//	635
+double code_Vdc_set_value;		//	636
+int code_set_pulse_number;		//  637
+
+// group 7 advance control vaiable 
+
+double wr_FilterPoleCoeff;		// 700
+double wn_wr_Coeff;				// 701
+double Max_wn_wr;				// 702
+double K_Damp_wr;				// 703
+double wr_DampingRatio;			// 704
+int wr_CntlPeriodIndex;			// 705
+	
+// �ڼ� ����
+double FW_VoltageCoeff;			// 706
+double Base_Flux_Coeff;			// 707
+double ExcitationTime;			// 708
+double K_Damp_Fr;				// 709
+double GM_Fr;					// 710
+double PM_Fr;					// 711
+
+double K_Damp_Is;				// 715
+double GM_Is;					// 716
+double PM_Is;					// 717
+
+// �������� ���� ����
+double Default_wr_FilterPole;	// 720
+double SlipCompCoeff;			// 721
+double GammaLambda;				// 722
+double GammaLambda_R_Constant;	// 723	
+double Max_DeltaLambda;			// 724
+double GammaTheta_M;			// 725
+double GammaTheta_R;			// 726
+double Max_DeltaTheta;			// 727
+double Delta_wr_FilterPoleCoeff_L; //728
+double Delta_wr_FilterPoleCoeff_U; //729
+
+double Data_Check;				// 800
+double Data_Backup;				// 801
+double Data_Load;				// 802
+double Data_Init;				// 803
+
+
+CODE_INFO code_inform = {0,0,0,0,0,0,{0}};
+
+#endif
+
