@@ -37,7 +37,7 @@ void main( void )
 	I2CA_Init();	// Initalize I2C serial eeprom and Real Time Clock;
 	InitCpuTimers();   // For this example, only initialize the Cpu Timers
 
-	ConfigCpuTimer(&CpuTimer0, 150, 250);	// debug 2011.10.01
+	ConfigCpuTimer(&CpuTimer0, 90, 1000);	// debug 2011.10.01
 
 	StartCpuTimer0();
 

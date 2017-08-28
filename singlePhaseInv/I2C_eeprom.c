@@ -1,22 +1,13 @@
-//###########################################################################
 //
 // FILE:    I2c_eeprom.c
-//
-// Project : SeoHo Inverter  I2C_eeprom.c
-//
+// Project : singlePhase inverter
 // ASSUMPTIONS:
-//
 //    This program requires an external I2C EEPROM connected to
 //    the I2C bus at address 0x51.
-//###########################################################################
+//
+
 #include	<header.h>
 #include	<extern.h>
-
-
-int code_group_start[26] = { 0,20,40,100,200,250,300,400,450,500,550,600,620,640,660,
-								670,700,730,760,800,850,900,910,920,940,960};
-int code_group_length[26]= {15,21,10, 53, 53, 42, 71, 71, 20, 17, 17,  7,  8, 12,  8,
-								 29, 29, 29, 29, 10, 10,900,  9, 29, 17, 20};
 
 void I2CA_Init(void)
 {
@@ -36,47 +27,41 @@ void I2CA_Init(void)
    									// Stop I2C when suspended
    I2caRegs.I2CFFTX.all = 0x6000;	// Enable FIFO mode and TXFIFO
    I2caRegs.I2CFFRX.all = 0x2040;	// Enable RXFIFO, clear RXFFINT,
-
 }
 
 Uint16 I2CA_WriteData(int iSlaveAddr,int iMemAddr,int iData)
 {
-// write data
-	I2caRegs.I2CMDR.all = 0x0020;	// Take I2C out of reset
-
-	BACKUP_ENABLE;
-	Nop(); 	Nop(); 	Nop(); Nop();
-
+    int i;
+    BACKUP_ENABLE;
+    DSP28x_usDelay(50);
+    I2caRegs.I2CMDR.all = 0x0020;	// Take I2C out of reset
 	I2caRegs.I2CFFTX.bit.TXFFINTCLR = 1;	 
 	I2caRegs.I2CCNT = 3;
     I2caRegs.I2CSAR = iSlaveAddr;
-  	I2caRegs.I2CDXR = (iMemAddr >> 8) & 0x00ff;			// ���� ����Ʈ 
-  	I2caRegs.I2CDXR = iMemAddr & 0x00ff;	// ���� ����Ʈ 
-	I2caRegs.I2CDXR = iData;		// byte write �� �ȴ�. 
+  	I2caRegs.I2CDXR = (iMemAddr >> 8) & 0x00ff;
+  	I2caRegs.I2CDXR = iMemAddr & 0x00ff;
+	I2caRegs.I2CDXR = iData;		// byte write
   	I2caRegs.I2CMDR.all = 0x6E20;			
-	Nop();
-	delay_msecs(EEPROM_RW_DELAY);
-	delay_msecs(EEPROM_RW_DELAY);
-	Nop();
-
+	for( i =0 ; i < 20 ; i ++ ){
+	    DSP28x_usDelay(1000);
+	}
 //	while(I2caRegs.I2CSTR.bit.SCD == 0); 
-	BACKUP_ENABLE;
-	Nop();	Nop(); 	Nop();
-
-   return I2C_SUCCESS;
+	BACKUP_DISABLE;
+	return I2C_SUCCESS;
 }
 
 Uint16 I2CA_ReadData(int iSlaveAddr, int iMemAddr, int * data)
 {
-	// no stop 
-   I2caRegs.I2CSAR = iSlaveAddr;
+    int i;
+    I2caRegs.I2CSAR = iSlaveAddr;
    I2caRegs.I2CCNT = 2;
    I2caRegs.I2CDXR = (iMemAddr>>8) & 0x00ff;
    I2caRegs.I2CDXR = iMemAddr & 0x00ff;
 //   I2caRegs.I2CMDR.all = 0x6620;			
    I2caRegs.I2CMDR.all = 0x2620;			
-	Nop();
-	delay_msecs(EEPROM_RW_DELAY);
+    for( i =0 ; i < 20 ; i ++ ){
+        DSP28x_usDelay(1000);
+    }
 	// 
 //	while(I2caRegs.I2CSTR.bit.ARDY == 0);  // test jsk 
 
@@ -87,17 +72,18 @@ Uint16 I2CA_ReadData(int iSlaveAddr, int iMemAddr, int * data)
    I2caRegs.I2CCNT = 1;
    I2caRegs.I2CMDR.all = 0x6C20;			// Send restart as master receiver stop
 
-	delay_msecs(EEPROM_RW_DELAY);
-//	delay_msecs(15);
+   for( i =0 ; i < 20 ; i ++ ){
+       DSP28x_usDelay(1000);
+   }
 //	while(I2caRegs.I2CSTR.bit.SCD == 0);  // test jsk
 	
  	* data = I2caRegs.I2CDRR;
-   return I2C_SUCCESS;
+ 	return I2C_SUCCESS;
 }
 
 int get_eprom_address( int code_address)
 {
-	return ( code_group_start[ code_address/100] + (code_address % 100)) * 4;
+	return code_address % 100 * 4;
 }		
 
 void write_code_2_eeprom(int address,UNION32 data)
@@ -222,7 +208,7 @@ int load_code2ram()
 	{
 		cmd = CMD_READ_DATA;
 		address = 0;
-		for( i = 0 ; i <= 26 ; i++){	 
+		for( i = 0 ; i <= CODE_END ; i++){
 
 			for( j = 0; j <= code_group_length[i];j++)
 			{
