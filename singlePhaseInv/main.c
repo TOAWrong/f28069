@@ -1,10 +1,4 @@
 /*
-#pragma DATA_SECTION(ZONE0_BUF,"ZONE0DATA");
-#pragma DATA_SECTION(ZONE6_BUF,"ZONE6DATA");
-#pragma DATA_SECTION(ZONE7_BUF,"ZONE7DATA");
-volatile unsigned int ZONE0_BUF[256];
-volatile unsigned int ZONE6_BUF[0x10000];
-volatile unsigned int ZONE7_BUF[256];
 */
 #include	"header.h"
 #include	"extern.h"
