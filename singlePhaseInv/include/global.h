@@ -3,27 +3,17 @@
 
 int init_charge_flag = 0;
 
-char TimeInput[13]="101020123000";
 int scib_rx_msg_flag = 0;
 int scic_rx_msg_flag = 0;
 
 double analog_ref_a;
 double analog_ref_b;
 
-//***************************************************
-// ������� 
-//***************************************************
 
 #if USE_GRAPH
-	double y1_data[GRAPH_NUMBER]={0.0};
-	double y2_data[GRAPH_NUMBER]={0.0};
-
-	int graph_ch1= 15;
-	int graph_ch2= 0;
+	float y1_data[GRAPH_NUMBER]={0.0};
+	float y2_data[GRAPH_NUMBER]={0.0};
 #endif
-
-//===================
-int cmdtest;
 
 double Vdc_factor;			// 2010 01 13
 double Vdc_calc_offset;		// 2010 01 13 for Vdc calc 
@@ -201,18 +191,28 @@ double OverCurLimit;
 //============================================
 //   CODE variable 
 //============================================
-int run_input_select;
-int motor_ctrl_mode;
-int motor_direction_change;
-int ramp_func_mode;
+int     codeMotorDirection;
+float   codeAccelTime1;
+float   codeDecelTime1;
+int     codeMotorCtrlMode;
+float   codeSpeed1;                     5
+float   codeSpeed2;                     6
 
-double accel_time1;
-double decel_time1;
-double accel_time2;				// 12
-double decel_time2;				// 13
-double btn_start_ref;			// 14
-double jog_speed;				// 15
-double min_vf_ref;				// 109
+float   codeMotorRatePower;     // 10
+float   codeMotorRateVolt;      // 11
+float   codeMotorRateCurrent;   // 12
+float   codeMotorRateHz;        // 13
+float   codeMotorRateRpm;       // 14
+float   codeMotorPole;          // 15
+float   codeMotorRateEffiency;  // 16
+float   codeRs;                 // 17
+float   codeRr;                 // 18
+float   codeLs;                 // 19
+float   codeLr;                 // 20
+float   codeLm;                 // 21
+float   codeJm;                 // 22
+float   codeProtectOff;         // 23
+// #define CODE_END                24
 
 ///////////////////////////
 int code_protect_inhibit_on;	// 30
@@ -225,16 +225,6 @@ int code_protect_ex_trip_off;	// 36
 int code_protect_IGBT2_off;		// 37
 int code_protect_CONV_adc_off;	// 38
 ///////////////////////////
-
-int code_use_binary_input;
-double code_speed1;			//22
-double code_speed2;			// 110
-double code_speed3;			// 111
-double code_speed4;			// 112
-double code_speed5;			// 113
-
-// group2
-
 double analog_cmd_in_zero1;		// 200
 double analog_cmd_in_span1;		// 201
 double analog_cmd_in_zero2;		// 202

@@ -9,34 +9,28 @@
 //======================================
 // Code address
 //======================================
-// group 0
+#define CODE_motor_direction_change		1
+#define CODE_accel_time1				2
+#define CODE_decel_time1				3
+#define CODE_motor_ctrl_mode            4
+#define CODE_speed1						5
+#define CODE_speed2						6
 
-#define CODE_motor_direction_change		2
-
-#define CODE_accel_time1				10
-#define CODE_decel_time1				11
-#define CODE_motor_ctrl_mode            1
-
-#define CODE_protect_inhibit_on			30
-
-#define CODE_speed1						101
-#define CODE_speed2						102
-
-#define CODE_motor_rate_power			400
-#define CODE_motor_rate_volt			401
-#define CODE_motor_rate_current			402
-#define CODE_motor_rate_hz				403
-#define CODE_motor_rate_rpm				404
-#define CODE_motor_pole					405
-#define CODE_motor_rate_effiency		406	
-
-#define CODE_Rs							407
-#define CODE_Rr							408
-#define CODE_Ls							409
-#define CODE_Lr							410
-#define CODE_Lm							411
-#define CODE_Jm							412
-
+#define CODE_motor_rate_power			10
+#define CODE_motor_rate_volt			11
+#define CODE_motor_rate_current			12
+#define CODE_motor_rate_hz				13
+#define CODE_motor_rate_rpm				14
+#define CODE_motor_pole					15
+#define CODE_motor_rate_effiency		16
+#define CODE_Rs							17
+#define CODE_Rr							18
+#define CODE_Ls							19
+#define CODE_Lr							20
+#define CODE_Lm							21
+#define CODE_Jm							22
+#define CODE_protect_inhibit_on         23
+#define CODE_END                        24
 
 #define CODE_Data_Check						800
 #define CODE_Data_Backup					801
