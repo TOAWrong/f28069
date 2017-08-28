@@ -33,7 +33,7 @@
 		<link>
 			<name>F2806x_Adc.c</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/common/source/F2806x_Adc.c</locationURI>
+			<locationURI>INSTALLROOT_F2806x/common/source/F2806x_Adc.c</locationURI>
 		</link>
 		<link>
 			<name>F2806x_CodeStartBranch.asm</name>
@@ -89,27 +89,27 @@
 	<variableList>
 		<variable>
 			<name>INSTALLROOT_F2806x</name>
-			<value>$%7BPARENT-3-ORIGINAL_PROJECT_ROOT%7D</value>
+			<value>file:/home/eunwho/f28069/f2806x</value>
 		</variable>
 		<variable>
 			<name>INSTALLROOT_F2806x_TO_MWARE</name>
-			<value>$%7BPARENT-3-ORIGINAL_PROJECT_ROOT%7D/MWare</value>
+			<value>file:/home/eunwho/f28069/f2806x/MWare</value>
 		</variable>
 		<variable>
 			<name>INSTALLROOT_FASTRTS</name>
-			<value>$%7BPARENT-5-ORIGINAL_PROJECT_ROOT%7D/libraries/math/FPUfastRTS/c28</value>
+			<value>file:/home/eunwho/f28069/libraries/math/FPUfastRTS/c28</value>
 		</variable>
 		<variable>
 			<name>INSTALLROOT_HCCAL</name>
-			<value>$%7BPARENT-5-ORIGINAL_PROJECT_ROOT%7D/libraries/calibration/hrcap</value>
+			<value>file:/home/eunwho/f28069/libraries/calibration/hrcap</value>
 		</variable>
 		<variable>
 			<name>INSTALLROOT_IQMATH</name>
-			<value>$%7BPARENT-5-ORIGINAL_PROJECT_ROOT%7D/libraries/math/IQmath/c28</value>
+			<value>file:/home/eunwho/f28069/libraries/math/IQmath/c28</value>
 		</variable>
 		<variable>
 			<name>ORIGINAL_PROJECT_ROOT</name>
-			<value>file:/home/eunwho/ti/c2000/C2000Ware_1_00_01_00/device_support/f2806x/examples/c28/epwm_updown_aq</value>
+			<value>file:/home/eunwho/f28069/f2806x/examples/c28/epwm_updown_aq</value>
 		</variable>
 	</variableList>
 </projectDescription>

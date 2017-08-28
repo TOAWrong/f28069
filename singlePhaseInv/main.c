@@ -139,7 +139,6 @@ void main( void )
 	gMachineState = STATE_READY; 
 	INIT_CHARGE_CLEAR;
 
-	GetTimeAndDateStr(gStr1);	gStr1[20] =0;
 	load_sci_tx_mail_box(gStr1); delay_msecs(20);
 
 	if( gPWMTripCode !=0 )	tripProc();
