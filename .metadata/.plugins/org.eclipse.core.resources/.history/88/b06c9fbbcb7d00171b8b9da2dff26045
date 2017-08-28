@@ -1,7 +1,0 @@
-#include	<header.h>
-#include	<extern.h>
-
-GetParaData( ModeNumber, &CodeData)
-{
-
-}

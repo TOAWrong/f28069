@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<section name="Workbench">
-	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item value="   RAML4_L7       : origin = 0x00A000, length = 0x008000     /* on-chip RAM block L4 */" key="selection"/>
-		<list key="findhistory">
-			<item value="   RAML4_L7       : origin = 0x00A000, length = 0x008000     /* on-chip RAM block L4 */"/>
-		</list>
-	</section>
-</section>
