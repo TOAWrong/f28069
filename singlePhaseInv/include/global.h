@@ -68,9 +68,6 @@ float	rpm=0.0;
 float	reference_in=0.0;
 float	reference_out=0.0;
 
-float	reference0=0.0;
-float	reference1=0.0;
-
 // ���� �� ���ļ�
 
 float	we_in=0.0;
@@ -191,10 +188,10 @@ float OverCurLimit;
 //============================================
 //   CODE variable 
 //============================================
-int     codeMotorDirection;     //
+float   codeMotorDirection;     //
 float   codeAccelTime1;         //
 float   codeDecelTime1;         //
-int     codeMotorCtrlMode;      //
+float   codeMotorCtrlMode;      //
 float   codeSpeed1;             // 5
 float   codeSpeed2;             // 6
 float   codeProtectOff;         // 7

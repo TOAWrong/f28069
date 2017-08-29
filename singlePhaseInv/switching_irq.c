@@ -8,22 +8,6 @@
 #include        <header.h>
 #include        <extern.h>
 
-
-void ePwmOff()
-{
-
-}
-
-void MotorControlProc( )
-{
-	switch( motor_ctrl_mode )
-	{	
-	case 0:	vf_simple_control(); break;
-	case 1: slip_comp_scalar_ctrl();break;
-	default: break;
-	}
-}
-
 interrupt void MainPWM(void)
 {
 	static int invt_PWM_Port_Set_flag = 0;
@@ -31,8 +15,6 @@ interrupt void MainPWM(void)
 #if TEST_ADC_CENTER
 	J8_2_SET;
 #endif
-
-	Speed_Calculation();
 
 	switch(gMachineState)
 	{
@@ -65,7 +47,7 @@ interrupt void MainPWM(void)
 		}
 		else{
 	    	VoltageEstimation();
-			MotorControlProc( );
+	    	vf_simple_control();
 			SpaceVectorModulation(Vs_dq_ref);						
 			EPwm1Regs.CMPA.half.CMPA = DutyCount[u];
 			EPwm2Regs.CMPA.half.CMPA = DutyCount[v];

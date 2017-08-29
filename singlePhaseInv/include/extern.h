@@ -1,22 +1,7 @@
 #ifndef		__VARIABLES_
 #define		__VARIABLES_
 
-extern float Ls;
-extern float Lr;
-extern float Lm;
-extern float Jm;
-
-extern float L3_sp_est;
-extern float L3_sp_tmp;
 extern float Pole_pair;
-extern float LAMdre_ref;
-
-//float Iqse_ref;
-extern float inv_Jm;
-
-extern float L2_sp_est;
-extern float L1_sp_est;
-// RPM2WRM
 
 extern float Wrm_det;
 
@@ -80,12 +65,8 @@ extern float analog_ref_b;
 //*******************************************************
 // ���� ���� 
 //*******************************************************
-	extern float y1_data[GRAPH_NUMBER];
-	extern float y2_data[GRAPH_NUMBER];
-	extern int graph_ch1;
-	extern int graph_ch2;
-
-extern int cmdtest;
+extern float y1_data[GRAPH_NUMBER];
+extern float y2_data[GRAPH_NUMBER];
 
 extern float Vdc_factor;			// 2010 01 13
 extern float Vdc_calc_offset;		// 2010 01 13 for Vdc calc
@@ -134,9 +115,6 @@ extern int timer0_count;
 extern float inv_MAX_PWM_CNT;
 
 // Ref.
-
-extern float	reference0;
-extern float	reference1;
 extern float	reference_in;
 extern float	reference_out;
 
@@ -361,18 +339,21 @@ extern float	inv_code_dac_scale_ch4;
 //============================================
 //   CODE variable 
 //============================================
-extern int run_input_select;
-extern int motor_ctrl_mode;
-extern int motor_direction_change;
-extern int ramp_func_mode;
+extern float   codeMotorDirection;     //
+extern float   codeAccelTime1;         //
+extern float   codeDecelTime1;         //
+extern float   codeMotorCtrlMode;      //
+extern float   codeSpeed1;             // 5
+extern float   codeSpeed2;             // 6
+extern float   codeProtectOff;         // 7
 
-extern float accel_time1;
-extern float decel_time1;
-extern float accel_time2;				// 12
-extern float decel_time2;				// 13
-extern float btn_start_ref;			// 14
-extern float jog_speed;				// 15
-extern float min_vf_ref;				//
+extern float   codeMotorRatePower;     // 10
+extern float   codeMotorRateVolt;      // 11
+extern float   codeMotorRateCurrent;   // 12
+extern float   codeMotorRateHz;        // 13
+extern float   codeMotorRateRpm;       // 14
+extern float   codeMotorPole;          // 15
+extern float   codeMotorRateEffiency;  // 16
 
 ///////////////////////////////////
 extern int code_protect_inhibit_on;		// 30

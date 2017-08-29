@@ -6,8 +6,8 @@
 
 void SpaceVectorModulation( float *Vs_dq)
 {
-//	unsigned int PWM_COUNT_MAX;
-	unsigned sector;
+
+    unsigned sector;
 	float	Vx,Vy;
 	float 	Dx,Dy,Dxy,Dz;
 	float	inv_Vdc;

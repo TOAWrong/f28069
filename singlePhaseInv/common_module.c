@@ -95,7 +95,7 @@ void analog_cmd_proc(float * ana_ref)
 //------------------------------
 //
 //------------------------------
-
+#define run_input_select    0
 void get_command( int * command, float * ref )
 {
 	int digital_cmd,sci_cmd;
@@ -104,12 +104,19 @@ void get_command( int * command, float * ref )
 	digital_input_proc( & digital_cmd, & digital_reference);
 	serial_com_proc( & sci_cmd, & sci_ref );
 	analog_cmd_proc( & ana_ref);
-//	KeyInputProc(&button_cmd,&button_ref);
 
-// button�� ���� ������ �ɼǰ� ������� ������ ������ �ȴ�.
 	switch( run_input_select )
 	{
-	case 1: // ������ �Է¿� ���� �õ��� ���� 
+    case 0: // �Ƴ��α� �Է�����
+
+        * command = digital_cmd;
+        if( digital_cmd == CMD_START ){
+            if( analog_ref_a < 0.01 )   * command = CMD_STOP;
+            else                        * ref = ana_ref;
+        }
+        break;
+
+    case 1: // ������ �Է¿� ���� �õ��� ����
 		* command = digital_cmd;
 		* ref = digital_reference;
 		break;
@@ -119,144 +126,14 @@ void get_command( int * command, float * ref )
 		* ref = sci_ref;
 		break;
 
-	case 3: // �Ƴ��α� �Է�����
-
-		* command = digital_cmd;
-		if( digital_cmd == CMD_START ){
-			if( analog_ref_a < 0.01 )	* command = CMD_STOP;
-			else 						* ref = ana_ref;
-		}
-		break;
-
 	default:
 		* command = CMD_STOP;
 		* ref = 0.0; 
 		break;
 	}
-
 	// ��ſ� ���� ������ �ֿ켱���� ó���Ѵ�. 
 	if( sci_cmd == CMD_SAVE){
 		* command = sci_cmd ;
-	}
-}
-
-void get_adc_offset()
-{
-	int LoopCtrl;
-
-	Uint32 RunTimeMsec,StartTimeMsec;
-	float u_offset_in, v_offset_in;
-	float u_offset_out, v_offset_out;
-	
-	UNION32 u32data;
-
-	load_sci_tx_mail_box( "\n***********************"); delay_msecs(10);
-	load_sci_tx_mail_box( "\n Start ADC Offset Calc "); delay_msecs(10);
-	load_sci_tx_mail_box( "\n***********************"); delay_msecs(10);
-
-	gfRunTime=0.0;
-	LoopCtrl = 1;
-	gMachineState = STATE_READY;
-
-	while(LoopCtrl == 1)
-	{
-		if( gfRunTime >= 5.0 ) LoopCtrl = 0;
-//		get_command(&cmd,&ref0);	// Command�� �Է� ���� 
-//		if( gPWMTripCode != 0 ) 	LoopCtrl = 0;
-//		if ( cmd == CMD_STOP)	LoopCtrl = 0; 
-
-		RunTimeMsec = ulGetTime_mSec( StartTimeMsec);
-		if(RunTimeMsec > 1){
-			StartTimeMsec = ulGetNow_mSec( );
-			u_offset_in = (float)adcIuPhase;
-			v_offset_in = (float)adcIvPhase;
-			LPF1(0.002,10.0,u_offset_in, & u_offset_out);
-			LPF1(0.002,10.0,v_offset_in, & v_offset_out);
-		}
-	}
-
-	if( gfRunTime >= 5.0 ){
-		adc_u_offset = (int)u_offset_out;
-		adc_v_offset = (int)v_offset_out;
-
-		u32data.word.word0 = adc_u_offset; write_code_2_eeprom(CODE_adc_u_offset,u32data);
-		u32data.word.word0 = adc_v_offset; write_code_2_eeprom(CODE_adc_v_offset,u32data);
-				
-		load_sci_tx_mail_box("\n*********************");delay_msecs(10);		
-		load_sci_tx_mail_box("\n OK Adc offset Saved ");delay_msecs(10);		
-		load_sci_tx_mail_box("\n*********************");delay_msecs(10);		
-	}
-}
-
-void get_adc_vdc_low()
-{
-	int LoopCtrl;
-
-	Uint32 RunTimeMsec,StartTimeMsec;
-	float adc_Vdc_in, adc_Vdc_out;
-	
-	UNION32 u32data;
-
-	load_sci_tx_mail_box( "Start ADC at Vdc low"); delay_msecs(10);
-
-	gfRunTime=0.0;
-	LoopCtrl = 1;
-	gMachineState = STATE_READY;
-
-	while(LoopCtrl == 1)
-	{
-		if( gfRunTime >= 1.0 ) LoopCtrl = 0;
-
-		RunTimeMsec = ulGetTime_mSec( StartTimeMsec);
-		if(RunTimeMsec > 1){
-			StartTimeMsec = ulGetNow_mSec( );
-			adc_Vdc_in = (float)adcVdc;			// VDC ����
-			LPF1(0.002,10.0,adc_Vdc_in, & adc_Vdc_out);
-		}
-	}
-
-	if( gfRunTime >= 1.0 ){
-
-		code_adc_vdc_low = adc_Vdc_out;
-		u32data.dword = code_adc_vdc_low; write_code_2_eeprom(CODE_adc_vdc_low,u32data);
-					
-		load_sci_tx_mail_box("OK adc_vdc_low Saved");delay_msecs(10);				
-	}
-}
-
-void get_adc_vdc_high()
-{
-	int LoopCtrl;
-
-	Uint32 RunTimeMsec,StartTimeMsec;
-	float adc_Vdc_in, adc_Vdc_out;
-	
-	UNION32 u32data;
-
-	load_sci_tx_mail_box( "Start ADC at Vdc high"); delay_msecs(10);
-
-	gfRunTime=0.0;
-	LoopCtrl = 1;
-	gMachineState = STATE_READY;
-
-	while(LoopCtrl == 1)
-	{
-		if( gfRunTime >= 1.0 ) LoopCtrl = 0;
-
-		RunTimeMsec = ulGetTime_mSec( StartTimeMsec);
-		if(RunTimeMsec > 1){
-			StartTimeMsec = ulGetNow_mSec( );
-			adc_Vdc_in = (float)adcVdc;
-			LPF1(0.002,10.0,adc_Vdc_in, & adc_Vdc_out);
-		}
-	}
-
-	if( gfRunTime >= 1.0 ){
-
-		code_adc_vdc_high = adc_Vdc_out;
-		u32data.dword = code_adc_vdc_high; write_code_2_eeprom(CODE_adc_vdc_high,u32data);
-						
-		load_sci_tx_mail_box("OK adc_vdc_high Saved");delay_msecs(10);				
 	}
 }
 

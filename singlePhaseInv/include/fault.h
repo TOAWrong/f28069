@@ -18,7 +18,10 @@ Hardware System : In this software, suported PCB is EwInv-55k-v1 2008.04.05
 #ifndef		_ERROR_CODE_DEFINITION_
 #define		_ERROR_CODE_DEFINITION_
 
-// ÆÄ¶ó¹ÌÅÍ ¿À·ù ÄÚµå 	: 1 ~ 799
+// ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½ 	: 1 ~ 799
+#define CODE_under_volt_set             100
+
+
 
 #define ERR_DB_IGBT							1000
 
@@ -76,7 +79,7 @@ Hardware System : In this software, suported PCB is EwInv-55k-v1 2008.04.05
 #define ERR_SCI_CMD_ADDR_2ND_UNDER			865
 #define ERR_SCI_CMD_ADDR_2ND_OVER			867
 
-// ¿ÀÅäÆ©´× ¿À·ù
+// ï¿½ï¿½ï¿½ï¿½Æ©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 #define	ERR_Req_Under						920
 #define	ERR_Req_Over						921
 #define	ERR_Leq_Under0						923
@@ -94,8 +97,8 @@ Hardware System : In this software, suported PCB is EwInv-55k-v1 2008.04.05
 #define	ERR_Jm_Over							945
 #define	ERR_WRONG_INTERRUPT_CMD				950
 
-// ÇÏµå¿þ¾î ÇÁ·ÎÅØ¼Ç (TMS320F240)
-#define	ERR_PRECHARGING_FAIL				960		// ÃÊ±â ÃæÀü ½ÇÆÐ 
+// ï¿½Ïµï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ (TMS320F240)
+#define	ERR_PRECHARGING_FAIL				960		// ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
 #define	ERR_PWM								961
 #define	ERR_HOC								962
 #define	ERR_HOV								963
@@ -105,9 +108,9 @@ Hardware System : In this software, suported PCB is EwInv-55k-v1 2008.04.05
 #define	ERR_EXT_TRIP						966
 #define	TRIP_EXT_A							967
 
-#define	ERR_PWM_CNT							971		// ½ºÀ§Äª ÁÖ±âÀÇ Ä«¿îÅÍ °ª ¿À·ù 
+#define	ERR_PWM_CNT							971		// ï¿½ï¿½ï¿½ï¿½Äª ï¿½Ö±ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
 
-#define	ERR_INV_DISABLE						972		// ¿îÀüÁß ÀÎ¹öÅÍ µð½º¿¡ÀÌºí 
+#define	ERR_INV_DISABLE						972		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î¹ï¿½ï¿½ï¿½ ï¿½ð½º¿ï¿½ï¿½Ìºï¿½ 
 
 struct TRIP_INFO_DEFINE {
 	int		CODE;				// 1

@@ -5,12 +5,6 @@
 extern void ePwmPortOff();
 extern void ePwmEnable();
 extern void InitGpio(void);
-
-
-
-extern void  EQEP_Initialization(void);
-extern void Speed_Calculation();
-
 // low_pass_filter.c
 extern void Init_Filters( );
 
@@ -40,7 +34,7 @@ extern void set_dac_point();
 extern void monitor_proc();		// need_edit
 
 //RefFunc.c
-extern void ramp_proc(  set_ref, float * out_ref);
+extern void ramp_proc(  float set_ref, float * out_ref);
 
 // auto_tuning.c
 extern int parameter_estimation( );
@@ -53,10 +47,6 @@ extern void LPF_I(float *LPF_out, float *LPF_feed, float LPF_in);
 extern float linear_eq(float x1, float x2, float y1, float y2, float x );
 extern int periodic_check(unsigned long  msec);
 extern	void 	PI_Damp_Controller(float limit,float Ts,float damp_factor,float Kp,float Ki,float ref,float feedback,float *integral,float *output);
-
-extern void get_adc_offset();
-extern void get_adc_vdc_low();
-extern void get_adc_vdc_high();
 
 // vf_control.c
 extern int vf_loop_control(float);
@@ -72,8 +62,7 @@ extern int pwm_regenerat_convert();
 
 // code_proc.c
 extern int get_code_information(int address,int cmd , CODE_INFO *  codes);
-extern void set_code_default_int( int min, int max, int defaults, int value, int open_level, CODE_INFO * codes );
-extern void set_code_default_float(float min, float max, float defaults, float value,int open_level, CODE_INFO * codes );
+extern void set_code_default(float min, float max, float defaults, float value,int open_level, CODE_INFO * codes );
 
 extern int get_code_group0(int addr ,int cmd, CODE_INFO * codes );
 extern int get_code_group1(int addr ,int cmd, CODE_INFO * codes );

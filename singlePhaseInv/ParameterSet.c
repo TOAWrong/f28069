@@ -19,8 +19,6 @@ void VariInit()
 	gfRunTime=0.0;
 
 	// reference
-	reference0=0.0;
-	reference1=0.0;
 	reference_in=0.0;
 	reference_out=0.0;	// new
 	
@@ -68,9 +66,6 @@ void VariInit()
 	Power_gap=0.0;
 	Vs_IR_comp=0.0;
 	del_Vs_comp=0.0;
-
-	inv_Jm = 1.0 / Jm;		
-
 }	
 
 //-----------------------------------

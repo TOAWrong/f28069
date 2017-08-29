@@ -178,9 +178,7 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
 	else if(scia_rx_msg_box[1] == '4'){
 		check = get_code_information( addr, CMD_READ_DATA , & code_inform);
 		if( check != 0 ){
-			if( code_inform.type == TYPE_float ) data = code_inform.code_value.floats;
-			else 								  data = (float)(code_inform.code_value.ints);
-
+			data = code_inform.code_value;
 			snprintf( gStr1,20,"read data =10.3%e \n",data);
 			load_scia_tx_mail_box(gStr1);		
 		}

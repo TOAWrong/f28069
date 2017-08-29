@@ -1,6 +1,8 @@
 #include	<header.h>
 #include	<extern.h>
 
+#define min_vf_ref  0.05
+
 int vf_loop_control(float cmd_ref)
 {
 	int LoopCtrl;
@@ -36,11 +38,8 @@ int vf_loop_control(float cmd_ref)
 		if( trip_code !=0 ){
 			LoopCtrl = 0;
 		}
-
 		monitor_proc();
-		get_command( & command, & ref_in0);	// Command�� �Է� ���� 
-		cmdtest = command;
-		
+		get_command( & command, & ref_in0);	            //
 		Nop();
 
 		if( command == CMD_START ) reference_in = ref_in0;

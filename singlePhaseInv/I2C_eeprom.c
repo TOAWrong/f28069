@@ -110,29 +110,23 @@ void read_eprom_data(int address, UNION32 * u32data)
 	I2CA_ReadData(ADDR_24LC32,eprom_addr+3,&iTemp); (u32data->byte).byte3 = iTemp;	
 }
 
-void data_under_proc(int address,int type, UNION32 u32data)
+void data_under_proc(int address, UNION32 u32data)
 {
 	int trip_code;
 	float trip_data;
 	
 	trip_code = address;
-
-	if(type ==TYPE_INTEGER) trip_data = (float) u32data.word.word0;
-	else					trip_data = u32data.dword;
-
+	trip_data = u32data.dword;
 	trip_recording( trip_code, trip_data,"Data Under");
 }
 
-void data_over_proc(int address,int type, UNION32 u32data)
+void data_over_proc(int address,UNION32 u32data)
 {
 	int trip_code;
 	float trip_data;
 	
 	trip_code = address;
-
-	if(type ==TYPE_INTEGER) trip_data = (float) u32data.word.word0;
-	else					trip_data = u32data.dword;
-
+	trip_data = u32data.dword;
 	trip_recording( trip_code, trip_data,"Data Over");
 }
 
@@ -158,107 +152,61 @@ int check_code_data(int address, UNION32 u32data )
 		return -1;
 	}
 
-	if( code_inform.type == TYPE_INTEGER){
-		if( (( code_inform.code_min).ints) > u32data.word.word0 ){
-			data_under_proc(address, TYPE_INTEGER, u32data);	
-			return_value = -1;
-		}
-		else if( (code_inform.code_max.ints) < u32data.word.word0 ){
-			data_over_proc(address, TYPE_INTEGER, u32data);	
-			return_value = -1;
-		}			
-		else {
-			code_inform.code_value.ints = u32data.word.word0;
-			cmd = CMD_WRITE_RAM;
-			check =  get_code_information( address,cmd, & code_inform);
-			return_value = 0;
-		}	 
-	}	
-	else {		//  code_inform->Type == TYPE_float
-		if( ( code_inform.code_min.floats) > u32data.dword ){
-			data_under_proc(address, TYPE_float, u32data);
-			return_value = -1;
-		}
-		else if( ( code_inform.code_max.floats) < u32data.dword ){
-			data_over_proc(address, TYPE_float, u32data);
-			return_value = -1;
-		}			
-		else {
-			code_inform.code_value.floats = u32data.dword;
-			cmd = CMD_WRITE_RAM;
-			check =  get_code_information( address,cmd, & code_inform);
-			return_value = 0;
-		}	 
-	}	
+    if( code_inform.code_min > u32data.dword ){
+        data_under_proc(address, u32data);
+        return_value = -1;
+    }
+    else if(code_inform.code_max < u32data.dword ){
+        data_over_proc(address, u32data);
+        return_value = -1;
+    }
+    else {
+        code_inform.code_value = u32data.dword;
+        cmd = CMD_WRITE_RAM;
+        check =  get_code_information( address,cmd, & code_inform);
+        return_value = 0;
+    }
 	return return_value;   
 }
 
 int load_code2ram()
 {
 	UNION32	data;
-	int i,j,check;
-	int loop_control,address,cmd,return_value;
+	int check;
+	int loop_control,addr,cmd;
 	
 	data.dword  = 0.0;
-
-	address = return_value = 0;	// start of address
-
-	loop_control =  1;
-	while( loop_control )	
-	{
-		cmd = CMD_READ_DATA;
-		address = 0;
-		for( i = 0 ; i <= CODE_END ; i++){
-
-			for( j = 0; j <= code_group_length[i];j++)
-			{
-				check = get_code_information( address, cmd , & code_inform);
-				if( !check ){
-					read_eprom_data( address, & data);
-					check = check_code_data(address, data);	// check min and max boundary
-					if(check){
-						loop_control = 0;
-						return_value = -1;
-					}
-					else{
-						if(( code_inform.type)==TYPE_INTEGER) code_inform.code_value.ints = data.word.word0;
-						else  							 	  code_inform.code_value.floats = data.dword;
-						
-						cmd = CMD_WRITE_RAM;
-						check = get_code_information( address,cmd, & code_inform);
-					}
-				}
-				address++;
-			}
-			address = i*100;
-		}
-	}
-	return return_value;
+	cmd = CMD_READ_DATA;
+    for( addr = 0 ; addr <= CODE_END ; addr++){
+        check = get_code_information( addr, cmd , & code_inform);
+        if( !check ){
+            read_eprom_data( addr, & data);
+            check = check_code_data(addr, data);	// check min and max boundary
+            if(check)   return -1;
+            else{
+                code_inform.code_value = data.dword;
+                cmd = CMD_WRITE_RAM;
+                check = get_code_information( addr,cmd, & code_inform);
+            }
+        }
+    }
+    return 0;
 }
 
 int code_init()
 {
 	UNION32 datum;
 
-	int i, j,check, cmd, address;
+	int check, cmd, addr;
  
 	cmd = CMD_READ_DATA;
-
-	address = 0;
-	for( i = 0 ; i <= 26 ; i++){	 
-
-		for( j = 0; j <= code_group_length[i];j++){
-			check = get_code_information( address, cmd , & code_inform);
-			if( !check ){
-
-				if( code_inform.type == TYPE_INTEGER)	datum.word.word0 = code_inform.code_value.ints;
-				else									datum.dword 	 = code_inform.code_value.floats;
-				write_code_2_eeprom(address, datum);
-			}	 		
-			address ++;
-		}	
-		address = i * 100;
-	}
+    for( addr = 0; addr <= CODE_END; addr++){
+        check = get_code_information( addr, cmd , & code_inform);
+        if( !check ){
+            datum.dword = code_inform.code_value;
+            write_code_2_eeprom(addr, datum);
+        }
+    }
 	check = load_code2ram();
 	return check;
 }		

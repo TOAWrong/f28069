@@ -1,7 +1,6 @@
 #ifndef		__CODE_PROC_H_
 #define		__CODE_PROC_H_	
 
-#define SWITCH_FREQ			8000
 
 #define TYPE_INTEGER		0
 #define TYPE_float			1

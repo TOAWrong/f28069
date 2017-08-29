@@ -6,13 +6,13 @@
 
 extern interrupt void MainPWM(void);
 
- Vdc_fnd_data;
+float Vdc_fnd_data;
 
 void main( void )
 {
 	int trip_code,i,loop_ctrl;
 	int cmd;
-	 ref_in0;
+	float ref_in0;
 
 	InitSysCtrl();
 	InitGpio();
@@ -42,8 +42,7 @@ void main( void )
 	StartCpuTimer0();
 
 	InitAdc();	
- 	EQEP_Initialization( );
-	
+
 	EALLOW;  // This is needed to write to EALLOW protected registers
 	  	PieVectTable.TINT0 		= &cpu_timer0_isr;
 		PieVectTable.WAKEINT 	= &wakeint_isr;
@@ -150,28 +149,21 @@ void main( void )
 		get_command( & cmd, & ref_in0);
 //		analog_out_proc( );
 		monitor_proc();
-
-		if(cmd == CMD_START)	// if( cmd == CMD_START )
-		{
-			trip_code = 0;
-			switch( motor_ctrl_mode ) // Control Method
-			{
-			case 0:	trip_code = vf_loop_control(ref_in0)		; break;
-			case 1:	trip_code = vf_loop_control(ref_in0)		; break;		// 
-			}
+		if(cmd == CMD_START){	// if( cmd == CMD_START )
+			trip_code = vf_loop_control(ref_in0);		//
 			if( trip_code !=0 )	tripProc();
 		}
 	}
 }
 
-//	MAX_PWM_CNT =	30000;		// 2.5kHz
-//	MAX_PWM_CNT =	15000;		// 5kHz
+
+#define igbt_pwm_freq   8000
+// #define SWITCH_FREQ         8000
 void InitEPwm_ACIM_Inverter()
 {  
-
 	EPwm1Regs.ETSEL.bit.INTEN = 0;    		        // Enable INT
-	MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / igbt_pwm_freq ) * 0.5 * 0.5 );
-	inv_MAX_PWM_CNT = 1.0 / ()MAX_PWM_CNT;
+	MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / igbt_pwm_freq ) * 0.5 * 0.5 * 0.5);
+	inv_MAX_PWM_CNT = 1.0 / MAX_PWM_CNT;
 
 	EPwm1Regs.TBPRD =  MAX_PWM_CNT;			// Set timer period
 	EPwm1Regs.TBPHS.half.TBPHS = 0x0000;           	// Phase is 0

@@ -6,9 +6,11 @@
 #include	<header.h>
 #include	<extern.h>
 
+#define max_I_ratio    1.5
+#define over_current_level    2.0
+
 void common_variable_init()
 {
-	float over_current_level;
 
 	Ts = 1.0 / SWITCH_FREQ;	// pwm switching frequency
 	inv_Ts=1.0/Ts;
@@ -18,9 +20,6 @@ void common_variable_init()
 
 	Is_max = Is_rat * max_I_ratio  / 100.0;		
 	inv_Is_rat=1.0/Is_rat;
-
-	if( selected_motor ) over_current_level = motor2_I_limit_ratio;	// debug
-	else				 over_current_level = motor1_I_limit_ratio;	// debug 
 
 	OverCurLimit = Is_rat * over_current_level / 100.0;
 
@@ -44,7 +43,7 @@ void common_variable_init()
 	S_lin=(motor_pole/PI)*(S_rat*motor_rate_hz)/Te_rat;				// ==> V/f ���� : ���� ����
 	Freq_slip_rat=S_rat*motor_rate_hz;
 
-	PreChargeLevel = 0.85*(1.35*motor_rate_volt);	// ���� ������ 85%
+	// PreChargeLevel = 0.85*(1.35*motor_rate_volt);	// ���� ������ 85%
 	C_ce_nF=(3.5-0.8)/(1000.0-100.0)*(2.0*Is_rat-100.0)+0.8;	// 1000A -> 3.5nF, 100A -> 0.8nF
 	C_ce=1.0e-9*C_ce_nF;
 	inv_C_ce=1.0/C_ce;	
@@ -57,10 +56,7 @@ void common_variable_init()
 
 //------
 // reference
-	reference0=0.0;
-	reference1=0.0;
 	reference_in=0.0;
-	reference=0.0;
 	
 	we_in=0.0;
 	we=0.0;

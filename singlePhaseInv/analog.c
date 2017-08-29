@@ -88,7 +88,7 @@ __interrupt void adcIsr(void)
     GpioDataRegs.GPACLEAR.bit.GPIO8 = 1;
 }
 
-void analog_input_proc( double * referenc)
+void analog_input_proc( float * referenc)
 {
 	* referenc = analog_ref_a * analog_cmd_in_span1 - analog_cmd_in_zero1;
 }
