@@ -3,23 +3,96 @@
 
 int get_code_information(int address,int cmd , CODE_INFO *  codes)
 {	
+    int returnValue=0;
+
 	switch(address)
 	{
-/*
-	case CODE_speed1:	
+    case CODE_motor_direction_change:
+        strncpy(codes->disp, "motor_direction_change ON(1)/OFF",40);
+        if( cmd == CMD_WRITE_RAM ) motor_direction_change = codes->code_value;
+        set_code_default_int(0,1,0,motor_direction_change,0,codes);
+        break;
+
+
+    case CODE_accel_time1:
+        strncpy(codes->disp, "accel_time1 (sec)",40);
+        if( cmd == CMD_WRITE_RAM ) accel_time1 = (codes->code_value).floats;
+        code_default_float(0.0,3000.0,5.0,accel_time1,0,codes);
+        break;
+
+    case CODE_decel_time1:
+        strncpy(codes->disp, "decel_time1 (sec)",40);
+        if( cmd == CMD_WRITE_RAM ) decel_time1 = (codes->code_value).floats;
+        set_code_default_float(0.0,3000.0,5.0,decel_time1,0,codes);
+        break;
+
+    case CODE_motor_ctrl_mode:  //
+        strncpy(codes->disp, "motor_ctrl_mode",40);
+        if( cmd == CMD_WRITE_RAM ) motor_ctrl_mode = (codes->code_value).ints;
+        set_code_default_int(0,7,0,motor_ctrl_mode,0,codes);
+        break;
+
+    case CODE_speed1:
 		strncpy(codes->disp, "speed1 (p.u)",40);
-		if( cmd == CMD_WRITE_RAM ) code_digital_speed2 = (codes->code_value).doubles;
-		set_code_default_double(0.0,0.9,0.25,code_digital_speed2,0,codes);
+		if( cmd == CMD_WRITE_RAM ) code_digital_speed2 = (codes->code_value).floats;
+		set_code_default_float(0.0,0.9,0.25,code_digital_speed2,0,codes);
 		break;
 
 	case CODE_speed2:		
 		strncpy(codes->disp, "speed2 (p.u)",40);
-		if( cmd == CMD_WRITE_RAM ) code_speed2 = (codes->code_value).doubles;
-		set_code_default_double(0.0,1.2,0.25,code_speed2,0,codes);
+		if( cmd == CMD_WRITE_RAM ) code_speed2 = (codes->code_value).floats;
+		set_code_default_float(0.0,1.2,0.25,code_speed2,0,codes);
 		break;
 
-*/
-	case CODE_GROUP1_END:
+    case CODE_motor_rate_power:
+        strncpy(codes->disp, "motor_rate_power",40);
+        if( cmd == CMD_WRITE_RAM ) motor_rate_power = (codes->code_value).floats;
+        set_code_default_float(100,2.0e+6,3700,motor_rate_power,0,codes);
+        break;
+
+    case CODE_motor_rate_volt:
+        strncpy(codes->disp, "motor_rate_volt (Vrms)",40);
+        if( cmd == CMD_WRITE_RAM ) motor_rate_volt = (codes->code_value).floats;
+        set_code_default_float(100.0,500.0,380.0,motor_rate_volt,0,codes);
+        break;
+
+    case CODE_motor_rate_current:
+        strncpy(codes->disp, "motor_rate_current (A)",40);
+        if( cmd == CMD_WRITE_RAM ) motor_rate_current = (codes->code_value).floats;
+        set_code_default_float(1.0,2000.0,7.6,motor_rate_current,0,codes);
+        break;
+
+    case CODE_motor_rate_hz:
+        strncpy(codes->disp, "motor_rate_hz (Hz)",40);
+        if( cmd == CMD_WRITE_RAM ) motor_rate_hz = (codes->code_value).floats;
+        set_code_default_float(30.0,120.0,60.0,motor_rate_hz,0,codes);
+        break;
+
+    case CODE_motor_rate_rpm:
+        strncpy(codes->disp, "motor_rate_rpm",40);
+        if( cmd == CMD_WRITE_RAM ) motor_rate_rpm = (codes->code_value).floats;
+        set_code_default_float(500,8000.0,1750.0,motor_rate_rpm,0,codes);
+        break;
+
+    case CODE_motor_pole:
+        strncpy(codes->disp, "motor_pole ",40);
+        if( cmd == CMD_WRITE_RAM ) motor_pole = (codes->code_value).ints;
+        set_code_default_int(2,20,4,motor_pole,0,codes);
+        break;
+
+    case CODE_motor_rate_effiency:
+        strncpy(codes->disp, "motor_rate_effiency (p.u)",40);
+        if( cmd == CMD_WRITE_RAM ) motor_rate_effiency = (codes->code_value).floats;
+        set_code_default_float(0.2,0.99,0.875,motor_rate_effiency,0,codes);
+        break;
+
+    case CODE_protect_inhibit_on:
+        strncpy(codes->disp, "protect_inhibit_on[1]",40);
+        if( cmd == CMD_WRITE_RAM ) code_protect_inhibit_on = (codes->code_value).ints;
+        set_code_default_int(0,1,0,code_protect_inhibit_on,0,codes);
+        break;
+
+	case CODE_END:
 		return -2;
 			
 	default:
@@ -28,28 +101,15 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
 	return 0;
 }
 
-void set_code_default_int( int min, int max, int defaults, int value, int open_level, CODE_INFO * codes )
+void set_code_default(float min, float max, float defaults, float value,int open_level, CODE_INFO * codes )
 {
-	codes->type 					= TYPE_INTEGER;
-	codes->open_level		 		= open_level;
-	(codes->code_min).ints 			= min;
-	(codes->code_max).ints			= max;
-	(codes->code_default).ints		= defaults;
-	(codes->code_value). ints		= value;
+	codes->type 		= TYPE_float;
+	codes->open_level 	= open_level;
+	codes->code_min		= min;
+	codes->code_max		= max;
+	codes->code_default	= defaults;
+	codes->code_value 	= value;
 }
-
-void set_code_default_double(double min, double max, double defaults, double value,int open_level, CODE_INFO * codes )
-{
-	codes->type 					= TYPE_DOUBLE;
-	codes->open_level 				= open_level;
-	(codes->code_min).doubles 		= min;
-	(codes->code_max).doubles		= max;
-	(codes->code_default).doubles 	= defaults;
-	(codes->code_value). doubles	= value;
-}
-
-// address ∞° 1000¿ª ¥ı«— øµø™ø° ¿˙¿Â«— µ•¿Ã≈Õ∏¶ 
-// ∞ÀªÁ «œ¥¬ ∑Á∆æ 
 
 int check_backup_data()
 {
@@ -68,14 +128,14 @@ int check_backup_data()
 
 	while( loop_control )	
 	{
-		for( i = 0 ; i <= 7 ; i++){	 // code group ¿Ã 6∞≥ 
+		for( i = 0 ; i <= 7 ; i++){	 // code group ÔøΩÔøΩ 6ÔøΩÔøΩ 
 			for( j = 0; j <= 50 ;j++)
 			{
 				address = i * 100 + j ;
 				check = get_code_information( address, cmd , & code_inform);
 				if( !check ){
 					
-					// debug  address ¿« π≈©∏¶ º≥¡§«œ¥¬ ±‚¥…¿ª √ﬂ∞°«“ ∞Õ 
+					// debug  address ÔøΩÔøΩ ÔøΩÔøΩ≈©ÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩœ¥ÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩﬂ∞ÔøΩÔøΩÔøΩ ÔøΩÔøΩ 
 					// 2009.08.30
 					Flag_TripDataBackup = 1;
 					read_eprom_data( address, & data);
@@ -107,7 +167,7 @@ void save_backup_data()
 	cmd = CMD_READ_DATA;
 	address = 0;
 
-	for( i = 0 ; i <= 7 ; i++){	 // code group ¿Ã 6∞≥ 
+	for( i = 0 ; i <= 7 ; i++){	 // code group ÔøΩÔøΩ 6ÔøΩÔøΩ 
 		for( j = 0; j <= 29 ;j++)
 		{
 			address = i* 100 +j ;
@@ -121,7 +181,7 @@ void save_backup_data()
 		}
 	}
 }
-// address 1000¿ª ¥ı«—¥Ÿ.  
+// address 1000ÔøΩÔøΩ ÔøΩÔøΩÔøΩ—¥ÔøΩ.  
 
 
 void backup_data_load()
@@ -139,7 +199,7 @@ void backup_data_load()
 	loop_control =  1;
 	while( loop_control )	
 	{
-		for( i = 0 ; i <= 7 ; i++){	 // code group ¿Ã 6∞≥ 
+		for( i = 0 ; i <= 7 ; i++){	 // code group ÔøΩÔøΩ 6ÔøΩÔøΩ 
 
 			for( j = 0; j <= 29 ;j++)
 			{
@@ -151,8 +211,8 @@ void backup_data_load()
 					Flag_TripDataBackup = 0;
 					write_code_2_eeprom( address,data);
 
-					if( code_inform.type == TYPE_DOUBLE) 
-						code_inform.code_value.doubles = data.dword;
+					if( code_inform.type == TYPE_FLOAT)
+						code_inform.code_value.floats = data.dword;
 					else
 						code_inform.code_value.ints = data.word.word0;
 
@@ -165,11 +225,11 @@ void backup_data_load()
 	}
 }
 
-double CheckSum()
+float CheckSum()
 {
 	return 0.0;
 }
-double CheckSum_bk()
+float CheckSum_bk()
 {
 	UNION32	data;
 	UNION32	data2;
@@ -197,7 +257,7 @@ double CheckSum_bk()
 	return data2.dword;
 }
 
-int SaveDataProc(int addr, double data)
+int SaveDataProc(int addr, float data)
 {
 	int cmd,i,return_value;
 	char SciBuf[30]={0};
@@ -275,11 +335,11 @@ int SaveDataProc(int addr, double data)
 			return 0;
 		}	 
 	}	
-	else {		//  code_inform->Type == TYPE_DOUBLE
-		if( ( code_inform.code_min.doubles) > data ){
+	else {		//  code_inform->Type == TYPE_float
+		if( ( code_inform.code_min.floats) > data ){
 			goto _SAVE_ERROR_DATA_UNDER;
 		}
-		else if( ( code_inform.code_max.doubles) < data ){
+		else if( ( code_inform.code_max.float) < data ){
 			goto _SAVE_ERROR_DATA_OVER;
 		}			
 		else {
@@ -291,7 +351,7 @@ int SaveDataProc(int addr, double data)
 
 				if( u32data.dword != u32data2.dword ) goto _EEPROM_WRITE_ERROR;
 
-				code_inform.code_value.doubles = data;
+				code_inform.code_value.float = data;
 				cmd = CMD_WRITE_RAM;
 				get_code_information( addr,cmd, & code_inform);
 
@@ -348,7 +408,7 @@ int init_eprom_data()
 {
 	UNION32	data,data2;
 	int check;
-	int address,cmd,loop_ctrl;
+	int address,cmd;
 	int return_value;
 
 	data.dword  = 0.0;
@@ -356,50 +416,28 @@ int init_eprom_data()
 	cmd = CMD_READ_DATA;
 	address = return_value = 0;
 	
-	loop_ctrl = 1;
-
-	while(loop_ctrl)
-	{
+	for( address = 0 ; address < CODE_END ; address++ )
 		cmd = CMD_READ_DATA;
 		check = get_code_information( address, cmd , & code_inform);
 
 		if( check==0 ){
-			if( code_inform.type == TYPE_DOUBLE){ 
-				data.dword = code_inform.code_default.doubles;
-			}
-			else{
-				data.word.word0 = code_inform.code_default.ints;
-			}
-
+			data.dword = code_inform.code_default;
 			read_eprom_data(address, & data2 );
-
 			if( data.dword != data2.dword)	write_code_2_eeprom( address,data);
-
 			read_eprom_data(address, & data2 );
-
 			if( data.dword != data2.dword)
 			{
-				loop_ctrl = 0;
 				return_value = -1;
 				load_sci_tx_mail_box("Trip : eeprom write" );
 				delay_msecs(100);
 				break;
 			}	 
-			code_inform.code_value.doubles = data.dword;
+			code_inform.code_value = data.dword;
 			cmd = CMD_WRITE_RAM;
 			check = get_code_information( address,cmd, & code_inform);
-			address ++;
 		}
-		else if( check == -2) address = (address/100)*100 + 100;
 		else address ++; 		
-
-		if( address >= CODE_GROUP7_END )
-		{
-			EepromSaveFlag = 0;
-			return 0;
-		}
 	}
-	EepromSaveFlag = 0;
 	return return_value;
 }
-// end of code_proc.c
+//--- end of code_proc.c

@@ -6,16 +6,14 @@
 #include	<header.h>
 #include	<extern.h>
 
-
-#if MOTOR_CONTROL
 void common_variable_init()
 {
-	double over_current_level;
+	float over_current_level;
 
 	Ts = 1.0 / SWITCH_FREQ;	// pwm switching frequency
 	inv_Ts=1.0/Ts;
 
-	Vs_rat = sqrt(2.0)/sqrt(3.0) * motor_rate_volt;			// »óÀü¾ÐÀÇ ÇÇÅ© °ª
+	Vs_rat = sqrt(2.0)/sqrt(3.0) * motor_rate_volt;			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å© ï¿½ï¿½
 	Is_rat=sqrt(2.0)*motor_rate_current;
 
 	Is_max = Is_rat * max_I_ratio  / 100.0;		
@@ -39,14 +37,14 @@ void common_variable_init()
 	inv_Kt=1.0/Kt;
 	P_pair=(motor_pole/2.0);
 	inv_P_pair=1.0/P_pair;
-	rpm_Coeff=60.0*inv_P_pair/PI_2;				// È¸Àü¼ö/ºÐ
+	rpm_Coeff=60.0*inv_P_pair/PI_2;				// È¸ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½
 	
-	// V/F Á¦¿¡ÀÇ ½½¸³ º¸»ó
+	// V/F ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	S_rat=(we_rat-wr_rat)/we_rat;
-	S_lin=(motor_pole/PI)*(S_rat*motor_rate_hz)/Te_rat;				// ==> V/f Á¦¾î : ½½¸³ º¸»ó
+	S_lin=(motor_pole/PI)*(S_rat*motor_rate_hz)/Te_rat;				// ==> V/f ï¿½ï¿½ï¿½ï¿½ : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	Freq_slip_rat=S_rat*motor_rate_hz;
 
-	PreChargeLevel = 0.85*(1.35*motor_rate_volt);	// Á¤»ó Àü¾ÐÀÇ 85%
+	PreChargeLevel = 0.85*(1.35*motor_rate_volt);	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 85%
 	C_ce_nF=(3.5-0.8)/(1000.0-100.0)*(2.0*Is_rat-100.0)+0.8;	// 1000A -> 3.5nF, 100A -> 0.8nF
 	C_ce=1.0e-9*C_ce_nF;
 	inv_C_ce=1.0/C_ce;	
@@ -54,7 +52,7 @@ void common_variable_init()
 //-----------------------
 
 	Freq_ref=0.0;
-	wr_ref=0.0;											// ¼Óµµ ¸í·É -> 0	
+	wr_ref=0.0;											// ï¿½Óµï¿½ ï¿½ï¿½ï¿½ -> 0	
 	rpm_ref=0.0;				
 
 //------
@@ -69,12 +67,12 @@ void common_variable_init()
 	we0=0.0;
 
 	wr_m0=0.0;
-	wr_m=0.0;				// ½ÇÁ¦ ¼ÓµµÀÇ ÇÊÅÍ¸µ ÃÊ±â°ª = ½ÇÁ¦ ¼Óµµ 
+	wr_m=0.0;				// ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ê±â°ª = ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ 
 	wr=0.0;
 
 	wr_ref=0.0;
 	wr_err=0.0;
-	wr_ErrInt=0.0;				// ¼ÓµµÁ¦¾î±âÀÇ ÀûºÐ·® 
+	wr_ErrInt=0.0;				// ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ð·ï¿½ 
 	w_sl=0.0;
 	w_sl0=0.0;
 
@@ -91,7 +89,7 @@ void common_variable_init()
 	CosDeltaTheta=0.0;
 	SinDeltaTheta=1.0;
 
-	// Àü·ù
+	// ï¿½ï¿½ï¿½ï¿½
 	Is_dq[ds]=Is_dq[qs]=0.0;
 	Is_mag=0.0;
 	Is_mag_rms=0.0;
@@ -102,9 +100,9 @@ void common_variable_init()
 	Is_DQ_ref[DS]=Is_DQ_ref[QS]=0.0;
 	
 	prev_I_QS=0.0;
-	Is_DQ_ErrInt[DS]=Is_DQ_ErrInt[QS]=0.0;			// Àü·ùÁ¦¾î±âÀÇ ÀûºÐ·®
+	Is_DQ_ErrInt[DS]=Is_DQ_ErrInt[QS]=0.0;			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ð·ï¿½
 	
-	// Àü¾Ð
+	// ï¿½ï¿½ï¿½ï¿½
 	Vs_max=0.0;	
 	Vs_abc[as]=Vs_abc[bs]=Vs_abc[cs]=0.0;
 	Vs_abc_ref[as]=Vs_abc_ref[bs]=Vs_abc_ref[cs]=0.0;
@@ -120,12 +118,12 @@ void common_variable_init()
 	Vs_DQ_ref_P[DS]=Vs_DQ_ref_P[QS]=0.0;
 	Vs_DQ_ref_PI[DS]=Vs_DQ_ref_PI[QS]=0.0;
 	
-	// ÅäÅ©
+	// ï¿½ï¿½Å©
 	Te_max=0.0;
 	Te_ref=0.0;
 	Te=0.0;
 	
-	// ÀÚ¼Ó
+	// ï¿½Ú¼ï¿½
 	Fs_ref0=0.0;
 	Fs_ref=0.0;
 	inv_Fs_ref=0.0;
@@ -153,18 +151,16 @@ void common_variable_init()
 
 	// V/F Control Parameter
 	VF_DeadTimeGain=1.0;
-	VF_ExcitationTime=2.0;					// DC¿©ÀÚ ½Ã°£ = 0.5ÃÊ
+	VF_ExcitationTime=2.0;					// DCï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ = 0.5ï¿½ï¿½
 	VF_Fs_Coeff=1.0;
 	VF_Freq_TrqBoost=1.5;
 	VF_Vs_Coeff_TrqBoost=1.5*(VF_Freq_TrqBoost / motor_rate_hz );			
 	VF_Rs_ThermalCoeff=1.05;			
 	VF_IR_Comp_FilterPole=100.0;		
 	VF_Slip_Comp_FilterPole=20.0;	
-	VF_Rs=0.0;								// µðÆúÆ® ÀúÇ× °ª --> 0
+	VF_Rs=0.0;								// ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ --> 0
 	//---------------------------
 	gfRunTime = 0.0;
 }
-#endif
-
 // end of file
 

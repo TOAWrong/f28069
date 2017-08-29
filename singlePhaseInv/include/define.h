@@ -3,11 +3,11 @@
 
 typedef union
 {
-	double	dword;			/* double word : 32bit */
+	float	dword;			/* float word : 32bit */
 	struct
 	{
-		int word0;		/* ÇÏÀ§ 16ºñÆ®(least siginificant word) */
-		int word1;		/* »óÀ§ 16ºñÆ®(most siginificant word) */
+		int word0;		/* ï¿½ï¿½ï¿½ï¿½ 16ï¿½ï¿½Æ®(least siginificant word) */
+		int word1;		/* ï¿½ï¿½ï¿½ï¿½ 16ï¿½ï¿½Æ®(most siginificant word) */
 	} word;	
 	struct
 	{
@@ -21,7 +21,7 @@ typedef union
 typedef struct {
 	int Cmd;
 	int Address;
-	double Data;
+	float Data;
 } CMD_MSG;
 
 

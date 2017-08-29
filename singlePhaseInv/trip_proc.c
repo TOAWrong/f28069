@@ -34,7 +34,7 @@ int CheckOverCurrent( )
 //  ������ ������ ��ȣ 
 //-----------------------------------------------
 #define CODE_OC_level 		301
-double code_over_volt_set = 350.0;
+float code_over_volt_set = 350.0;
 
 int CheckOverVolt( )
 {
@@ -127,7 +127,7 @@ int trip_check()
 //-----------------------------------
 // Trip Message�� Ʈ���� �߻��� ������ ������ �Ѵ�. 
 //
-void trip_recording(int trip_code,double trip_data,char * st)
+void trip_recording(int trip_code,float trip_data,char * st)
 {
 	if(gRunFlag)	gTripSaveFlag = 1;
 	else			gTripSaveFlag = 0;

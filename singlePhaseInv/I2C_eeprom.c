@@ -113,11 +113,11 @@ void read_eprom_data(int address, UNION32 * u32data)
 void data_under_proc(int address,int type, UNION32 u32data)
 {
 	int trip_code;
-	double trip_data;
+	float trip_data;
 	
 	trip_code = address;
 
-	if(type ==TYPE_INTEGER) trip_data = (double) u32data.word.word0;
+	if(type ==TYPE_INTEGER) trip_data = (float) u32data.word.word0;
 	else					trip_data = u32data.dword;
 
 	trip_recording( trip_code, trip_data,"Data Under");
@@ -126,11 +126,11 @@ void data_under_proc(int address,int type, UNION32 u32data)
 void data_over_proc(int address,int type, UNION32 u32data)
 {
 	int trip_code;
-	double trip_data;
+	float trip_data;
 	
 	trip_code = address;
 
-	if(type ==TYPE_INTEGER) trip_data = (double) u32data.word.word0;
+	if(type ==TYPE_INTEGER) trip_data = (float) u32data.word.word0;
 	else					trip_data = u32data.dword;
 
 	trip_recording( trip_code, trip_data,"Data Over");
@@ -139,7 +139,7 @@ void data_over_proc(int address,int type, UNION32 u32data)
 void invalid_address_proc(int address )
 {
 	int trip_code;
-	double trip_data;
+	float trip_data;
 	
 	trip_code = address;
 	trip_data = 0.0;
@@ -174,17 +174,17 @@ int check_code_data(int address, UNION32 u32data )
 			return_value = 0;
 		}	 
 	}	
-	else {		//  code_inform->Type == TYPE_DOUBLE
-		if( ( code_inform.code_min.doubles) > u32data.dword ){
-			data_under_proc(address, TYPE_DOUBLE, u32data);	
+	else {		//  code_inform->Type == TYPE_float
+		if( ( code_inform.code_min.floats) > u32data.dword ){
+			data_under_proc(address, TYPE_float, u32data);
 			return_value = -1;
 		}
-		else if( ( code_inform.code_max.doubles) < u32data.dword ){
-			data_over_proc(address, TYPE_DOUBLE, u32data);	
+		else if( ( code_inform.code_max.floats) < u32data.dword ){
+			data_over_proc(address, TYPE_float, u32data);
 			return_value = -1;
 		}			
 		else {
-			code_inform.code_value.doubles = u32data.dword;
+			code_inform.code_value.floats = u32data.dword;
 			cmd = CMD_WRITE_RAM;
 			check =  get_code_information( address,cmd, & code_inform);
 			return_value = 0;
@@ -222,7 +222,7 @@ int load_code2ram()
 					}
 					else{
 						if(( code_inform.type)==TYPE_INTEGER) code_inform.code_value.ints = data.word.word0;
-						else  							 	  code_inform.code_value.doubles = data.dword;
+						else  							 	  code_inform.code_value.floats = data.dword;
 						
 						cmd = CMD_WRITE_RAM;
 						check = get_code_information( address,cmd, & code_inform);
@@ -252,7 +252,7 @@ int code_init()
 			if( !check ){
 
 				if( code_inform.type == TYPE_INTEGER)	datum.word.word0 = code_inform.code_value.ints;
-				else									datum.dword 	 = code_inform.code_value.doubles;
+				else									datum.dword 	 = code_inform.code_value.floats;
 				write_code_2_eeprom(address, datum);
 			}	 		
 			address ++;

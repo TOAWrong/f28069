@@ -40,26 +40,26 @@ extern void set_dac_point();
 extern void monitor_proc();		// need_edit
 
 //RefFunc.c
-extern void ramp_proc( double set_ref, double * out_ref);
+extern void ramp_proc(  set_ref, float * out_ref);
 
 // auto_tuning.c
 extern int parameter_estimation( );
 
 // common_module.c
-extern void LPF_COEFF_CAL(double cut_freq, double * coeff1, double * coeff2);
-extern void LPF_V(double *LPF_out, double *LPF_feed, double LPF_in);
-extern void LPF_I(double *LPF_out, double *LPF_feed, double LPF_in);
+extern void LPF_COEFF_CAL(float cut_freq, float * coeff1, float * coeff2);
+extern void LPF_V(float *LPF_out, float *LPF_feed, float LPF_in);
+extern void LPF_I(float *LPF_out, float *LPF_feed, float LPF_in);
 
-extern double linear_eq(double x1, double x2, double y1, double y2, double x );
+extern float linear_eq(float x1, float x2, float y1, float y2, float x );
 extern int periodic_check(unsigned long  msec);
-extern	void 	PI_Damp_Controller(double limit,double Ts,double damp_factor,double Kp,double Ki,double ref,double feedback,double *integral,double *output);
+extern	void 	PI_Damp_Controller(float limit,float Ts,float damp_factor,float Kp,float Ki,float ref,float feedback,float *integral,float *output);
 
 extern void get_adc_offset();
 extern void get_adc_vdc_low();
 extern void get_adc_vdc_high();
 
 // vf_control.c
-extern int vf_loop_control(double);
+extern int vf_loop_control(float);
 extern int vf_frequency_control();
 extern void vf_simple_control();
 extern void slip_comp_scalar_ctrl();
@@ -73,7 +73,7 @@ extern int pwm_regenerat_convert();
 // code_proc.c
 extern int get_code_information(int address,int cmd , CODE_INFO *  codes);
 extern void set_code_default_int( int min, int max, int defaults, int value, int open_level, CODE_INFO * codes );
-extern void set_code_default_double(double min, double max, double defaults, double value,int open_level, CODE_INFO * codes );
+extern void set_code_default_float(float min, float max, float defaults, float value,int open_level, CODE_INFO * codes );
 
 extern int get_code_group0(int addr ,int cmd, CODE_INFO * codes );
 extern int get_code_group1(int addr ,int cmd, CODE_INFO * codes );
@@ -90,22 +90,22 @@ extern void save_backup_data();
 extern void backup_data_load();
 extern int init_eprom_data();
 extern int Check_Eeprom_Error();
-extern double CheckSum();
+extern float CheckSum();
 
-extern int SaveDataProc(int addr, double data);
+extern int SaveDataProc(int addr, float data);
 
 // digital_inout.c
 
 extern void digital_out_proc();
-extern void	digital_input_proc( int * cmd, double * ref);
+extern void	digital_input_proc( int * cmd, float * ref);
 extern void input_ext_fault_a_proc();
 
 
-extern void serial_com_proc( int * sci_cmd, double * sci_reference );
+extern void serial_com_proc( int * sci_cmd, float * sci_reference );
 extern void load_sci_tx_mail_box(char *st);
 
 // scia.c
-extern void scia_cmd_proc(int * scic_cmd, double * scic_ref);
+extern void scia_cmd_proc(int * scic_cmd, float * scic_ref);
 extern interrupt void sciaTxFifoIsr(void);
 extern interrupt void sciaRxFifoIsr(void);
 extern void scia_fifo_init(void);
@@ -116,7 +116,7 @@ interrupt void MainPWM(void);
 
 
 // analog.c
-extern void analog_input_proc( double * analog_referenc);
+extern void analog_input_proc( float * analog_referenc);
 extern void analog_out_proc( );
 extern int check_sensor_trip();
 
@@ -140,13 +140,13 @@ extern	int 	AUTO_TUNING_Parameter();
 //******************************************
 
 // File : "svm.c"
-extern	void SpaceVectorModulation(double *Vs_dq );
+extern	void SpaceVectorModulation(float *Vs_dq );
 extern	void VoltageEstimation();
 
 //***************************************
 
 // File : "control.c"
-extern	void 	LPF1(double Ts,double pole,double in,double *out);
+extern	void 	LPF1(float Ts,float pole,float in,float *out);
 	
 // File : ""SL_Vect.c""
 extern	void 	SL_VectCntl_SFRF();
@@ -191,7 +191,7 @@ extern void GetSensorValue( );
 
 // refunc.c
 
-extern void RefFunc( double CommandRef,double * OutRef);
+extern void RefFunc( float CommandRef,float * OutRef);
 
 // I2C_eeprom.c
 extern int check_code_data(int address, UNION32 u32data );
@@ -217,10 +217,10 @@ extern void WriteTimeToDS1307( );
 // interrupt void i2c_int1a_isr(void);
 
 // CommandProc.c
-extern void get_command(int * command, double * ref );
+extern void get_command(int * command, float * ref );
 
 //TripProc.c
-extern void trip_recording(int trip_code,double trip_data,char * st);
+extern void trip_recording(int trip_code,float trip_data,char * st);
 extern void GetTripInfo(int Point, TRIP_INFO * TripData );
 extern void WriteTripString(int StartAddr, char * str);
 extern void ReadTripString(int StartAddr, char * str);

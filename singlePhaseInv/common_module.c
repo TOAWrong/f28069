@@ -1,40 +1,15 @@
 #include	<header.h>
 #include	<extern.h>
 
-/*
-void LPF_V(double *LPF_out, double *LPF_feed, double LPF_in)
+float linear_eq(float x1, float x2, float y1, float y2, float x )
 {
-	*LPF_out = (pCoeff_V2 * (LPF_in + *LPF_feed)) - ( pCoeff_V1 * (*LPF_out));
-	*LPF_feed = LPF_in;
-}
-
-void LPF_I(double *LPF_out, double *LPF_feed, double LPF_in)
-{
-
-	
-// 1000 Hz cut off at 2.5 kH switching
-//	pCoeff_I1 = -0.081;
-//	pCoeff_I2 =  0.919*0.5;
-
-	
-// 2000 Hz cut off  at 2.5 kH switching
-	pCoeff_I1 = -0.006561;
-	pCoeff_I2 =  0.9934*0.5;
-
-	*LPF_out = (pCoeff_I2 * (LPF_in + *LPF_feed)) - ( pCoeff_I1 * (*LPF_out));
-	*LPF_feed = LPF_in;
-}
-*/
-
-double linear_eq(double x1, double x2, double y1, double y2, double x )
-{
-	double y;
+	float y;
 
 	y = (( y2-y1) / ( x2 - x1 )) * x  + (( y1 * x2 - y2 * x1 )/ (x2- x1));
 	return y;
 }
 
-void LPF1(double Ts,double pole,double in,double *out)
+void LPF1(float Ts,float pole,float in,float *out)
 {
 	*out+=pole*(in-*out)*Ts;
 }
@@ -43,7 +18,7 @@ void Nop()
 {
   asm ("      nop");
 }
-void PI_Damp_Controller(double limit,double Ts, double damp_factor, double Kp,double Ki,double ref,double feedback,double *integral,double *output)
+void PI_Damp_Controller(float limit,float Ts, float damp_factor, float Kp,float Ki,float ref,float feedback,float *integral,float *output)
 {
 	*integral+=Ki*(ref-feedback)*Ts;
 	if (*integral>fabs(limit))			*integral=fabs(limit);
@@ -103,7 +78,7 @@ int periodic_check(unsigned long  msec)
 	return -1;				
 }
 
-int iGetAinCmd(int * piCommand, double * pfReference)
+int iGetAinCmd(int * piCommand, float * pfReference)
 {
 	int iTemp;
 	iTemp = 0;
@@ -113,7 +88,7 @@ int iGetAinCmd(int * piCommand, double * pfReference)
 	return iTemp;
 }
 
-void analog_cmd_proc(double * ana_ref)
+void analog_cmd_proc(float * ana_ref)
 {
 	* ana_ref = analog_ref_a * analog_cmd_in_span1;		// debug
 }
@@ -121,10 +96,10 @@ void analog_cmd_proc(double * ana_ref)
 //
 //------------------------------
 
-void get_command( int * command, double * ref )
+void get_command( int * command, float * ref )
 {
 	int digital_cmd,sci_cmd;
-	double digital_reference,sci_ref,ana_ref;
+	float digital_reference,sci_ref,ana_ref;
 
 	digital_input_proc( & digital_cmd, & digital_reference);
 	serial_com_proc( & sci_cmd, & sci_ref );
@@ -170,8 +145,8 @@ void get_adc_offset()
 	int LoopCtrl;
 
 	Uint32 RunTimeMsec,StartTimeMsec;
-	double u_offset_in, v_offset_in;
-	double u_offset_out, v_offset_out;
+	float u_offset_in, v_offset_in;
+	float u_offset_out, v_offset_out;
 	
 	UNION32 u32data;
 
@@ -193,8 +168,8 @@ void get_adc_offset()
 		RunTimeMsec = ulGetTime_mSec( StartTimeMsec);
 		if(RunTimeMsec > 1){
 			StartTimeMsec = ulGetNow_mSec( );
-			u_offset_in = (double)adcIuPhase;
-			v_offset_in = (double)adcIvPhase;
+			u_offset_in = (float)adcIuPhase;
+			v_offset_in = (float)adcIvPhase;
 			LPF1(0.002,10.0,u_offset_in, & u_offset_out);
 			LPF1(0.002,10.0,v_offset_in, & v_offset_out);
 		}
@@ -218,7 +193,7 @@ void get_adc_vdc_low()
 	int LoopCtrl;
 
 	Uint32 RunTimeMsec,StartTimeMsec;
-	double adc_Vdc_in, adc_Vdc_out;
+	float adc_Vdc_in, adc_Vdc_out;
 	
 	UNION32 u32data;
 
@@ -235,7 +210,7 @@ void get_adc_vdc_low()
 		RunTimeMsec = ulGetTime_mSec( StartTimeMsec);
 		if(RunTimeMsec > 1){
 			StartTimeMsec = ulGetNow_mSec( );
-			adc_Vdc_in = (double)adcVdc;			// VDC ����
+			adc_Vdc_in = (float)adcVdc;			// VDC ����
 			LPF1(0.002,10.0,adc_Vdc_in, & adc_Vdc_out);
 		}
 	}
@@ -254,7 +229,7 @@ void get_adc_vdc_high()
 	int LoopCtrl;
 
 	Uint32 RunTimeMsec,StartTimeMsec;
-	double adc_Vdc_in, adc_Vdc_out;
+	float adc_Vdc_in, adc_Vdc_out;
 	
 	UNION32 u32data;
 
@@ -271,7 +246,7 @@ void get_adc_vdc_high()
 		RunTimeMsec = ulGetTime_mSec( StartTimeMsec);
 		if(RunTimeMsec > 1){
 			StartTimeMsec = ulGetNow_mSec( );
-			adc_Vdc_in = (double)adcVdc;
+			adc_Vdc_in = (float)adcVdc;
 			LPF1(0.002,10.0,adc_Vdc_in, & adc_Vdc_out);
 		}
 	}

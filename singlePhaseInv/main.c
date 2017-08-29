@@ -6,13 +6,13 @@
 
 extern interrupt void MainPWM(void);
 
-double Vdc_fnd_data;
+ Vdc_fnd_data;
 
 void main( void )
 {
 	int trip_code,i,loop_ctrl;
 	int cmd;
-	double ref_in0;
+	 ref_in0;
 
 	InitSysCtrl();
 	InitGpio();
@@ -171,7 +171,7 @@ void InitEPwm_ACIM_Inverter()
 
 	EPwm1Regs.ETSEL.bit.INTEN = 0;    		        // Enable INT
 	MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / igbt_pwm_freq ) * 0.5 * 0.5 );
-	inv_MAX_PWM_CNT = 1.0 / (double)MAX_PWM_CNT;
+	inv_MAX_PWM_CNT = 1.0 / ()MAX_PWM_CNT;
 
 	EPwm1Regs.TBPRD =  MAX_PWM_CNT;			// Set timer period
 	EPwm1Regs.TBPHS.half.TBPHS = 0x0000;           	// Phase is 0

@@ -1,12 +1,12 @@
 #include	<header.h>
 #include	<extern.h>
 
-void RefFunc( double SetRef,double * pOutRef)
+void RefFunc( float SetRef,float * pOutRef)
 {
 	static unsigned long ulCount;
 
-	double OutRef;
-	double accel_time,decel_time;
+	float OutRef;
+	float accel_time,decel_time;
 	
 	OutRef = * pOutRef;
 
@@ -22,7 +22,7 @@ void RefFunc( double SetRef,double * pOutRef)
 	if( fabs(OutRef) <= code_speed2 )	{ accel_time = accel_time1; decel_time = decel_time1; }
 	else 								{ accel_time = accel_time2; decel_time = decel_time2; }
 
-//-- ¼³Á¤°ªÀÌ ¾ç¼öÀÎ °æ¿ì 
+//-- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ 
 	if( OutRef >= 0 )
 	{
 		if (SetRef > OutRef){ 
@@ -34,7 +34,7 @@ void RefFunc( double SetRef,double * pOutRef)
 			if( OutRef < SetRef ) OutRef = SetRef;
 		}
 	}
-//-- ¼³Á¤°ªÀÌ À½¼öÀÎ °æ¿ì 
+//-- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ 
 	else{
 		if (SetRef > OutRef){
 			OutRef += 0.001 / decel_time ;
@@ -49,7 +49,7 @@ void RefFunc( double SetRef,double * pOutRef)
 }	
 
 
-void ramp_proc( double set_ref, double * out_ref)
+void ramp_proc( float set_ref, float * out_ref)
 {
 	switch(ramp_func_mode){
 	

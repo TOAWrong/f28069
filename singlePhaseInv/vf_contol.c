@@ -1,12 +1,12 @@
 #include	<header.h>
 #include	<extern.h>
 
-int vf_loop_control(double cmd_ref)
+int vf_loop_control(float cmd_ref)
 {
 	int LoopCtrl;
 	int trip_code=0;
 	int command;
-	double ref_in0;
+	float ref_in0;
 
 //	simple_scalar_control_variable_init();
 
@@ -38,7 +38,7 @@ int vf_loop_control(double cmd_ref)
 		}
 
 		monitor_proc();
-		get_command( & command, & ref_in0);	// Command¸¦ ÀÔ·Â ¹ÞÀ½ 
+		get_command( & command, & ref_in0);	// Commandï¿½ï¿½ ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½ï¿½ 
 		cmdtest = command;
 		
 		Nop();
@@ -102,8 +102,8 @@ int vf_loop_control(double cmd_ref)
 
 void vf_simple_control()
 {
-	static double theta = 0;
-	double Vs_ref;
+	static float theta = 0;
+	float Vs_ref;
 
 	Freq_out = motor_rate_hz * reference_out;
 
@@ -140,10 +140,10 @@ void slip_comp_scalar_ctrl()
    float   Es_m;
    float   Slip;
    float   sgn_freq;
-   float   Det_slip;            // sqrt()¾ÈÀÇ ºÎÈ£°Ë»ç
+   float   Det_slip;            // sqrt()ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½Ë»ï¿½
    float   Det_emf;
    
-   // Àü¾Ð ÃßÁ¤½Ã ½Ã°£Áö¿¬(Ts)À» º¸»ó
+   // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½(Ts)ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
    CosDeltaTheta=cos(we*Ts);
    SinDeltaTheta=sin(we*Ts);
    Us_dq[ds]=Vs_dq[ds]*CosDeltaTheta + Vs_dq[qs]*SinDeltaTheta;
@@ -151,8 +151,8 @@ void slip_comp_scalar_ctrl()
    Vs_dq[ds]=Us_dq[ds];
    Vs_dq[qs]=Us_dq[qs];
    
-   // ÁÖÆÄ¼ö ¸í·É
-//   if ( gfRunTime < gExcitationTime)      // DC ¿©ÀÚ ==> Flux Setup
+   // ï¿½ï¿½ï¿½Ä¼ï¿½ ï¿½ï¿½ï¿½
+//   if ( gfRunTime < gExcitationTime)      // DC ï¿½ï¿½ï¿½ï¿½ ==> Flux Setup
    if( gMachineState == STATE_INIT_RUN){
       Freq_ref = Freq_out= reference_out= we = theta = SinTheta=0.0;
       CosTheta=1.0;               
@@ -163,11 +163,11 @@ void slip_comp_scalar_ctrl()
       Freq_ref = Freq_rat * reference_out;
       if (Freq_ref > VF_Freq_TrqBoost)
       {
-         // ÁÖÆÄ¼öÀÇ ºÎÈ£
+         // ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ ï¿½ï¿½È£
          if (Freq_ref >= 0.0)   sgn_freq =  1.0;
          else                  sgn_freq = -1.0;
          
-         // ½½¸³ º¸»ó
+         // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
          Slip = fabs(Freq_slip)*inv_Freq_rat;
          Power_core_rat = motor_rate_power*(1.0-motor_rate_effiency/(1.0-S_rat))-1.5*Is_rat*Is_rat*VF_Rs;
          Power_core=0.5*( (1.0+Slip)/(1+S_rat)*(Freq_out*inv_Freq_rat) + (1.0+Slip*Slip)/(1.0+S_rat*S_rat)*(Freq_out*inv_Freq_rat)*(Freq_out*inv_Freq_rat) )*Power_core_rat;
@@ -178,7 +178,7 @@ void slip_comp_scalar_ctrl()
                LPF1(Ts,VF_Slip_Comp_FilterPole,-0.5*sqrt(fabs(S_lin*Power_gap)),&Freq_slip);
          else   LPF1(Ts,VF_Slip_Comp_FilterPole,0.5*(sqrt(Det_slip)-fabs(Freq_ref)),&Freq_slip);
       
-         // ½½¸³ Á¦ÇÑ
+         // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
          if (Freq_slip>2.0*Freq_slip_rat)         Freq_slip=2.0*Freq_slip_rat;
          else if (Freq_slip<-2.0*Freq_slip_rat)   Freq_slip=-2.0*Freq_slip_rat;
 
@@ -192,7 +192,7 @@ void slip_comp_scalar_ctrl()
          Freq_slip=0.0;
       }   
    
-      // °¢µµ °è»ê : ÁÖÆÄ¼ö ¸í·É + ½½¸³ ==> »õ·Î¿î ÁÖÆÄ¼ö ¸í·É
+      // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ : ï¿½ï¿½ï¿½Ä¼ï¿½ ï¿½ï¿½ï¿½ + ï¿½ï¿½ï¿½ï¿½ ==> ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½Ä¼ï¿½ ï¿½ï¿½ï¿½
       we=PI_2*Freq_out;
       theta+=we*Ts;
 
@@ -208,12 +208,12 @@ void slip_comp_scalar_ctrl()
       Is_DQ[DS]= CosTheta*Is_dq[ds] + SinTheta*Is_dq[qs];
       Is_DQ[QS]=-SinTheta*Is_dq[ds] + CosTheta*Is_dq[qs];
 
-      Det_emf=(Es_m*Es_m)-(VF_Rs*Is_DQ[QS])*(VF_Rs*Is_DQ[QS]);  //sqrt¾ÈÀÇ À½¼ö¿©ºÎÁ¶»ç
+      Det_emf=(Es_m*Es_m)-(VF_Rs*Is_DQ[QS])*(VF_Rs*Is_DQ[QS]);  //sqrtï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
       if ( (Det_emf>0.0) && (fabs(Freq_out)>VF_Freq_TrqBoost) )
             LPF1(Ts,VF_IR_Comp_FilterPole,0.9*(VF_Rs*Is_DQ[DS]+sqrt(Det_emf)-Es_m),&Vs_IR_comp);      
       else   LPF1(Ts,VF_IR_Comp_FilterPole,VF_Vs_Coeff_TrqBoost*Vs_rat,&Vs_IR_comp);   
    
-      // Àü·ù Á¦ÇÑ±â
+      // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ñ±ï¿½
       if (Is_mag>Is_max)
       {
          del_Vs_comp=(2.0*Vs_rat*inv_Is_rat)*(Is_mag-Is_max);
@@ -223,11 +223,11 @@ void slip_comp_scalar_ctrl()
       }   
       else   del_Vs_comp=0.0;
    
-      // ÃÖÁ¾ Àü¾Ð ¸í·É
-      Vs_ref = Es_m + Vs_IR_comp - del_Vs_comp;      // IRº¸»ó, Àü·ùÅ©±â Á¦ÇÑ 
+      // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+      Vs_ref = Es_m + Vs_IR_comp - del_Vs_comp;      // IRï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
       if (Vs_ref>Vs_max)   Vs_ref=Vs_max;
    }      
-   // Ãâ·Â Àü¾Ð
+   // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
    Vs_dq_ref[ds]=Vs_ref*CosTheta + VF_DeadTimeGain*(Vs_dq_ref[ds]-Vs_dq[ds]);
    Vs_dq_ref[qs]=Vs_ref*SinTheta + VF_DeadTimeGain*(Vs_dq_ref[qs]-Vs_dq[qs]);
 

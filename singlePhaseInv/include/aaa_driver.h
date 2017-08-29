@@ -67,7 +67,7 @@ typedef struct
 
 typedef union
 {
-	double	dword;			/* float word : 32bit */
+	float	dword;			/* float word : 32bit */
 	struct
 	{
 		int word0;		/* ���� 16��Ʈ(least siginificant word) */

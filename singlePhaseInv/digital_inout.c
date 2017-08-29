@@ -4,7 +4,7 @@
 void set_digit_input_funtion(int function_option );
 void digit_run_dir_chk( );
 
-double multi_step_proc( );
+float multi_step_proc( );
 
 void fault_reset()
 {
@@ -30,7 +30,7 @@ void input_ext_fault_a_proc()
 	gPWMTripCode = TRIP_EXT_A;
 }
 
-void digital_input_proc(int * cmd, double * ref )
+void digital_input_proc(int * cmd, float * ref )
 {
 	if( RUN_INPUT == 0 ){
 	 	* cmd = CMD_START; //FWD LOW

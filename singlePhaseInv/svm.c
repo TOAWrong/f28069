@@ -4,13 +4,13 @@
 #define	Vdc_MIN						10.0
 #define	inv_Vdc_MIN					0.1
 
-void SpaceVectorModulation( double *Vs_dq)
+void SpaceVectorModulation( float *Vs_dq)
 {
 //	unsigned int PWM_COUNT_MAX;
 	unsigned sector;
-	double	Vx,Vy;
-	double 	Dx,Dy,Dxy,Dz;
-	double	inv_Vdc;
+	float	Vx,Vy;
+	float 	Dx,Dy,Dxy,Dz;
+	float	inv_Vdc;
 
 	if (Vs_dq[qs]>=0) {
 		if (fabs(0.57735*Vs_dq[qs])<fabs(Vs_dq[ds])){
@@ -63,9 +63,9 @@ void SpaceVectorModulation( double *Vs_dq)
 }  
 
 #define Dt_us						4
-double 	Dd;
-double 	T_d;
-double 	delta_Tc;
+float 	Dd;
+float 	T_d;
+float 	delta_Tc;
 #define inv_Min_Isw 				20
 
 void VoltageEstimation_bk()

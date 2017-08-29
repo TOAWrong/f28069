@@ -3,7 +3,7 @@
 
 void VariInit()
 {
-	double x1,x2,y1,y2;
+	float x1,x2,y1,y2;
 // for Vdc calc 
 	x1 = code_adc_vdc_low;		y1 = code_Vdc_calc_low;
 	x2 = code_adc_vdc_high;		y2 = code_Vdc_calc_high;
@@ -15,7 +15,7 @@ void VariInit()
 	C_ce=1.0e-9*C_ce_nF;
 	inv_C_ce=1.0/C_ce;
 
-	// ½Ã°£ ¹× ÀÎµ¦½º
+	// ï¿½Ã°ï¿½ ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½
 	gfRunTime=0.0;
 
 	// reference
@@ -24,7 +24,7 @@ void VariInit()
 	reference_in=0.0;
 	reference_out=0.0;	// new
 	
-	// °¢µµ, ÁÖÆÄ¼ö, ¼Óµµ
+	// ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½Ä¼ï¿½, ï¿½Óµï¿½
 	frequency=0.0;
 	theta=0.0;
 	SinTheta=0.0;
@@ -37,7 +37,7 @@ void VariInit()
 	rpm=0.0;
 	rpm_ref=0.0;
 	
-	// Àü·ù
+	// ï¿½ï¿½ï¿½ï¿½
 	RMS_Ia = 0.0;
 	RMS_Ib = 0.0;
 
@@ -48,10 +48,10 @@ void VariInit()
 	Is_DQ[DS]=Is_DQ[QS]=0.0;
 	
 
-	// Àü¾Ð
+	// ï¿½ï¿½ï¿½ï¿½
 	Vs_max=0.0;	
 
-	// ÅäÅ©
+	// ï¿½ï¿½Å©
 	Te_max=0.0;
 	Te_ref=0.0;
 	Te=0.0;
