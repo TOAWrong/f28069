@@ -14,7 +14,7 @@
 #define CODE_motor_ctrl_mode            4
 #define CODE_speed1						5
 #define CODE_speed2						6
-#define CODE_protect_inhibit_on         7
+#define CODE_protect_off                7
 
 #define CODE_motor_rate_power			10
 #define CODE_motor_rate_volt			11

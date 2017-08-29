@@ -2,14 +2,12 @@
 #define		__VARIABLES_
 
 extern float Pole_pair;
-
 extern float Wrm_det;
 
 extern float Wrm_det_flt;
 extern float Wr;
 extern float Wrpm_det;
 extern float Wrpm_max;
-
 
 //--- low_pass_filter.c 
 extern float LPF_zeta;
@@ -41,12 +39,7 @@ extern float  ADC_I_v;
 
 extern unsigned int Fault_Code;
 
-extern volatile unsigned int ZONE0_BUF[256];
-extern volatile unsigned int ZONE6_BUF[0x10000];		// debug
-extern volatile unsigned int ZONE7_BUF[256];
-
 extern int init_charge_flag;
-extern unsigned int xcon_data;		// expansion board xcon0,1,2,3 out data
 
 extern int giAdcAI_I1;
 extern int giAdcAI_V1;
@@ -71,23 +64,15 @@ extern float y2_data[GRAPH_NUMBER];
 extern float Vdc_factor;			// 2010 01 13
 extern float Vdc_calc_offset;		// 2010 01 13 for Vdc calc
 
-extern float dac_ch0_unit_count_value;
-extern float dac_ch1_unit_count_value;
-extern float dac_ch2_unit_count_value;
-extern float dac_ch3_unit_count_value;
-
 extern float ref_time;	// 2009.10.28
 
 extern CODE_INFO code_inform;
 extern union PROTECT_FLAG protect_reg;
 
 // codes
-
 // --- digital_inout.h
-
 extern union DIGITAL_OUT_FUNC relay_flag;
 extern union DIGITAL_FUNCTION func_flag;	// ������ �Է��� ����� �����Ѵ�.
-
 
 extern int scic_rx_start_addr;
 extern int scic_rx_end_addr;
@@ -95,14 +80,9 @@ extern int scic_rx_end_addr;
 extern int scic_tx_start_addr;
 extern int scic_tx_end_addr;
 
-//extern char scic_rx_msg_box[SCIC_RX_BUF_MAX];
-//extern char scic_tx_msg_box[SCIC_TX_BUF_MAX];
-
 //-- use in udd_timer_irq
 extern int terminal_input_state;
 extern char TripMessage[25];
-
-
 // PWM
 extern float	DutyRatio[3];
 extern Uint16 DutyCount[3];
@@ -269,10 +249,6 @@ extern float	S_rat;
 extern float	S_lin;
 extern float	Freq_slip_rat;
 	
-//====================================
-// F28335 
-// EwInv ���� ����
-//====================================
 extern unsigned long gulStartCount;
 extern unsigned int gStartInitFinish; 
 
@@ -356,7 +332,7 @@ extern float   codeMotorPole;          // 15
 extern float   codeMotorRateEffiency;  // 16
 
 ///////////////////////////////////
-extern int code_protect_inhibit_on;		// 30
+// extern int code_protect_inhibit_on;		// 30
 extern int code_protect_uv_off;			// 31
 extern int code_protect_ov_off;			// 32
 extern int code_protect_Iadc_off;		// 33
@@ -418,15 +394,6 @@ extern float code_adc_vdc_high;		// 311
 extern float code_Vdc_calc_low;		// 312
 extern float code_Vdc_calc_high;		// 313
 
-//group 4
-extern float motor_rate_power;		// 400
-extern float motor_rate_volt;			// 401
-extern float motor_rate_current;		// 402
-extern float motor_rate_hz;			// 403
-extern float motor_rate_rpm;			// 404
-extern float motor_pole;				// 405
-extern float motor_rate_effiency;		// 406
-
 // group5
 extern float I_sense_value;			// 500
 extern float u_phase_I_sense_span;		// 502
@@ -475,9 +442,8 @@ extern float S_rat;
 extern float Fs_rat;
 
 extern float rpm_ref;
-extern float	wr_rat;
-extern float	rpm_Coeff;
+extern float wr_rat;
+extern float rpm_Coeff;
 
-//***********************************************************
 #endif
 

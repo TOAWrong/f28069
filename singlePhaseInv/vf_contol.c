@@ -104,7 +104,7 @@ void vf_simple_control()
 	static float theta = 0;
 	float Vs_ref;
 
-	Freq_out = motor_rate_hz * reference_out;
+	Freq_out = codeMotorRateHz * reference_out;
 
 	rpm_Coeff = 60.0 * inv_P_pair / PI_2;	
 
@@ -120,7 +120,7 @@ void vf_simple_control()
 	SinTheta = sin(theta);
 	CosTheta = cos(theta);	
 
-	Vs_ref = fabs( Freq_out / motor_rate_hz * Vs_rat );// debug
+	Vs_ref = fabs( Freq_out / codeMotorRateHz * Vs_rat );// debug
 
 	Vs_dq_ref[ds] = Vs_ref * CosTheta;
 	Vs_dq_ref[qs] = Vs_ref * SinTheta;
@@ -168,7 +168,7 @@ void slip_comp_scalar_ctrl()
          
          // ���� ����
          Slip = fabs(Freq_slip)*inv_Freq_rat;
-         Power_core_rat = motor_rate_power*(1.0-motor_rate_effiency/(1.0-S_rat))-1.5*Is_rat*Is_rat*VF_Rs;
+         Power_core_rat = codeMotorRatePower * (1.0-codeMotorRateEffiency / (1.0-S_rat))-1.5*Is_rat*Is_rat*VF_Rs;
          Power_core=0.5*( (1.0+Slip)/(1+S_rat)*(Freq_out*inv_Freq_rat) + (1.0+Slip*Slip)/(1.0+S_rat*S_rat)*(Freq_out*inv_Freq_rat)*(Freq_out*inv_Freq_rat) )*Power_core_rat;
          LPF1(Ts,VF_Slip_Comp_FilterPole,1.5*(Vs_dq[ds]*Is_dq[ds]+Vs_dq[qs]*Is_dq[qs] - VF_Rs_ThermalCoeff*VF_Rs*Is_mag*Is_mag)-Power_core,&Power_gap);   
          Det_slip = Freq_ref*Freq_ref + S_lin*Power_gap;
@@ -182,7 +182,6 @@ void slip_comp_scalar_ctrl()
          else if (Freq_slip<-2.0*Freq_slip_rat)   Freq_slip=-2.0*Freq_slip_rat;
 
          Freq_out=Freq_ref + sgn_freq*Freq_slip;
-
       }
       else
       {   

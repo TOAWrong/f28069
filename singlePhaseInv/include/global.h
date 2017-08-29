@@ -206,7 +206,7 @@ float   codeMotorRateEffiency;  // 16
 // #define CODE_END                17
 
 ///////////////////////////
-int code_protect_inhibit_on;	// 30
+//int code_protect_inhibit_on;	// 30
 int code_protect_uv_off;		// 31
 int code_protect_ov_off;		// 32
 int code_protect_Iadc_off;		// 33

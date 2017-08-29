@@ -15,14 +15,14 @@ void VariInit()
 	C_ce=1.0e-9*C_ce_nF;
 	inv_C_ce=1.0/C_ce;
 
-	// �ð� �� �ε���
+	//
 	gfRunTime=0.0;
 
 	// reference
 	reference_in=0.0;
 	reference_out=0.0;	// new
 	
-	// ����, ���ļ�, �ӵ�
+	//
 	frequency=0.0;
 	theta=0.0;
 	SinTheta=0.0;
@@ -31,11 +31,10 @@ void VariInit()
 	we_in=0.0;
 	we=0.0;
 	we0=0.0;
-
 	rpm=0.0;
 	rpm_ref=0.0;
 	
-	// ����
+	//
 	RMS_Ia = 0.0;
 	RMS_Ib = 0.0;
 
@@ -44,12 +43,11 @@ void VariInit()
 	Is_mag_rms=0.0;
 	
 	Is_DQ[DS]=Is_DQ[QS]=0.0;
-	
 
-	// ����
+	//
 	Vs_max=0.0;	
 
-	// ��ũ
+	//
 	Te_max=0.0;
 	Te_ref=0.0;
 	Te=0.0;

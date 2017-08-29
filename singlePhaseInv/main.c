@@ -10,7 +10,8 @@ float Vdc_fnd_data;
 
 void main( void )
 {
-	int trip_code,i,loop_ctrl;
+    UNION32 u32Data;
+    int trip_code,i,loop_ctrl;
 	int cmd;
 	float ref_in0;
 
@@ -65,6 +66,11 @@ void main( void )
 
 	gPWMTripCode = 0;		//
 
+	u32Data.dword = 1234;
+	write_code_2_eeprom(9,u32Data);
+    read_eprom_data( 9, & u32Data);
+
+	init_eprom_data();
 	i = load_code2ram();
 	if( i !=0 ) tripProc();
 
@@ -79,17 +85,14 @@ void main( void )
 
 	gfRunTime = 0.0; 
 
-	if( code_protect_inhibit_on == 1)
+	if( (int)(floor(codeProtectOff+0.5)) == 1)
 	{
 		protect_reg.bit.UNVER_VOLT = 0;			// udd �߰� 
 		protect_reg.bit.EX_TRIP = 0;
 		protect_reg.bit.OVER_VOLT = 0;
 		protect_reg.bit.OVER_I_ADC = 0;
 		protect_reg.bit.IGBT_FAULT = 0;		
-		protect_reg.bit.IGBT_FAULT2 = 0;		
 		protect_reg.bit.OVER_I = 0;
-		protect_reg.bit.CONV_ADC = 0;
-
 	}
 	else {
 		if(code_protect_uv_off == 0 ) 		protect_reg.bit.UNVER_VOLT = 1;			// udd �߰� 
@@ -97,9 +100,7 @@ void main( void )
 		if(code_protect_Iadc_off == 0 ) 	protect_reg.bit.OVER_I_ADC = 1;
 		if(code_protect_over_I_off == 0) 	protect_reg.bit.OVER_I = 1;
 		if(code_protect_IGBT_off == 0 ) 	protect_reg.bit.IGBT_FAULT = 1;		
-		if(code_protect_IGBT2_off == 0 ) 	protect_reg.bit.IGBT_FAULT2 = 1;	
 		if(code_protect_ex_trip_off == 0 ) 	protect_reg.bit.EX_TRIP = 1;
-		if(code_protect_CONV_adc_off == 0 )	protect_reg.bit.CONV_ADC = 1;	
 	}
 	init_charge_flag = 1;	
 	while( gfRunTime < 3.0){
@@ -112,7 +113,7 @@ void main( void )
 	loop_ctrl = 1;
 	gfRunTime = 0.0;
 
-	if((code_protect_inhibit_on == 0 ) & (code_protect_uv_off == 0 )){
+	if((codeProtectOff == 0 ) & (code_protect_uv_off == 0 )){
 		while( loop_ctrl == 1){
 			if( Vdc > under_volt_set ) loop_ctrl = 0;
 			if( gfRunTime > 3.0) loop_ctrl = 0;
@@ -156,9 +157,6 @@ void main( void )
 	}
 }
 
-
-#define igbt_pwm_freq   8000
-// #define SWITCH_FREQ         8000
 void InitEPwm_ACIM_Inverter()
 {  
 	EPwm1Regs.ETSEL.bit.INTEN = 0;    		        // Enable INT

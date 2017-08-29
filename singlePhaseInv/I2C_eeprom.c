@@ -52,18 +52,16 @@ Uint16 I2CA_WriteData(int iSlaveAddr,int iMemAddr,int iData)
 
 Uint16 I2CA_ReadData(int iSlaveAddr, int iMemAddr, int * data)
 {
-    int i;
     I2caRegs.I2CSAR = iSlaveAddr;
    I2caRegs.I2CCNT = 2;
    I2caRegs.I2CDXR = (iMemAddr>>8) & 0x00ff;
    I2caRegs.I2CDXR = iMemAddr & 0x00ff;
 //   I2caRegs.I2CMDR.all = 0x6620;			
    I2caRegs.I2CMDR.all = 0x2620;			
-    for( i =0 ; i < 20 ; i ++ ){
-        DSP28x_usDelay(1000);
-    }
-	// 
-//	while(I2caRegs.I2CSTR.bit.ARDY == 0);  // test jsk 
+
+   DSP28x_usDelay(20000);
+
+   //	while(I2caRegs.I2CSTR.bit.ARDY == 0);  // test jsk
 
 	I2caRegs.I2CFFRX.bit.RXFFRST = 0;		// RXFIFO Operation disable	 
 	I2caRegs.I2CFFRX.bit.RXFFINT = 1;		// RXFIFO Operation disable	 
@@ -72,25 +70,18 @@ Uint16 I2CA_ReadData(int iSlaveAddr, int iMemAddr, int * data)
    I2caRegs.I2CCNT = 1;
    I2caRegs.I2CMDR.all = 0x6C20;			// Send restart as master receiver stop
 
-   for( i =0 ; i < 20 ; i ++ ){
-       DSP28x_usDelay(1000);
-   }
-//	while(I2caRegs.I2CSTR.bit.SCD == 0);  // test jsk
-	
+   DSP28x_usDelay(20000);
+
+   //	while(I2caRegs.I2CSTR.bit.SCD == 0);  // test jsk
  	* data = I2caRegs.I2CDRR;
  	return I2C_SUCCESS;
 }
-
-int get_eprom_address( int code_address)
-{
-	return code_address % 100 * 4;
-}		
 
 void write_code_2_eeprom(int address,UNION32 data)
 {
 	int eprom_addr;
 
-	eprom_addr = get_eprom_address(address);
+	eprom_addr = address * 4 ;
 
 	I2CA_WriteData(ADDR_24LC32,eprom_addr+0,data.byte.byte0);
 	I2CA_WriteData(ADDR_24LC32,eprom_addr+1,data.byte.byte1);
@@ -102,7 +93,7 @@ void read_eprom_data(int address, UNION32 * u32data)
 {
 	int eprom_addr,iTemp;
 
-	eprom_addr = get_eprom_address(address);
+	eprom_addr = address * 4 ;
 	
 	I2CA_ReadData(ADDR_24LC32,eprom_addr+0,&iTemp); (u32data->byte).byte0 = iTemp;	
 	I2CA_ReadData(ADDR_24LC32,eprom_addr+1,&iTemp); (u32data->byte).byte1 = iTemp;	
@@ -173,7 +164,7 @@ int load_code2ram()
 {
 	UNION32	data;
 	int check;
-	int loop_control,addr,cmd;
+	int addr,cmd;
 	
 	data.dword  = 0.0;
 	cmd = CMD_READ_DATA;
@@ -200,7 +191,7 @@ int code_init()
 	int check, cmd, addr;
  
 	cmd = CMD_READ_DATA;
-    for( addr = 0; addr <= CODE_END; addr++){
+    for( addr = 0; addr < CODE_END; addr++){
         check = get_code_information( addr, cmd , & code_inform);
         if( !check ){
             datum.dword = code_inform.code_value;

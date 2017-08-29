@@ -12,36 +12,37 @@
 void common_variable_init()
 {
 
-	Ts = 1.0 / SWITCH_FREQ;	// pwm switching frequency
-	inv_Ts=1.0/Ts;
+	Ts = 1.0 / igbt_pwm_freq;	// pwm switching frequency
+	inv_Ts = igbt_pwm_freq;
 
-	Vs_rat = sqrt(2.0)/sqrt(3.0) * motor_rate_volt;			// �������� ��ũ ��
-	Is_rat=sqrt(2.0)*motor_rate_current;
+	Freq_rat = codeMotorRateHz;
+    inv_Freq_rat=1.0/Freq_rat;
+    inv_motor_rate_hz = 1.0 / codeMotorRateHz; //   csk_check 2009.10.30.
 
-	Is_max = Is_rat * max_I_ratio  / 100.0;		
-	inv_Is_rat=1.0/Is_rat;
+    we_rat=PI_2*codeMotorRateHz;
+    wr_rat=PI_2*codeMotorPole * codeMotorRateRpm/120.0;         // rpm -> rad/sec
+    wm_rat=wr_rat*(2.0/codeMotorPole);
 
-	OverCurLimit = Is_rat * over_current_level / 100.0;
+	Vs_rat = sqrt(2.0)/sqrt(3.0) * codeMotorRateVolt;			// �������� ��ũ ��
 
-	we_rat=PI_2*motor_rate_hz;
-	inv_motor_rate_hz=1.0/motor_rate_hz;
-	wr_rat=PI_2*motor_pole*motor_rate_rpm/120.0;			// rpm -> rad/sec
-	wm_rat=wr_rat*(2.0/motor_pole);
-	Te_rat=motor_rate_power/wm_rat;
-	inv_Te_rat=1.0/Te_rat;
+	Is_rat=sqrt(2.0) * codeMotorRateCurrent;
+    inv_Is_rat=1.0/Is_rat;
+    Is_max = Is_rat * max_I_ratio;
+    OverCurLimit = Is_max * 2.0;            // added 2009.11.01  _debug
 
-	Fs_rat=Vs_rat/we_rat;
+    Te_rat=codeMotorRatePower/wm_rat;
+    inv_Te_rat=1.0/Te_rat;
 
-	Kt=(3.0/2.0)*(motor_pole/2.0);
-	inv_Kt=1.0/Kt;
-	P_pair=(motor_pole/2.0);
-	inv_P_pair=1.0/P_pair;
-	rpm_Coeff=60.0*inv_P_pair/PI_2;				// ȸ����/��
-	
-	// V/F ������ ���� ����
-	S_rat=(we_rat-wr_rat)/we_rat;
-	S_lin=(motor_pole/PI)*(S_rat*motor_rate_hz)/Te_rat;				// ==> V/f ���� : ���� ����
-	Freq_slip_rat=S_rat*motor_rate_hz;
+    Fs_rat=Vs_rat/we_rat;
+    Kt=(3.0/2.0)*(codeMotorPole/2.0);
+    inv_Kt=1.0/Kt;
+    P_pair=(codeMotorPole/2.0);
+    inv_P_pair=1.0/P_pair;
+    rpm_Coeff=60.0*inv_P_pair/PI_2;
+
+    S_rat=(we_rat-wr_rat)/we_rat;
+    S_lin=(codeMotorPole/PI)*(S_rat*Freq_rat)/Te_rat;               // ==> V/f ���� : ���� ����
+    Freq_slip_rat=S_rat*Freq_rat;
 
 	// PreChargeLevel = 0.85*(1.35*motor_rate_volt);	// ���� ������ 85%
 	C_ce_nF=(3.5-0.8)/(1000.0-100.0)*(2.0*Is_rat-100.0)+0.8;	// 1000A -> 3.5nF, 100A -> 0.8nF
@@ -150,7 +151,7 @@ void common_variable_init()
 	VF_ExcitationTime=2.0;					// DC���� �ð� = 0.5��
 	VF_Fs_Coeff=1.0;
 	VF_Freq_TrqBoost=1.5;
-	VF_Vs_Coeff_TrqBoost=1.5*(VF_Freq_TrqBoost / motor_rate_hz );			
+	VF_Vs_Coeff_TrqBoost=1.5*(VF_Freq_TrqBoost / codeMotorRateHz );
 	VF_Rs_ThermalCoeff=1.05;			
 	VF_IR_Comp_FilterPole=100.0;		
 	VF_Slip_Comp_FilterPole=20.0;	

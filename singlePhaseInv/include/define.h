@@ -1,6 +1,8 @@
 #ifndef		__EWINV_DEFINE_
 #define		__EWINV_DEFINE_
 
+#define igbt_pwm_freq   8000
+
 typedef union
 {
 	float	dword;			/* float word : 32bit */
