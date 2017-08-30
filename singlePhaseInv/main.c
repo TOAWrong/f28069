@@ -5,6 +5,8 @@
 #include	"global.h"
 
 extern interrupt void MainPWM(void);
+extern __interrupt void adcIsr(void);
+
 float Vdc_fnd_data;
 
 void main( void )
@@ -25,12 +27,11 @@ void main( void )
 //	RESET_DRIVER_CLEAR;
 
 	gMachineState = STATE_POWER_ON; 
-	DINT;	IER = 0x0000; 	IFR = 0x0000;
+	DINT;
 
 	InitPieCtrl();
-	IER = 0x0000;
-    IFR = 0x0000;
-    InitPieVectTable();
+	IER = 0x0000;   IFR = 0x0000;
+	InitPieVectTable();
 
 	scia_fifo_init();
 
@@ -39,8 +40,8 @@ void main( void )
 
 	ConfigCpuTimer(&CpuTimer0, 90, 1000);	// debug 2011.10.01
 	StartCpuTimer0();
-	InitAdc();	
-	AdcOffsetSelfCal();
+
+	PieCtrlRegs.PIEIER1.bit.INTx1 = 1; // Enable INT 1.1 in the PIE
 
 	EALLOW;  // This is needed to write to EALLOW protected registers
 	  	PieVectTable.TINT0 		= &cpu_timer0_isr;
@@ -51,6 +52,9 @@ void main( void )
 		PieVectTable.SCIRXINTA = &sciaRxFifoIsr;
 		PieVectTable.SCITXINTA = &sciaTxFifoIsr;
   	EDIS;    // This is needed to disable write to EALLOW protected registers
+
+  	InitAdc();
+    AdcOffsetSelfCal();
 
   	EALLOW;
      SysCtrlRegs.PCLKCR0.bit.TBCLKSYNC = 1;
@@ -277,7 +281,6 @@ void InitEPwm_ACIM_Inverter()
 //	AdcRegs.ADCTRL3.all = 0x00FE;  // Power up bandgap/reference/ADC circuits
 
 	EPwm1Regs.ETSEL.bit.SOCAEN = 1;   // Enable SOC on A group
-//	EPwm1Regs.ETSEL.bit.SOCASEL = ET_CTR_ZERO; // ET_CTR_PRD?
 	EPwm1Regs.ETSEL.bit.SOCASEL = ET_CTR_PRD;//
 	EPwm1Regs.ETPS.bit.SOCAPRD = 1;        // Generate pulse on 1st event
 

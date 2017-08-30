@@ -21,8 +21,8 @@ void ADC_SOC_CNF( )
     AdcRegs.ADCCTL2.bit.ADCNONOVERLAP = 1; // Enable non-overlap mode
     AdcRegs.ADCCTL1.bit.INTPULSEPOS = 1;
     AdcRegs.INTSEL1N2.bit.INT1E = 1;        // enable ADC interrupt 1
-
     AdcRegs.INTSEL1N2.bit.INT1CONT = 0; // set ADCInterrupt 1 to auto clr
+
     AdcRegs.INTSEL1N2.bit.INT1SEL = 1;      // IntChSel causes ADCInterrupt 1
 /*
     AdcRegs.INTSEL1N2.bit.INT2CONT = 1; // set ADCInterrupt 1 to auto clr
@@ -39,30 +39,31 @@ void ADC_SOC_CNF( )
 
     AdcRegs.INTSEL5N6.bit.INT6CONT = 0; // set ADCInterrupt 1 to auto clr
     AdcRegs.INTSEL5N6.bit.INT6SEL = 5;      // IntChSel causes ADCInterrupt 1
-*/
+
     AdcRegs.ADCINTFLG.bit.ADCINT1 = 0;  // clear interrupt flag for ADCINT1
     AdcRegs.ADCINTFLG.bit.ADCINT2 = 0;  // clear interrupt flag for ADCINT1
     AdcRegs.ADCINTFLG.bit.ADCINT3 = 0;  // clear interrupt flag for ADCINT1
     AdcRegs.ADCINTFLG.bit.ADCINT4 = 0;  // clear interrupt flag for ADCINT1
     AdcRegs.ADCINTFLG.bit.ADCINT5 = 0;  // clear interrupt flag for ADCINT1
-
+*/
     AdcRegs.ADCSOC0CTL.bit.CHSEL= 0;        // I_u
     AdcRegs.ADCSOC1CTL.bit.CHSEL= 8;        // I_v
     AdcRegs.ADCSOC2CTL.bit.CHSEL= 1;        // Vdc
     AdcRegs.ADCSOC3CTL.bit.CHSEL= 9;        // IGBT_Temp
     AdcRegs.ADCSOC4CTL.bit.CHSEL= 3;        // Ex_sensor
 
+    AdcRegs.ADCSOC0CTL.bit.TRIGSEL   = 5;
+    AdcRegs.ADCSOC1CTL.bit.TRIGSEL  = 5;
+    AdcRegs.ADCSOC2CTL.bit.TRIGSEL   = 5;
+    AdcRegs.ADCSOC3CTL.bit.TRIGSEL  = 5;
+    AdcRegs.ADCSOC4CTL.bit.TRIGSEL   = 5;
+
     AdcRegs.ADCSOC0CTL.bit.ACQPS = 6;
     AdcRegs.ADCSOC1CTL.bit.ACQPS = 6;
     AdcRegs.ADCSOC2CTL.bit.ACQPS = 6;
     AdcRegs.ADCSOC3CTL.bit.ACQPS = 6;
     AdcRegs.ADCSOC4CTL.bit.ACQPS = 6;
-    AdcRegs.ADCSOC5CTL.bit.ACQPS = 6;
-
-    AdcRegs.ADCSOC0CTL.bit.TRIGSEL   = 5;
-//    AdcRegs.ADCSOC1CTL.bit.TRIGSEL  = 5;
-
-    AdcRegs.ADCSAMPLEMODE.all = 0;      // Simultaneous sample mode
+//    AdcRegs.ADCSAMPLEMODE.all = 0;      // Simultaneous sample mode
     EDIS;
 }
 
@@ -71,7 +72,7 @@ void ADC_SOC_CNF( )
 __interrupt void adcIsr(void)
 {
 //    GpioDataRegs.GPASET.bit.GPIO8 = 1;
-    GpioDataRegs.GPATOGGLE.bit.GPIO7 = 1;  // GATE_driver Enable CON1.8
+    GpioDataRegs.GPATOGGLE.bit.GPIO7 = 1;  // CON1.8 GATE_ENABLE
 
     adcIuPhase = AdcResult.ADCRESULT0;
     adcIvPhase = AdcResult.ADCRESULT1;
@@ -83,6 +84,7 @@ __interrupt void adcIsr(void)
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;   // Acknowledge interrupt to PIE
 
 //    GpioDataRegs.GPACLEAR.bit.GPIO8 = 1;
+    return;
 }
 
 void analog_input_proc( float * referenc)
