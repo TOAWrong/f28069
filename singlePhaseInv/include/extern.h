@@ -400,7 +400,6 @@ extern float u_phase_I_sense_span;		// 502
 extern float v_phase_I_sense_span;		// 504
 extern float vdc_sense_zero;			// 505
 extern float vdc_sense_span;			// 506
-extern float igbt_pwm_freq;			// 508
 
 extern int adc_u_offset;				// 510
 extern int adc_v_offset;				// 511

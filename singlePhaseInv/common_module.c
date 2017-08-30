@@ -92,49 +92,22 @@ void analog_cmd_proc(float * ana_ref)
 {
 	* ana_ref = analog_ref_a * analog_cmd_in_span1;		// debug
 }
-//------------------------------
+
 //
-//------------------------------
-#define run_input_select    0
 void get_command( int * command, float * ref )
 {
 	int digital_cmd,sci_cmd;
 	float digital_reference,sci_ref,ana_ref;
 
 	digital_input_proc( & digital_cmd, & digital_reference);
-	serial_com_proc( & sci_cmd, & sci_ref );
+//	serial_com_proc( & sci_cmd, & sci_ref );
 	analog_cmd_proc( & ana_ref);
 
-	switch( run_input_select )
-	{
-    case 0: // �Ƴ��α� �Է�����
-
-        * command = digital_cmd;
-        if( digital_cmd == CMD_START ){
-            if( analog_ref_a < 0.01 )   * command = CMD_STOP;
-            else                        * ref = ana_ref;
-        }
-        break;
-
-    case 1: // ������ �Է¿� ���� �õ��� ����
-		* command = digital_cmd;
-		* ref = digital_reference;
-		break;
-
-	case 2: //  ��ſ� ���� �õ��� ��
-		* command = sci_cmd;
-		* ref = sci_ref;
-		break;
-
-	default:
-		* command = CMD_STOP;
-		* ref = 0.0; 
-		break;
-	}
-	// ��ſ� ���� ������ �ֿ켱���� ó���Ѵ�. 
-	if( sci_cmd == CMD_SAVE){
-		* command = sci_cmd ;
-	}
+	* command = digital_cmd;
+    if( digital_cmd == CMD_START ){
+        if( analog_ref_a < 0.01 )   * command = CMD_STOP;
+        else                        * ref = ana_ref;
+    }
 }
 
 //---------------------------------

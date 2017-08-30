@@ -270,7 +270,6 @@ float u_phase_I_sense_span;	// 502
 float v_phase_I_sense_span;	// 504
 float vdc_sense_zero;			// 505
 float vdc_sense_span;			// 506
-float igbt_pwm_freq;			// 508
 
 int adc_u_offset;				// 510
 int adc_v_offset;				// 511

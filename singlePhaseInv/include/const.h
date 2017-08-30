@@ -68,7 +68,7 @@
 #define		B					1
 #define		C					2
 
-#define F_OSC					30000000
+#define F_OSC					20000000
 
 // Control Constant
 #define AT_SUCCESS	10

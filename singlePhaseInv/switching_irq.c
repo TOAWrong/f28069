@@ -18,11 +18,16 @@ interrupt void MainPWM(void)
 
 	switch(gMachineState)
 	{
-	case STATE_READY:
+    case STATE_TRIP:
+        invt_PWM_Port_Set_flag = 0;
+//      ePwmPortOff(); // converter PWM gate OFF
+        break;
+
+    case STATE_READY:
 	case STATE_POWER_ON:
-	case STATE_TRIP:					
-		invt_PWM_Port_Set_flag = 0;
-		ePwmPortOff(); // converter PWM gate OFF
+        EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+        EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+        EPwm3Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
 		break;
 
 	case STATE_INIT_RUN:

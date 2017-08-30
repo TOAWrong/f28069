@@ -9,7 +9,6 @@ float Vdc_fnd_data;
 
 void main( void )
 {
-    UNION32 u32Data;
     int trip_code,i,loop_ctrl;
 	int cmd;
 	float ref_in0;
@@ -29,6 +28,9 @@ void main( void )
 	DINT;	IER = 0x0000; 	IFR = 0x0000;
 
 	InitPieCtrl();
+	IER = 0x0000;
+    IFR = 0x0000;
+    InitPieVectTable();
 
 	scia_fifo_init();
 
@@ -50,16 +52,23 @@ void main( void )
 		PieVectTable.SCITXINTA = &sciaTxFifoIsr;
   	EDIS;    // This is needed to disable write to EALLOW protected registers
 
+  	EALLOW;
+     SysCtrlRegs.PCLKCR0.bit.TBCLKSYNC = 1;
+    EDIS;
+
   	PieCtrlRegs.PIEIER1.bit.INTx6 = 1;	// Enable Adc irq
 	PieCtrlRegs.PIEIER1.bit.INTx7 = 1;	// Timer0 irq
-	PieCtrlRegs.PIECTRL.bit.ENPIE = 1;   // Enable the PIE block   
-    PieCtrlRegs.PIEIER3.bit.INTx1 = 1;   //
     PieCtrlRegs.PIEIER1.bit.INTx1 = 1; // Enable INT 1.1 in the PIE ADCINT1
+    PieCtrlRegs.PIEIER3.bit.INTx1 = 1;   //
+
+    PieCtrlRegs.PIECTRL.bit.ENPIE = 1;   // Enable the PIE block
 
     IER |= M_INT1;		// Enable CPU INT1 which is connected to CPU-Timer 0:
 	IER |= M_INT8;		// scic irq 
 	IER |= M_INT9;		//CAN, SCI_A
-	EINT;   // Enable Global interrupt INTM
+    IER |= M_INT3;
+
+    EINT;   // Enable Global interrupt INTM
 	ERTM;	// Enable Global realtime interrupt DBGM
 
     ADC_SOC_CNF();
@@ -153,7 +162,7 @@ void main( void )
 void InitEPwm_ACIM_Inverter()
 {  
 	EPwm1Regs.ETSEL.bit.INTEN = 0;    		        // Enable INT
-	MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / igbt_pwm_freq ) * 0.5 * 0.5 * 0.5);
+	MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / SWITCHING_FREQ ) * 0.5 * 0.5 * 0.5);
 	inv_MAX_PWM_CNT = 1.0 / MAX_PWM_CNT;
 
 	EPwm1Regs.TBPRD =  MAX_PWM_CNT;			// Set timer period

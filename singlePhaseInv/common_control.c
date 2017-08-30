@@ -12,8 +12,8 @@
 void common_variable_init()
 {
 
-	Ts = 1.0 / igbt_pwm_freq;	// pwm switching frequency
-	inv_Ts = igbt_pwm_freq;
+	Ts = 1.0 / SWITCHING_FREQ;	// pwm switching frequency
+	inv_Ts = SWITCHING_FREQ;
 
 	Freq_rat = codeMotorRateHz;
     inv_Freq_rat=1.0/Freq_rat;

@@ -1,11 +1,9 @@
 #ifndef		__UDD_OPTION_H_
 #define		__UDD_OPTION_H_
 
-//#define F_OSC               (30.e+6)      // Osciilator Freq.
 #define   RPM2WRM            (2.*PI/60.) 
 #define   WRM2RPM            (60./(2.*PI)) 
-#define SWITCH_FREQ            (5000.)         
-
+#define SWITCHING_FREQ   8000
 
 //#define DUAL_PWM_INTERRUPT      (0)          //   PWM Top & Bottom Interrupt
 
