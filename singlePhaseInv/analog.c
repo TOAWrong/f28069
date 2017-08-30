@@ -18,16 +18,7 @@ void ADC_SOC_CNF( )
     extern void DSP28x_usDelay(Uint32 Count);
 
     EALLOW;
-    AdcRegs.ADCCTL1.bit.ADCREFSEL   = 0;
-    AdcRegs.ADCCTL1.bit.ADCBGPWD    = 1;    // Power up band gap
-    AdcRegs.ADCCTL1.bit.ADCREFPWD   = 1;    // Power up reference
-    AdcRegs.ADCCTL1.bit.ADCPWDN     = 1;    // Power up rest of ADC
-    AdcRegs.ADCCTL1.bit.ADCENABLE   = 1;    // Enable ADC
-
-    DSP28x_usDelay(1000);         // Delay before converting ADC channels
-
-
-
+    AdcRegs.ADCCTL2.bit.ADCNONOVERLAP = 1; // Enable non-overlap mode
     AdcRegs.ADCCTL1.bit.INTPULSEPOS = 1;
     AdcRegs.INTSEL1N2.bit.INT1E = 1;        // enable ADC interrupt 1
 
@@ -67,6 +58,10 @@ void ADC_SOC_CNF( )
     AdcRegs.ADCSOC3CTL.bit.ACQPS = 6;
     AdcRegs.ADCSOC4CTL.bit.ACQPS = 6;
     AdcRegs.ADCSOC5CTL.bit.ACQPS = 6;
+
+    AdcRegs.ADCSOC0CTL.bit.TRIGSEL   = 5;
+//    AdcRegs.ADCSOC1CTL.bit.TRIGSEL  = 5;
+
     AdcRegs.ADCSAMPLEMODE.all = 0;      // Simultaneous sample mode
     EDIS;
 }

@@ -5,7 +5,6 @@
 #include	"global.h"
 
 extern interrupt void MainPWM(void);
-
 float Vdc_fnd_data;
 
 void main( void )
@@ -24,11 +23,9 @@ void main( void )
 	INIT_CHARGE_CLEAR;
 
 	init_charge_flag = 0;
-
 //	RESET_DRIVER_CLEAR;
 
 	gMachineState = STATE_POWER_ON; 
-
 	DINT;	IER = 0x0000; 	IFR = 0x0000;
 
 	InitPieCtrl();
@@ -39,10 +36,9 @@ void main( void )
 	InitCpuTimers();   // For this example, only initialize the Cpu Timers
 
 	ConfigCpuTimer(&CpuTimer0, 90, 1000);	// debug 2011.10.01
-
 	StartCpuTimer0();
-
 	InitAdc();	
+	AdcOffsetSelfCal();
 
 	EALLOW;  // This is needed to write to EALLOW protected registers
 	  	PieVectTable.TINT0 		= &cpu_timer0_isr;
@@ -54,28 +50,25 @@ void main( void )
 		PieVectTable.SCITXINTA = &sciaTxFifoIsr;
   	EDIS;    // This is needed to disable write to EALLOW protected registers
 
-	PieCtrlRegs.PIEIER1.bit.INTx6 = 1;	// Enable Adc irq
+  	PieCtrlRegs.PIEIER1.bit.INTx6 = 1;	// Enable Adc irq
 	PieCtrlRegs.PIEIER1.bit.INTx7 = 1;	// Timer0 irq
 	PieCtrlRegs.PIECTRL.bit.ENPIE = 1;   // Enable the PIE block   
+    PieCtrlRegs.PIEIER3.bit.INTx1 = 1;   //
+    PieCtrlRegs.PIEIER1.bit.INTx1 = 1; // Enable INT 1.1 in the PIE ADCINT1
 
-	IER |= M_INT1;		// Enable CPU INT1 which is connected to CPU-Timer 0:
+    IER |= M_INT1;		// Enable CPU INT1 which is connected to CPU-Timer 0:
 	IER |= M_INT8;		// scic irq 
 	IER |= M_INT9;		//CAN, SCI_A
 	EINT;   // Enable Global interrupt INTM
 	ERTM;	// Enable Global realtime interrupt DBGM
 
-	gPWMTripCode = 0;		//
+    ADC_SOC_CNF();
 
-	u32Data.dword = 1234;
-	write_code_2_eeprom(9,u32Data);
-    read_eprom_data( 9, & u32Data);
-
-	init_eprom_data();
+    gPWMTripCode = 0;		//
+	//init_eprom_data();
 	i = load_code2ram();
 	if( i !=0 ) tripProc();
-
 	VariInit();
-
 	if(HardwareParameterVerification() !=0 ) tripProc();
 
 	IER &= ~M_INT3;      // debug for PWM
@@ -124,11 +117,11 @@ void main( void )
 		}
 	}
 	else{
-		MAIN_CHARGE_ON;		// ���� ���� on 
+		MAIN_CHARGE_ON;		//
 		TRIP_OUT_OFF;
 	}
 
-	MAIN_CHARGE_ON;		// ���� ���� on 
+	MAIN_CHARGE_ON;		    //
 	init_charge_flag=0;
 	gMachineState = STATE_READY; 
 	INIT_CHARGE_CLEAR;
