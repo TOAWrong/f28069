@@ -14,7 +14,7 @@ int vf_loop_control(float cmd_ref)
 
 	VariInit();
 	trip_code = HardwareParameterVerification();
-
+	common_variable_init();
 	reference_in = cmd_ref;
 
 	if( trip_code !=0 ) return trip_code;

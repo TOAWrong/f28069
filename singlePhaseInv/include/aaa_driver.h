@@ -4,7 +4,7 @@
 #define   RPM2WRM            (2.*PI/60.) 
 #define   WRM2RPM            (60./(2.*PI)) 
 #define SWITCHING_FREQ   8000
-
+#define ADC_CONST         0.00048828125   // 1/2048
 //#define DUAL_PWM_INTERRUPT      (0)          //   PWM Top & Bottom Interrupt
 
 //*******************************************
@@ -16,7 +16,7 @@
 #define USE_UART_A              1
 
 #define SLIP_COMP_SCALAR		0
-#define USE_GRAPH				0
+#define USE_GRAPH				1
 #define TEST_ADC_CENTER			1
 #define ENCODER_ON				1
 #define SCALAR_TEST             1

@@ -18,12 +18,9 @@ extern float LPF_Vdc_out[3];
 extern float LPF_Vdc_K[4];
 
 //--- AC Current Low Pass
-extern float LPF_I_uvw_cutoff_freq ;
-
 extern float LPF_I_u_in[3], LPF_I_v_in[3], LPF_I_w_in[3];
 extern float LPF_I_u_out[3], LPF_I_v_out[3], LPF_I_w_out[3];
 extern float LPF_I_u_K[4], LPF_I_v_K[4],LPF_I_w_K[4];
-
 
 extern float  ADC_Vdc;
 
@@ -292,6 +289,7 @@ extern int adcIvPhase;
 extern int adcVdc;
 extern int adcIgbtTemperature;
 extern int adcExSensor;
+extern int adcCmdAnalog;
 
 extern TRIP_INFO TripInfo;
 extern TRIP_INFO TripInfoNow;

@@ -38,8 +38,9 @@
 #define BACKUP_ENABLE       (GpioDataRegs.GPACLEAR.bit.GPIO17 = 1)
 #define BACKUP_DISABLE      (GpioDataRegs.GPASET.bit.GPIO17   = 1)
 
-// 2011.06.25
-#define RUN_INPUT           (GpioDataRegs.GPADAT.bit.GPIO12)    // run input
+// 2017.09.01--2011.06.25
+#define EX_INPUT1           GpioDataRegs.GPADAT.bit.GPIO14    // exInput1
+#define RUN_INPUT           (EX_INPUT1)                         // run input
 
 #define INIT_CHARGE_CLEAR   Nop()               // (GpioDataRegs.GPACLEAR.bit.GPIO13 = 1)
 #define INIT_CHARGE_SET     Nop()               // (GpioDataRegs.GPASET.bit.GPIO13   = 1)

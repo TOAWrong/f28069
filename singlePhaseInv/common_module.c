@@ -90,7 +90,9 @@ int iGetAinCmd(int * piCommand, float * pfReference)
 
 void analog_cmd_proc(float * ana_ref)
 {
-	* ana_ref = analog_ref_a * analog_cmd_in_span1;		// debug
+    analog_cmd_in_span1 = 1.0;
+
+    * ana_ref = adcCmdAnalog * ADC_CONST * 0.5 * analog_cmd_in_span1;		// debug
 }
 
 //
@@ -105,7 +107,7 @@ void get_command( int * command, float * ref )
 
 	* command = digital_cmd;
     if( digital_cmd == CMD_START ){
-        if( analog_ref_a < 0.01 )   * command = CMD_STOP;
+        if( ana_ref < 0.01 )   * command = CMD_STOP;
         else                        * ref = ana_ref;
     }
 }

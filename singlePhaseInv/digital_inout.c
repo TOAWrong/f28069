@@ -1,11 +1,6 @@
 #include	<header.h>
 #include	<extern.h>
 
-void set_digit_input_funtion(int function_option );
-void digit_run_dir_chk( );
-
-float multi_step_proc( );
-
 void fault_reset()
 {
 	Nop();
@@ -37,17 +32,6 @@ void digital_input_proc(int * cmd, float * ref )
 		* ref = 1.0;
 	}
 	else { * cmd = CMD_STOP; * ref = 0.0;}
-/*
-	if((gMachineState==STATE_TRIP)&&(( temp & 0x0008) == 0)){
-	  	// fault_reset();
-		* cmd = CMD_RESET;
-		* ref = 0.0;
-	}
-
-	if(	protect_reg.bit.EX_TRIP == 1 ){
-		if(( temp & 0x0004 ) != 0 )  input_ext_fault_a_proc();	// jsk debug
-	}	
-*/
 }
 
 //=====================

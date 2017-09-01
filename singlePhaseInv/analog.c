@@ -30,23 +30,24 @@ void ADC_SOC_CNF( )
     AdcRegs.ADCSOC2CTL.bit.CHSEL= 8;        // Vdc
     AdcRegs.ADCSOC3CTL.bit.CHSEL= 9;        // IGBT_Temp
     AdcRegs.ADCSOC4CTL.bit.CHSEL= 3;        // Ex_sensor
+    AdcRegs.ADCSOC5CTL.bit.CHSEL= 5;        // Ex_sensor
 
     AdcRegs.ADCSOC0CTL.bit.TRIGSEL = 5;
     AdcRegs.ADCSOC1CTL.bit.TRIGSEL = 5;
     AdcRegs.ADCSOC2CTL.bit.TRIGSEL = 5;
     AdcRegs.ADCSOC3CTL.bit.TRIGSEL = 5;
     AdcRegs.ADCSOC4CTL.bit.TRIGSEL = 5;
+    AdcRegs.ADCSOC5CTL.bit.TRIGSEL = 5;
 
     AdcRegs.ADCSOC0CTL.bit.ACQPS = 6;
     AdcRegs.ADCSOC1CTL.bit.ACQPS = 6;
     AdcRegs.ADCSOC2CTL.bit.ACQPS = 6;
     AdcRegs.ADCSOC3CTL.bit.ACQPS = 6;
     AdcRegs.ADCSOC4CTL.bit.ACQPS = 6;
+    AdcRegs.ADCSOC5CTL.bit.ACQPS = 6;
 //    AdcRegs.ADCSAMPLEMODE.all = 0;      // Simultaneous sample mode
     EDIS;
 }
-
-#define ADC_CONST         0.00048828125   // 1/2048
 
 __interrupt void adcIsr(void)
 {
@@ -58,6 +59,8 @@ __interrupt void adcIsr(void)
     adcVdc       = AdcResult.ADCRESULT2;
     adcIgbtTemperature = AdcResult.ADCRESULT3;
     adcExSensor = AdcResult.ADCRESULT4;
+    adcCmdAnalog = AdcResult.ADCRESULT5;
+
 
     AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;   // Acknowledge interrupt to PIE

@@ -160,6 +160,7 @@ int adcIvPhase;
 int adcVdc;
 int adcIgbtTemperature;
 int adcExSensor;
+int adcCmdAnalog;
 
 union DIGITAL_FUNCTION func_flag;	// ������ �Է��� ����� �����Ѵ�.
 
