@@ -161,6 +161,7 @@ void InitGpio(void)
     GpioCtrlRegs.GPAQSEL2.bit.GPIO25 = 0; // Synch SYSCLKOUT
     GpioCtrlRegs.GPAMUX2.bit.GPIO24 = 1;  // EQEP2A
     GpioCtrlRegs.GPAMUX2.bit.GPIO25 = 1;  // EQEP2B
+
 //--- Enable SCI-A on GPIO28 - GPIO29
     GpioCtrlRegs.GPAPUD.bit.GPIO28 = 0;   // Enable pullup on GPIO28
     GpioCtrlRegs.GPAQSEL2.bit.GPIO28 = 3; // Asynch input

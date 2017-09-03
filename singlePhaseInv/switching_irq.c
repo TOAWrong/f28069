@@ -70,16 +70,15 @@ interrupt void MainPWM(void)
 
 	digital_out_proc();
 //---
-/*
+
 	if(dacCount<300){
-	    //       y1_data[dacCount] = DutyRatio[u];
-	     //       y2_data[dacCount] = DutyRatio[v];
-	    y1_data[dacCount] = reference_in;
-	    y2_data[dacCount] = reference_out;
+	    y1_data[dacCount] = DutyRatio[u];
+	    y2_data[dacCount] = DutyRatio[v];
+	    // y1_data[dacCount] = reference_in;
+	    //y2_data[dacCount] = reference_out;
 	    dacCount ++;
 	}
 	else dacCount = 0;
-*/
 
 	EPwm1Regs.ETCLR.bit.INT = 1;	
 	PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;

@@ -142,9 +142,15 @@ void main( void )
 	load_sci_tx_mail_box(gStr1); delay_msecs(20);
 
 	if( gPWMTripCode !=0 )	tripProc();
-	strncpy(MonitorMsg," INVERTER READY  ",20);
-	strncpy(gStr1," INVERTER READY",20);
-	load_sci_tx_mail_box(gStr1); delay_msecs(20);
+//	strncpy(MonitorMsg,"INVERTER-READY  ",20);
+//	strncpy(gStr1,"INVERTER_READY",20);
+//	load_sci_tx_mail_box(gStr1); delay_msecs(20);
+
+	for( ; ; ){
+	    delay_msecs(1000);
+	    strncpy(gStr1,"inverter_ready",20);
+	    load_scia_tx_mail_box(gStr1);
+    }
 
 	GATE_DRIVER_ENABLE;
 

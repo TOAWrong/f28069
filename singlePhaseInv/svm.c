@@ -12,6 +12,7 @@ void SpaceVectorModulation( float *Vs_dq)
 	float 	Dx,Dy,Dxy,Dz;
 	float	inv_Vdc;
 
+	Vdc = 300.0;
 	if (Vs_dq[qs]>=0) {
 		if (fabs(0.57735*Vs_dq[qs])<fabs(Vs_dq[ds])){
 			if (Vs_dq[ds]>=0){ sector=1; Vx=Vs_dq[ds]-0.57735*Vs_dq[qs];	Vy=1.154701*Vs_dq[qs];}

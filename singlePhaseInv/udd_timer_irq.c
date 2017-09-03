@@ -21,6 +21,7 @@ interrupt void cpu_timer0_isr(void)
     if( gfRunTime < 1.0e+30 ) gfRunTime += 0.001;
 
     timerCount++;
+/*
     if(timerCount > 100){
         timerCount = 0 ;
         if(dacCount<300){
@@ -32,5 +33,6 @@ interrupt void cpu_timer0_isr(void)
         }
         else dacCount = 0;
     }
+*/
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
 }

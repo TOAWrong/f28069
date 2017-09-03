@@ -4,11 +4,15 @@
 
 #if	USE_UART_A
 
-// #define UARTA_BAUD_RATE			60		// 38400 PLL 5
-#define UARTA_BAUD_RATE			120		// 38400
+#define CPU_FREQ    90E6
+#define LSPCLK_FREQ CPU_FREQ/4
+#define SCI_FREQ    115200
+#define SCI_PRD     (LSPCLK_FREQ/(SCI_FREQ*8))-1
+
+#define UARTA_BAUD_RATE          SCI_PRD     // 38400
 
 #define SCIA_RX_BUF_MAX		20
-#define SCIA_TX_BUF_MAX		100
+#define SCIA_TX_BUF_MAX		48
 
 int scia_rx_start_addr=0;
 int scia_rx_end_addr=0;
@@ -22,64 +26,43 @@ char scia_tx_msg_box[SCIA_TX_BUF_MAX] = {0};
 
 void scia_fifo_init()
 {
-	SciaRegs.SCICCR.all =0x0007;   // 1 stop bit,  No loopback
-	                              // No parity,8 char bits,
-	                              // async mode, idle-line protocol
-	SciaRegs.SCICTL1.all =0x0003;  // enable TX, RX, internal SCICLK,
-	                              // Disable RX ERR, SLEEP, TXWAKE
-
+	SciaRegs.SCICCR.all =0x0007;   // 1stopbit,No parity,8 char bits, async mode, idle-line protocol
+	SciaRegs.SCICTL1.all =0x0003;  // enable TX, RX, internal SCICLK,Disable RX ERR, SLEEP, TXWAKE
 	SciaRegs.SCICTL2.bit.TXINTENA 	=1;	// debug
 	SciaRegs.SCICTL2.bit.RXBKINTENA 	=0;
 	SciaRegs.SCIHBAUD = 0x0000;
 	SciaRegs.SCILBAUD = UARTA_BAUD_RATE;
 	SciaRegs.SCICCR.bit.LOOPBKENA =0; // Enable loop back
-
+	SciaRegs.SCIFFTX.all=0xC020; // 2011.
+    // SciaRegs.SCIFFTX.all=0xC022;        // 2017.09.01
+//    SciaRegs.SCIFFRX.all=0xC022;
+    SciaRegs.SCIFFCT.all=0x00;          // 2017.09.01
+    SciaRegs.SCIFFTX.bit.TXFFIL = 0;    // irq 15 byte receive
+    SciaRegs.SCIFFCT.all=0x00;
+    SciaRegs.SCICTL1.all =0x0023;       // Relinquish SCI from Reset
+    SciaRegs.SCIFFTX.bit.TXFIFOXRESET=1;
+    SciaRegs.SCIFFRX.bit.RXFIFORESET=1;
 	SciaRegs.SCIFFTX.bit.TXFFIENA = 0;	// Clear SCI Interrupt flag
 	SciaRegs.SCIFFTX.bit.SCIFFENA=1;
-	//   ScicRegs.SCIFFTX.bit.TXFFINTCLR=1;
 
-	SciaRegs.SCIFFTX.all=0xC020;
-//****************************************************************
-
-//	SciaRegs.SCIFFRX.all=0x0000;
-//	SciaRegs.SCIFFRX.bit.RXFFIL = 0;	// irq 13 byte receive 
-	SciaRegs.SCIFFRX.bit.RXFFIL 	= 13;	// 13	debug
-	SciaRegs.SCIFFRX.bit.RXFFIENA 	= 1;	// 1
-	SciaRegs.SCIFFRX.bit.RXFFINTCLR = 1;	// 1
-	SciaRegs.SCIFFRX.bit.RXFFINT 	= 0;	// 1
-	SciaRegs.SCIFFRX.bit.RXFFST		= 0;	// 5
-	SciaRegs.SCIFFRX.bit.RXFIFORESET= 1;	// 1
-	SciaRegs.SCIFFRX.bit.RXFFOVRCLR	= 1;	// 1
-	SciaRegs.SCIFFRX.bit.RXFFOVF	= 0;	// 1
-//*******************************************************************
-
-	SciaRegs.SCIFFTX.bit.TXFFIL = 0;	// irq 15 byte receive 
-	SciaRegs.SCIFFCT.all=0x00;
-
-	SciaRegs.SCICTL1.all =0x0023;     // Relinquish SCI from Reset
-	SciaRegs.SCIFFTX.bit.TXFIFOXRESET=1;
-	SciaRegs.SCIFFRX.bit.RXFIFORESET=1;
-
-
+	SciaRegs.SCIFFTX.bit.TXFFINTCLR=1;
+	PieCtrlRegs.PIECTRL.bit.ENPIE = 1;   // Enable the PIE block 2017.09.03
 	PieCtrlRegs.PIEIER9.bit.INTx1=1;     // SCI_RX_INT_A --> PIE Group 9, INT1
 	PieCtrlRegs.PIEIER9.bit.INTx2=1;     // SCI_TX_INT_A --> PIE Group 9, INT1
-	IER |= M_INT9;		// scia irq 
+	//PieCtrlRegs.PIEIER9.bit.INTx2=0;     // SCI_TX_INT_A --> PIE Group 9, INT1
+	IER |= M_INT9;		// M == 0x0100 scia irq
 }
 
+/*
 void scia_tx_msg( char * st)
 {
-	int i =0;
-	char * str;
+    int i =0;
 
-	str = st;
-
-	while( *str !='\0'){		
-		SciaRegs.SCITXBUF= * str++;     // Send data
-		
-		if(i < 16) i++;
-		else 		break;
-	}
+    for(i = 0 ; i < 16 ; i++ ){
+        SciaRegs.SCITXBUF= st[i];     // Send data
+    }
 }
+*/
 
 void load_scia_tx_mail_box( char * st)
 {
@@ -119,12 +102,10 @@ interrupt void sciaTxFifoIsr(void)
 		if(scia_tx_end_addr == scia_tx_start_addr) break;
 
 		i++;
-		if( i > 15 ) break;
+		if( i > 4 ) break;
 	}
 
-	if(scia_tx_end_addr == scia_tx_start_addr) 
-
-	SciaRegs.SCIFFTX.bit.TXFFIENA = 0;	// Clear SCI Interrupt flag
+	if(scia_tx_end_addr == scia_tx_start_addr) SciaRegs.SCIFFTX.bit.TXFFIENA = 0;	// Clear SCI Interrupt flag
 
 	SciaRegs.SCIFFTX.bit.TXFFINTCLR=1;	// Clear SCI Interrupt flag
 	PieCtrlRegs.PIEACK.all|=0x0100;     // IN9 
