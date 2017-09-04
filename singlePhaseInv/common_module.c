@@ -102,7 +102,7 @@ void get_command( int * command, float * ref )
 	float digital_reference,sci_ref,ana_ref;
 
 	digital_input_proc( & digital_cmd, & digital_reference);
-//	serial_com_proc( & sci_cmd, & sci_ref );
+	serial_com_proc( & sci_cmd, & sci_ref );
 	analog_cmd_proc( & ana_ref);
 
 	* command = digital_cmd;
