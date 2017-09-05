@@ -72,13 +72,18 @@ interrupt void MainPWM(void)
 //---
 
 	if(dacCount<300){
-	    y1_data[dacCount] = DutyRatio[u];
-	    y2_data[dacCount] = DutyRatio[v];
-	    // y1_data[dacCount] = reference_in;
-	    //y2_data[dacCount] = reference_out;
+	    //y1_data[dacCount] = DutyRatio[u];
+	    //y2_data[dacCount] = DutyRatio[v];
+	    y1_data[dacCount] = reference_in;
+	    y2_data[dacCount] = reference_out;
 	    dacCount ++;
 	}
 	else dacCount = 0;
+
+	EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+    EPwm2Regs.CMPA.half.CMPA = (MAX_PWM_CNT>>2);
+    EPwm3Regs.CMPA.half.CMPA = 500;
+
 
 	EPwm1Regs.ETCLR.bit.INT = 1;	
 	PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;

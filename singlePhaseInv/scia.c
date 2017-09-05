@@ -11,7 +11,7 @@
 
 #define UARTA_BAUD_RATE          SCI_PRD     // 38400
 
-#define SCIA_RX_BUF_MAX		20
+#define SCIA_RX_BUF_MAX		30
 #define SCIA_TX_BUF_MAX		48
 
 int scia_rx_start_addr=0;
@@ -22,6 +22,7 @@ int scia_tx_start_addr=0;
 int scia_tx_end_addr=0;
 int scia_rx_msg_flag = 0;
 
+char msg_box[20]={0};
 char sciaRxIrqBox[SCIA_RX_BUF_MAX] = {0};
 char scia_rx_msg_box[SCIA_RX_BUF_MAX] = {0};
 char scia_tx_msg_box[SCIA_TX_BUF_MAX] = {0};
@@ -62,17 +63,6 @@ void scia_fifo_init()
 	IER |= M_INT9;		// M == 0x0100 scia irq
 }
 
-/*
-void scia_tx_msg( char * st)
-{
-    int i =0;
-
-    for(i = 0 ; i < 16 ; i++ ){
-        SciaRegs.SCITXBUF= st[i];     // Send data
-    }
-}
-*/
-
 void load_scia_tx_mail_box( char * st)
 {
 	int loop_ctrl = 1;
@@ -90,7 +80,7 @@ void load_scia_tx_mail_box( char * st)
 
 		if(scia_tx_end_addr == scia_tx_start_addr){
 			if(scia_tx_end_addr < (SCIA_TX_BUF_MAX-1)) scia_tx_start_addr++;
-			else										scia_tx_start_addr = 0;
+			else									   scia_tx_start_addr = 0;
 		}
 		if( *str == '\0') loop_ctrl = 0;
 	}
@@ -119,30 +109,11 @@ interrupt void sciaTxFifoIsr(void)
 	SciaRegs.SCIFFTX.bit.TXFFINTCLR=1;	// Clear SCI Interrupt flag
 	PieCtrlRegs.PIEACK.all|=0x0100;     // IN9 
 }
-/*
-interrupt void sciaRxFifoIsr(void)
-{
-	int i;
-	char tempBuf;
 
-	for( i =0 ; i< 4 ; i++){
-        if(sciRxPoint < 15) sciaRxIrqBox[sciRxPoint++] = SciaRegs.SCIRXBUF.all;   // Read data
-        else tempBuf = SciaRegs.SCIRXBUF.all;   // Read data
-	}
-	
-	if (sciRxPoint > 14 )   scia_rx_msg_flag = 1;
-
-	SciaRegs.SCIFFRX.bit.RXFFOVRCLR=1;   // Clear Overflow flag
-	SciaRegs.SCIFFRX.bit.RXFFINTCLR=1;   // Clear Interrupt flag
-
-	PieCtrlRegs.PIEACK.all|=0x0100;     // IN9 
-}
-*/
 interrupt void sciaRxFifoIsr(void)
 {
     static Uint32 modebus_start_time=0;
     static int scia_rx_count=0;
-    static char msg_box[17]={0};
 
     // .
     if( ulGetTime_mSec(modebus_start_time) > 10 ){
@@ -159,7 +130,6 @@ interrupt void sciaRxFifoIsr(void)
         msg_box[15] = SciaRegs.SCIRXBUF.all;     // Read data
         scia_rx_count = 0;
         scia_rx_msg_flag =1;
-        strncpy( scia_rx_msg_box,msg_box,16);
     }
     else{
         msg_box[0] = SciaRegs.SCIRXBUF.all;  // Read data
@@ -191,7 +161,7 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
 
 	scia_rx_msg_flag = 0;
 
-	// strncpy(scia_rx_msg_box,sciaRxIrqBox,17);
+    strncpy( scia_rx_msg_box,msg_box,16);
 
     if (( scia_rx_msg_box[0] != '9') && ( scia_rx_msg_box[1] != ':')) return;
 

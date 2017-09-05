@@ -3,7 +3,7 @@
 
 #define   RPM2WRM            (2.*PI/60.) 
 #define   WRM2RPM            (60./(2.*PI)) 
-#define SWITCHING_FREQ   8000
+#define SWITCHING_FREQ      10000
 #define ADC_CONST         0.00048828125   // 1/2048
 //#define DUAL_PWM_INTERRUPT      (0)          //   PWM Top & Bottom Interrupt
 

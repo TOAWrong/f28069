@@ -353,6 +353,10 @@ void tripProc()
 	MAIN_CHARGE_OFF;
 	ePwmPortOff();
 
+	for(; ;){
+	    Nop();
+	}
+
 	/*
 	while( RESET_INPUT==0)Nop();
 	delay_msecs(50);

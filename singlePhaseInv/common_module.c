@@ -95,7 +95,7 @@ void analog_cmd_proc(float * ana_ref)
     * ana_ref = adcCmdAnalog * ADC_CONST * 0.5 * analog_cmd_in_span1;		// debug
 }
 
-//
+
 void get_command( int * command, float * ref )
 {
 	int digital_cmd,sci_cmd;

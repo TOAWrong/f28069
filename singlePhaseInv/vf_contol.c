@@ -75,7 +75,7 @@ int vf_loop_control(float cmd_ref)
 				if( reference_in < -1.0 ) reference_in = -1.0;
 			}
 			else if( command == CMD_START ){
-				ramp_proc(reference_in, &reference_out);
+				ramp_proc(reference_in, & reference_out);
 			}
 			break;
 

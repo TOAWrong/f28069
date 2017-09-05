@@ -51,9 +51,6 @@ void ADC_SOC_CNF( )
 
 __interrupt void adcIsr(void)
 {
-    GpioDataRegs.GPASET.bit.GPIO7 = 1;
-//    GpioDataRegs.GPATOGGLE.bit.GPIO7 = 1;  // CON1.8 GATE_ENABLE
-
     adcIuPhase = AdcResult.ADCRESULT0;
     adcIvPhase = AdcResult.ADCRESULT1;
     adcVdc       = AdcResult.ADCRESULT2;
@@ -61,11 +58,8 @@ __interrupt void adcIsr(void)
     adcExSensor = AdcResult.ADCRESULT4;
     adcCmdAnalog = AdcResult.ADCRESULT5;
 
-
     AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;   // Acknowledge interrupt to PIE
-
-    GpioDataRegs.GPACLEAR.bit.GPIO7 = 1;
     return;
 }
 

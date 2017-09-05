@@ -141,10 +141,11 @@ void main( void )
 
 	load_sci_tx_mail_box(gStr1); delay_msecs(20);
 
+
 	if( gPWMTripCode !=0 )	tripProc();
-//	strncpy(MonitorMsg,"INVERTER-READY  ",20);
-//	strncpy(gStr1,"INVERTER_READY",20);
-//	load_sci_tx_mail_box(gStr1); delay_msecs(20);
+	strncpy(MonitorMsg,"INVERTER-READY  ",20);
+	strncpy(gStr1,"INVERTER_READY",20);
+	load_sci_tx_mail_box(gStr1); delay_msecs(20);
 /*
 	for( ; ; ){
 	    delay_msecs(1000);
@@ -153,7 +154,6 @@ void main( void )
     }
 */
 	GATE_DRIVER_ENABLE;
-
 	for( ; ; )
 	{
 		if( gPWMTripCode !=0 )	tripProc();
@@ -175,84 +175,63 @@ void InitEPwm_ACIM_Inverter()
 	MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / SWITCHING_FREQ ) * 0.5 * 0.5 * 0.5);
 	inv_MAX_PWM_CNT = 1.0 / MAX_PWM_CNT;
 
-	EPwm1Regs.TBPRD =  MAX_PWM_CNT;			// Set timer period
-	EPwm1Regs.TBPHS.half.TBPHS = 0x0000;           	// Phase is 0
-	EPwm1Regs.TBCTR = 0x0000;                      	// Clear counter
-
-	// Setup TBCLK
-	EPwm1Regs.TBCTL.bit.PHSDIR = TB_UP;				// Count up
-	EPwm1Regs.TBCTL.bit.CTRMODE = TB_COUNT_UPDOWN;	// 
-	EPwm1Regs.TBCTL.bit.PHSEN = TB_ENABLE;			// 2010.06.21
-	EPwm1Regs.TBCTL.bit.HSPCLKDIV = 0;				// Clock ratio to SYSCLKOUT
-	EPwm1Regs.TBCTL.bit.CLKDIV = 0;
-	EPwm1Regs.TBCTL.bit.SYNCOSEL = TB_CTR_ZERO;        	
-
-	EPwm1Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW;		// Load registers every ZERO
-	EPwm1Regs.CMPCTL.bit.SHDWBMODE = CC_SHADOW;
-	EPwm1Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO;
-	EPwm1Regs.CMPCTL.bit.LOADBMODE = CC_CTR_ZERO;   
-
-	EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT;
-   
-	EPwm1Regs.AQCTLA.bit.CAU = AQ_SET;
-	EPwm1Regs.AQCTLA.bit.CAD = AQ_CLEAR;
-   
+//--- PWM Module1
+	EPwm1Regs.TBPRD                 =  MAX_PWM_CNT;			// Set timer period
+	EPwm1Regs.TBPHS.half.TBPHS      = 0x0000; // Phase is 0
+    EPwm1Regs.TBCTL.bit.CTRMODE     = TB_COUNT_UPDOWN;  //
+    EPwm1Regs.TBCTL.bit.PHSEN       = TB_DISABLE;   // 2017.09.05
+    EPwm1Regs.TBCTL.bit.PRDLD       = TB_SHADOW;    // 2017.09.05
+    EPwm1Regs.TBCTL.bit.SYNCOSEL    = TB_CTR_ZERO;
+	EPwm1Regs.CMPCTL.bit.SHDWAMODE  = CC_SHADOW;	// Load registers every ZERO
+	EPwm1Regs.CMPCTL.bit.SHDWBMODE  = CC_SHADOW;
+	EPwm1Regs.CMPCTL.bit.LOADAMODE  = CC_CTR_ZERO;
+	EPwm1Regs.CMPCTL.bit.LOADBMODE  = CC_CTR_ZERO;
+	EPwm1Regs.AQCTLA.bit.CAU        = AQ_SET;
+	EPwm1Regs.AQCTLA.bit.CAD        = AQ_CLEAR;
 	EPwm1Regs.DBCTL.bit.OUT_MODE 	= DB_FULL_ENABLE;
-
-	EPwm1Regs.DBCTL.bit.POLSEL 	= DB_ACTV_HIC;
-
-	EPwm1Regs.DBCTL.bit.IN_MODE 	= DBA_ALL;
-	EPwm1Regs.DBRED = DEAD_TIME_COUNT;					// debug set to 4usec
-	EPwm1Regs.DBFED = DEAD_TIME_COUNT;
-
-	// Set PWM2   
-	EPwm2Regs.TBPRD =  MAX_PWM_CNT;				// Set timer period
-	EPwm2Regs.TBCTL.bit.PHSDIR = TB_UP;	// Count up
-	EPwm2Regs.TBCTL.bit.CTRMODE = TB_COUNT_UPDOWN; 		// Count up
-	EPwm2Regs.TBCTL.bit.HSPCLKDIV = 0;       			// Clock ratio to SYSCLKOUT
-	EPwm2Regs.TBCTL.bit.CLKDIV = 0;          			// Slow just to observe on the scope
-
-	EPwm2Regs.TBPHS.half.TBPHS = 0x0000;           	// Phase is 0
-	EPwm2Regs.TBCTL.bit.PHSEN = TB_ENABLE; 
-	EPwm2Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_IN;        	
-	EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT;
-
-	EPwm2Regs.AQCTLA.bit.CAU = AQ_SET;             		
-	EPwm2Regs.AQCTLA.bit.CAD = AQ_CLEAR;
-
-	EPwm2Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE;
-	EPwm2Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC;		
-
-	EPwm2Regs.DBCTL.bit.IN_MODE = DBA_ALL;
-	EPwm2Regs.DBRED = DEAD_TIME_COUNT;
-	EPwm2Regs.DBFED = DEAD_TIME_COUNT;
-	EPwm2Regs.ETSEL.bit.INTEN = 0;                 	
+	EPwm1Regs.DBCTL.bit.POLSEL 	    = DB_ACTV_HIC;
+	EPwm1Regs.DBRED                 = DEAD_TIME_COUNT; // debug set to 4usec
+	EPwm1Regs.DBFED                 = DEAD_TIME_COUNT;
+    EPwm1Regs.CMPA.half.CMPA        = MAX_PWM_CNT;
+//--- Set PWM2
+	EPwm2Regs.TBPRD                 =  MAX_PWM_CNT;				// Set timer period
+    EPwm2Regs.TBPHS.half.TBPHS      = 0x0000;            // Phase is 0
+	EPwm2Regs.TBCTL.bit.CTRMODE     = TB_COUNT_UPDOWN; 		// Count up
+    EPwm2Regs.TBCTL.bit.PHSEN       = TB_ENABLE;
+    EPwm2Regs.TBCTL.bit.PRDLD       = TB_SHADOW;          // 2017.09.05
+    EPwm2Regs.TBCTL.bit.SYNCOSEL    = TB_SYNC_IN;
+    EPwm2Regs.CMPCTL.bit.SHDWAMODE   = CC_SHADOW;
+    EPwm2Regs.CMPCTL.bit.SHDWBMODE   = CC_SHADOW;
+    EPwm2Regs.CMPCTL.bit.LOADAMODE   = CC_CTR_ZERO;
+    EPwm2Regs.CMPCTL.bit.LOADBMODE   = CC_CTR_ZERO;
+    EPwm2Regs.AQCTLA.bit.CAU        = AQ_SET;
+    EPwm2Regs.AQCTLA.bit.CAD        = AQ_CLEAR;
+	EPwm2Regs.DBCTL.bit.OUT_MODE    = DB_FULL_ENABLE;
+	EPwm2Regs.DBCTL.bit.POLSEL      = DB_ACTV_HIC;
+	EPwm2Regs.DBRED                 = DEAD_TIME_COUNT;
+	EPwm2Regs.DBFED                 = DEAD_TIME_COUNT;
+    EPwm2Regs.CMPA.half.CMPA        = MAX_PWM_CNT;
+//	EPwm2Regs.ETSEL.bit.INTEN = 0;
 
 //Set PWM3 
 	EPwm3Regs.TBPRD =  MAX_PWM_CNT;			// Set timer period
-
-	EPwm3Regs.TBCTL.bit.PHSDIR 		= TB_UP;				// Count up
+    EPwm3Regs.TBPHS.half.TBPHS      = 0x0000;               // Phase is 0
 	EPwm3Regs.TBCTL.bit.CTRMODE 	= TB_COUNT_UPDOWN; 	// Count up
-	EPwm3Regs.TBCTL.bit.HSPCLKDIV 	= TB_DIV1;		// 
-	EPwm3Regs.TBCTL.bit.CLKDIV 		= TB_DIV1;			// Slow so we can observe on the scope
-
-	EPwm3Regs.TBPHS.half.TBPHS 		= 0x0000;           	// Phase is 0
 	EPwm3Regs.TBCTL.bit.PHSEN 		= TB_ENABLE; 
+    EPwm3Regs.TBCTL.bit.PRDLD       = TB_SHADOW;          // 2017.09.05
 	EPwm3Regs.TBCTL.bit.SYNCOSEL 	= TB_SYNC_IN;        	
-
+    EPwm3Regs.CMPCTL.bit.SHDWAMODE   = CC_SHADOW;
+    EPwm3Regs.CMPCTL.bit.SHDWBMODE   = CC_SHADOW;
+    EPwm3Regs.CMPCTL.bit.LOADAMODE   = CC_CTR_ZERO;
+    EPwm3Regs.CMPCTL.bit.LOADBMODE   = CC_CTR_ZERO;
+    EPwm3Regs.AQCTLA.bit.CAU        = AQ_SET;
+    EPwm3Regs.AQCTLA.bit.CAD        = AQ_CLEAR;
+    EPwm3Regs.DBCTL.bit.OUT_MODE    = DB_FULL_ENABLE;
+    EPwm3Regs.DBCTL.bit.POLSEL      = DB_ACTV_HIC;
 	EPwm3Regs.CMPA.half.CMPA 		= MAX_PWM_CNT;
-
-	EPwm3Regs.AQCTLA.bit.CAU 		= AQ_SET;	 
-	EPwm3Regs.AQCTLA.bit.CAD 		= AQ_CLEAR;
-
-	EPwm3Regs.DBCTL.bit.OUT_MODE 	= DB_FULL_ENABLE;
-	EPwm3Regs.DBCTL.bit.POLSEL 		= DB_ACTV_HIC;
-
-	EPwm3Regs.DBCTL.bit.IN_MODE 	= DBA_ALL;
 	EPwm3Regs.DBRED 				= DEAD_TIME_COUNT;
 	EPwm3Regs.DBFED 				= DEAD_TIME_COUNT;
-	EPwm3Regs.ETSEL.bit.INTEN 		= 0;                  
-
+//	EPwm3Regs.ETSEL.bit.INTEN 		= 0;
 
 //Set PWM4 
 	EPwm4Regs.TBPRD =  MAX_PWM_CNT;			// Set timer period
