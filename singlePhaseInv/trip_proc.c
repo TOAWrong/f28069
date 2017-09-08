@@ -34,7 +34,7 @@ int CheckOverCurrent( )
 //  ������ ������ ��ȣ 
 //-----------------------------------------------
 #define CODE_OC_level 		301
-float code_over_volt_set = 350.0;
+float code_over_volt_set = 380.0;
 
 int CheckOverVolt( )
 {
@@ -79,7 +79,7 @@ int CheckUndeVolt( )
 
 int CheckIGBTFault( )
 {
-	if( PWM_FAULT == 0)	return ERR_PWM;
+	if( GATE_DRIVER_FAULT == 0)	return ERR_PWM;
 	return 0;
 }
 
@@ -348,7 +348,6 @@ void ClearTripDataToEeprom()
 
 void tripProc()
 {
-
 	GATE_DRIVER_CLEAR;
 	MAIN_CHARGE_OFF;
 	ePwmPortOff();
@@ -356,14 +355,25 @@ void tripProc()
 	for(; ;){
 	    Nop();
 	}
+//start input 이 되어 있는 상태에서 트립이 발생한다. 일반적으로
+// - 이때 다시 스톱을 하고 시작을
+// 다시 스톱 하면 리셋이 된다.
+// 리셋이 되고 있다는 신호를 줘야 한다.
+// - 초기 충전 릴레이?
+//	트립과 동시에 충전 릴레이는 off가 된다.
+// 리모트 리셋도 가능하다.
 
-	/*
-	while( RESET_INPUT==0)Nop();
+	while( RUN_INPUT==0)Nop();
+	delay_msecs(100);
+	while( RUN_INPUT)Nop();
 	delay_msecs(50);
-	while( RESET_INPUT)Nop();
-	delay_msecs(50);
-	while( RESET_INPUT==0)Nop();
-*/
+	while( RUN_INPUT==0)Nop();
+
+	gMachineState = STATE_TRIP;
+
+    Nop();
+    asm (" .ref _c_int00"); // ;Branch to start of boot.asm in RTS library
+    asm (" LB _c_int00"); // ;Branch to start of boot.asm in RTS library
 }
 
 

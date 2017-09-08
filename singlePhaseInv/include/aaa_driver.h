@@ -3,7 +3,7 @@
 
 #define   RPM2WRM            (2.*PI/60.) 
 #define   WRM2RPM            (60./(2.*PI)) 
-#define SWITCHING_FREQ      10000
+#define SWITCHING_FREQ      1000
 #define ADC_CONST         0.00048828125   // 1/2048
 //#define DUAL_PWM_INTERRUPT      (0)          //   PWM Top & Bottom Interrupt
 
@@ -31,7 +31,7 @@
 #define EEPROM_RW_DELAY			10	
 
 // #define DEAD_TIME_COUNT			320
-#define DEAD_TIME_COUNT			640			// 150Mhz
+#define DEAD_TIME_COUNT			137			// 90Mhz
 
 #define TRIP_BACKUP_ADDR		3000		
 #define EPROM_ADDR_TRIP_POINT	4010

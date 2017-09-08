@@ -74,8 +74,10 @@ interrupt void MainPWM(void)
 	if(dacCount<300){
 	    //y1_data[dacCount] = DutyRatio[u];
 	    //y2_data[dacCount] = DutyRatio[v];
-	    y1_data[dacCount] = reference_in;
-	    y2_data[dacCount] = reference_out;
+        y1_data[dacCount] = adcIuPhase /4096.0 ;
+        y2_data[dacCount] = adcIvPhase /4096.0 ;
+        //y1_data[dacCount] = adcExSensor /4096.0 ;
+        //y2_data[dacCount] = adcCmdAnalog /4096.0 ;
 	    dacCount ++;
 	}
 	else dacCount = 0;

@@ -45,7 +45,7 @@
 #define INIT_CHARGE_CLEAR   Nop()               // (GpioDataRegs.GPACLEAR.bit.GPIO13 = 1)
 #define INIT_CHARGE_SET     Nop()               // (GpioDataRegs.GPASET.bit.GPIO13   = 1)
 
-#define PWM_FAULT       (GpioDataRegs.GPADAT.bit.GPIO16)    // gateDriverFault
+#define GATE_DRIVER_FAULT   (GpioDataRegs.GPADAT.bit.GPIO16)    // gateDriverFault
 // #define DB_FAULT     (GpioDataRegs.GPADAT.bit.GPIO17)
 
 struct DIGIT_FUNCTION_BITS {      

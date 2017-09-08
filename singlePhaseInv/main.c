@@ -75,6 +75,8 @@ void main( void )
     EINT;   // Enable Global interrupt INTM
 	ERTM;	// Enable Global realtime interrupt DBGM
 
+	LPF_2nd_INIT( LPF_Vdc_cutoff_freq,Ts, LPF_Vdc_in, LPF_Vdc_out, LPF_Vdc_K);
+
     ADC_SOC_CNF();
 
     gPWMTripCode = 0;		//
@@ -146,13 +148,7 @@ void main( void )
 	strncpy(MonitorMsg,"INVERTER-READY  ",20);
 	strncpy(gStr1,"INVERTER_READY",20);
 	load_sci_tx_mail_box(gStr1); delay_msecs(20);
-/*
-	for( ; ; ){
-	    delay_msecs(1000);
-	    strncpy(gStr1,"inverter_ready",20);
-	    load_scia_tx_mail_box(gStr1);
-    }
-*/
+
 	GATE_DRIVER_ENABLE;
 	for( ; ; )
 	{
@@ -186,10 +182,10 @@ void InitEPwm_ACIM_Inverter()
 	EPwm1Regs.CMPCTL.bit.SHDWBMODE  = CC_SHADOW;
 	EPwm1Regs.CMPCTL.bit.LOADAMODE  = CC_CTR_ZERO;
 	EPwm1Regs.CMPCTL.bit.LOADBMODE  = CC_CTR_ZERO;
-	EPwm1Regs.AQCTLA.bit.CAU        = AQ_SET;
-	EPwm1Regs.AQCTLA.bit.CAD        = AQ_CLEAR;
+	EPwm1Regs.AQCTLA.bit.CAU        = AQ_CLEAR;
+	EPwm1Regs.AQCTLA.bit.CAD        = AQ_SET;
 	EPwm1Regs.DBCTL.bit.OUT_MODE 	= DB_FULL_ENABLE;
-	EPwm1Regs.DBCTL.bit.POLSEL 	    = DB_ACTV_HIC;
+	EPwm1Regs.DBCTL.bit.POLSEL 	    = DB_ACTV_LOC;
 	EPwm1Regs.DBRED                 = DEAD_TIME_COUNT; // debug set to 4usec
 	EPwm1Regs.DBFED                 = DEAD_TIME_COUNT;
     EPwm1Regs.CMPA.half.CMPA        = MAX_PWM_CNT;
@@ -200,14 +196,14 @@ void InitEPwm_ACIM_Inverter()
     EPwm2Regs.TBCTL.bit.PHSEN       = TB_ENABLE;
     EPwm2Regs.TBCTL.bit.PRDLD       = TB_SHADOW;          // 2017.09.05
     EPwm2Regs.TBCTL.bit.SYNCOSEL    = TB_SYNC_IN;
-    EPwm2Regs.CMPCTL.bit.SHDWAMODE   = CC_SHADOW;
-    EPwm2Regs.CMPCTL.bit.SHDWBMODE   = CC_SHADOW;
-    EPwm2Regs.CMPCTL.bit.LOADAMODE   = CC_CTR_ZERO;
-    EPwm2Regs.CMPCTL.bit.LOADBMODE   = CC_CTR_ZERO;
-    EPwm2Regs.AQCTLA.bit.CAU        = AQ_SET;
-    EPwm2Regs.AQCTLA.bit.CAD        = AQ_CLEAR;
+    EPwm2Regs.CMPCTL.bit.SHDWAMODE  = CC_SHADOW;
+    EPwm2Regs.CMPCTL.bit.SHDWBMODE  = CC_SHADOW;
+    EPwm2Regs.CMPCTL.bit.LOADAMODE  = CC_CTR_ZERO;
+    EPwm2Regs.CMPCTL.bit.LOADBMODE  = CC_CTR_ZERO;
+    EPwm2Regs.AQCTLA.bit.CAU        = AQ_CLEAR;
+    EPwm2Regs.AQCTLA.bit.CAD        = AQ_SET;
 	EPwm2Regs.DBCTL.bit.OUT_MODE    = DB_FULL_ENABLE;
-	EPwm2Regs.DBCTL.bit.POLSEL      = DB_ACTV_HIC;
+	EPwm2Regs.DBCTL.bit.POLSEL      = DB_ACTV_LOC;
 	EPwm2Regs.DBRED                 = DEAD_TIME_COUNT;
 	EPwm2Regs.DBFED                 = DEAD_TIME_COUNT;
     EPwm2Regs.CMPA.half.CMPA        = MAX_PWM_CNT;
@@ -220,14 +216,14 @@ void InitEPwm_ACIM_Inverter()
 	EPwm3Regs.TBCTL.bit.PHSEN 		= TB_ENABLE; 
     EPwm3Regs.TBCTL.bit.PRDLD       = TB_SHADOW;          // 2017.09.05
 	EPwm3Regs.TBCTL.bit.SYNCOSEL 	= TB_SYNC_IN;        	
-    EPwm3Regs.CMPCTL.bit.SHDWAMODE   = CC_SHADOW;
-    EPwm3Regs.CMPCTL.bit.SHDWBMODE   = CC_SHADOW;
-    EPwm3Regs.CMPCTL.bit.LOADAMODE   = CC_CTR_ZERO;
-    EPwm3Regs.CMPCTL.bit.LOADBMODE   = CC_CTR_ZERO;
-    EPwm3Regs.AQCTLA.bit.CAU        = AQ_SET;
-    EPwm3Regs.AQCTLA.bit.CAD        = AQ_CLEAR;
+    EPwm3Regs.CMPCTL.bit.SHDWAMODE  = CC_SHADOW;
+    EPwm3Regs.CMPCTL.bit.SHDWBMODE  = CC_SHADOW;
+    EPwm3Regs.CMPCTL.bit.LOADAMODE  = CC_CTR_ZERO;
+    EPwm3Regs.CMPCTL.bit.LOADBMODE  = CC_CTR_ZERO;
+    EPwm3Regs.AQCTLA.bit.CAU        = AQ_CLEAR;
+    EPwm3Regs.AQCTLA.bit.CAD        = AQ_SET;
     EPwm3Regs.DBCTL.bit.OUT_MODE    = DB_FULL_ENABLE;
-    EPwm3Regs.DBCTL.bit.POLSEL      = DB_ACTV_HIC;
+    EPwm3Regs.DBCTL.bit.POLSEL      = DB_ACTV_LOC;
 	EPwm3Regs.CMPA.half.CMPA 		= MAX_PWM_CNT;
 	EPwm3Regs.DBRED 				= DEAD_TIME_COUNT;
 	EPwm3Regs.DBFED 				= DEAD_TIME_COUNT;
