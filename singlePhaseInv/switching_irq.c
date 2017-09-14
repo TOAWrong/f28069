@@ -13,6 +13,7 @@ int dacCount = 0;
 interrupt void MainPWM(void)
 {
 	static int invt_PWM_Port_Set_flag = 0;
+	float modulationRatio;
 
 #if TEST_ADC_CENTER
 	J8_2_SET;
@@ -48,19 +49,22 @@ interrupt void MainPWM(void)
 	case STATE_GO_STOP:
 	case STATE_WAIT_BREAK_OFF:		
 
-		if( invt_PWM_Port_Set_flag == 0 ){
-			ePwmEnable();
-			invt_PWM_Port_Set_flag = 1;
-		}
-		else{
-	    	VoltageEstimation();
-	    	vf_simple_control();
-			SpaceVectorModulation(Vs_dq_ref);						
-			EPwm1Regs.CMPA.half.CMPA = DutyCount[u];
-			EPwm2Regs.CMPA.half.CMPA = DutyCount[v];
-			EPwm3Regs.CMPA.half.CMPA = DutyCount[w];
-		}
-		break;
+	    we = codeMotorRateHz * reference_out;
+	    theta += we * Ts;
+        if (theta > PI_2 )     theta -= PI_2;
+        else if (theta < 0.0 ) theta = 0.0;
+
+        modulationRatio = reference_out;
+        singlePhaseModulation(modulationRatio, theta, DutyRatio);
+
+        DutyCount[0] = MAX_PWM_CNT * DutyRatio[0];
+        DutyCount[1] = MAX_PWM_CNT * DutyRatio[1];
+        DutyCount[2] = MAX_PWM_CNT * DutyRatio[2];
+
+        EPwm1Regs.CMPA.half.CMPA = DutyCount[0];
+        EPwm2Regs.CMPA.half.CMPA = DutyCount[1];
+        EPwm3Regs.CMPA.half.CMPA = DutyCount[2];
+        break;
 
 	default: 
 		invt_PWM_Port_Set_flag = 0;
@@ -72,10 +76,10 @@ interrupt void MainPWM(void)
 //---
 
 	if(dacCount<300){
-	    //y1_data[dacCount] = DutyRatio[u];
-	    //y2_data[dacCount] = DutyRatio[v];
-        y1_data[dacCount] = adcIuPhase /4096.0 ;
-        y2_data[dacCount] = adcIvPhase /4096.0 ;
+	    y1_data[dacCount] = DutyRatio[1];
+	    y2_data[dacCount] = DutyRatio[2];
+        //y1_data[dacCount] = adcIuPhase /4096.0 ;
+        //y2_data[dacCount] = adcIvPhase /4096.0 ;
         //y1_data[dacCount] = adcExSensor /4096.0 ;
         //y2_data[dacCount] = adcCmdAnalog /4096.0 ;
 	    dacCount ++;
