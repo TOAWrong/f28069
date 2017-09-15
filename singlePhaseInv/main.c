@@ -117,7 +117,7 @@ void main( void )
 		if(code_protect_ex_trip_off == 0 ) 	protect_reg.bit.EX_TRIP = 1;
 	}
 	init_charge_flag = 1;	
-	while( gfRunTime < 10.0){
+	while( gfRunTime < 3.0){
 		get_command( & cmd, & ref_in0);
 		monitor_proc();
 		Nop();

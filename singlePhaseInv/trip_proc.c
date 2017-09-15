@@ -98,7 +98,7 @@ void trip_recording(int trip_code,float trip_data,char * st)
 
 	TripInfoNow.CODE	= trip_code;
 	TripInfoNow.DATA	= trip_data;
-	strncpy( TripInfoNow.MSG,st,20) ;
+	strncpy( TripInfoNow.MSG,st,30) ;
 
 	gMachineState 		= STATE_TRIP;
 	TripInfoNow.CURRENT	= rmsIm;
@@ -312,11 +312,11 @@ void tripProc()
 	}
 	delay_msecs(100);
 	while( RUN_INPUT){
-	    gMachineState = STATE_TO_RESET;
+	    // gMachineState = STATE_TO_RESET;
         monitor_proc( );
 	}
 	while( RUN_INPUT==0){
-	    gMachineState = STATE_TO_RESET;
+	    // gMachineState = STATE_TO_RESET;
 	    monitor_proc( );
     }
 	gMachineState = STATE_POWER_ON;

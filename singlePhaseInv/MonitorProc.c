@@ -4,8 +4,9 @@
 void monitor_proc()		// need_edit
 {
     static int monitorCount=0;
-	int temp;
-	char str[30]= {0};
+    int temp;
+    float ftemp;
+	char str[50]= {0};
 
 	Uint32 RunTimeMsec=0 ;
 	static unsigned long StartTimeMsec = 0 ;
@@ -31,22 +32,30 @@ void monitor_proc()		// need_edit
             load_scia_tx_mail_box(TripInfoNow.MSG);
         }
         else if( monitorCount == 2 ){
-            snprintf( str,10,"Trip CODE= %d",TripInfo.CODE); load_scia_tx_mail_box(str);
+            snprintf( str,20,"CODE=%d",TripInfoNow.CODE); load_scia_tx_mail_box(str);
         }
         else if( monitorCount == 3 ){
-            snprintf( str,10,"Trip DATA= %e",TripInfo.DATA); load_scia_tx_mail_box(str);
+            //snprintf( str,25,"Trip DATA= %.2f",TripInfoNow.DATA); load_scia_tx_mail_box(str);
+            sprintf( str,"DATA=%e",TripInfoNow.DATA); load_scia_tx_mail_box(str);
         }
         else if( monitorCount == 4 ){
-            snprintf( str,10,"Trip DATA= %e",TripInfo.CURRENT); load_scia_tx_mail_box(str);
+            //snprintf( str,25,"Trip DATA= %.2f",TripInfoNow.CURRENT); load_scia_tx_mail_box(str);
+            ftemp = (floor(TripInfoNow.CURRENT +0.5));
+            sprintf( str,"Irms=%e",ftemp); load_scia_tx_mail_box(str);
         }
         else if( monitorCount == 5 ){
-            snprintf( str,10,"Trip Vdc= %e",TripInfo.RPM); load_scia_tx_mail_box(str);
+            // snprintf( str,20,"Trip Vdc= %.2f",TripInfoNow.RPM); load_scia_tx_mail_box(str);
+            sprintf( str,"RPM =%e",TripInfoNow.RPM); load_scia_tx_mail_box(str);
+        }
+        else if( monitorCount == 6 ){
+            // snprintf( str,20,"Trip Vdc= %.2f",TripInfoNow.RPM); load_scia_tx_mail_box(str);
+            sprintf( str,"VDC =%e",TripInfoNow.VDC); load_scia_tx_mail_box(str);
         }
         else{
             monitorCount = 0;
         }
         monitorCount ++;
-        if(monitorCount>5) monitorCount = 0;
+        if(monitorCount>6) monitorCount = 0;
     }
     else {
         if( monitorCount == 0 ){
