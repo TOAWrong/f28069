@@ -75,7 +75,6 @@ void main( void )
     EINT;   // Enable Global interrupt INTM
 	ERTM;	// Enable Global realtime interrupt DBGM
 
-	LPF_2nd_INIT( LPF_Vdc_cutoff_freq,Ts, LPF_Vdc_in, LPF_Vdc_out, LPF_Vdc_K);
 
     ADC_SOC_CNF();
 
@@ -92,6 +91,13 @@ void main( void )
 	IER |= M_INT3;      // debug for PWM
 
 	gfRunTime = 0.0; 
+
+	//lpf2ndCoeffInit( LPF_VDC_CUTOFF_FREQ,Ts, lpfVdcIn, lpfVdcOut, lpfVdcK);
+    lpf2ndCoeffInit( 1000.0, Ts, lpfVdcIn, lpfVdcOut, lpfVdcK);
+    lpf2ndCoeffInit( 1.0, Ts, lpfImIn, lpfImOut, lpfIrmsK);
+    lpf2ndCoeffInit( 1.0, Ts, lpfIaIn, lpfIaOut, lpfIrmsK);
+
+    delay_msecs(500);
 
 	if( (int)(floor(codeProtectOff+0.5)) == 1)
 	{
@@ -111,7 +117,7 @@ void main( void )
 		if(code_protect_ex_trip_off == 0 ) 	protect_reg.bit.EX_TRIP = 1;
 	}
 	init_charge_flag = 1;	
-	while( gfRunTime < 3.0){
+	while( gfRunTime < 10.0){
 		get_command( & cmd, & ref_in0);
 		monitor_proc();
 		Nop();
@@ -141,13 +147,13 @@ void main( void )
 	gMachineState = STATE_READY; 
 	INIT_CHARGE_CLEAR;
 
-	load_sci_tx_mail_box(gStr1); delay_msecs(20);
-
-
 	if( gPWMTripCode !=0 )	tripProc();
-	strncpy(MonitorMsg,"INVERTER-READY  ",20);
-	strncpy(gStr1,"INVERTER_READY",20);
+	strncpy(MonitorMsg,"READY",20);delay_msecs(20);
+	strncpy(gStr1,"READY",20);
 	load_sci_tx_mail_box(gStr1); delay_msecs(20);
+
+	trip_recording(123,456.789,"Test Trip Message Print");
+	tripProc();
 
 	GATE_DRIVER_ENABLE;
 	for( ; ; )

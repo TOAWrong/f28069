@@ -1,6 +1,32 @@
 #ifndef		__VARIABLES_
 #define		__VARIABLES_
 
+extern float    Is_max;                 // �ִ� �������
+
+extern float sensVdc;
+extern float sensIm;
+extern float sensIa;
+
+extern float lpfVdc;
+extern float lpfIm;
+extern float lpfIa;
+extern float rmsIm;
+extern float rmsIa;
+
+//-- low pass filter
+extern float lpfVdcCutoffFreq;
+extern float lpfVdcIn[3];
+extern float lpfVdcOut[3];
+extern float lpfVdcK[4];
+
+extern float lpfIrmsCutOffRreq;
+extern float lpfImIn[3];
+extern float lpfImOut[3];
+extern float lpfIrmsK[4];
+//float lpfIrmsCutOffRreq = 1.0;
+extern float lpfIaIn[3];
+extern float lpfIaOut[3];
+
 extern float Pole_pair;
 extern float Wrm_det;
 
@@ -135,9 +161,6 @@ extern float	Is_dq[2];
 extern float RMS_Ia;
 extern float RMS_Ib;
 
-extern float	Is_mag;
-extern float	Is_mag_rms;
-
 extern float I_r;
 extern float I_s;
 extern float I_t;
@@ -239,8 +262,6 @@ extern float	P_pair;
 extern float	inv_P_pair;
 
 // �ι��� �Ķ����
-extern float	Is_max;					// �ִ� �������
-	
 // V/F �����
 extern float	S_rat;
 extern float	S_lin;
@@ -282,10 +303,9 @@ extern int gDeChargeFlag;
 extern int	gPWMTripCode;
 
 extern int gTripSavePoint;		// Ʈ���� ������ ������
-
-extern int adc_result[16];
-extern int adcIuPhase;
-extern int adcIvPhase;
+extern int adc_result[6];
+extern int adcIm;
+extern int adcIa;
 extern int adcVdc;
 extern int adcIgbtTemperature;
 extern int adcExSensor;
@@ -297,7 +317,7 @@ extern TRIP_INFO TripInfoNow;
 extern int gTripFlag;
 extern float AnaCmdReference;
 extern Uint16	MAX_PWM_CNT;
-extern char MonitorMsg[30];
+extern char MonitorMsg[25];
 extern int gRunFlag;
 extern int gTripSaveFlag;
 extern float OverCurLimit;
@@ -321,13 +341,13 @@ extern float   codeSpeed1;             // 5
 extern float   codeSpeed2;             // 6
 extern float   codeProtectOff;         // 7
 
-extern float   codeMotorRatePower;     // 10
-extern float   codeMotorRateVolt;      // 11
-extern float   codeMotorRateCurrent;   // 12
-extern float   codeMotorRateHz;        // 13
-extern float   codeMotorRateRpm;       // 14
-extern float   codeMotorPole;          // 15
-extern float   codeMotorRateEffiency;  // 16
+extern float   codeRatePower;     // 10
+extern float   codeRateVolt;      // 11
+extern float   codeRateCurrent;   // 12
+extern float   codeRateHz;        // 13
+extern float   codeRateRpm;       // 14
+extern float   codeMotorPole;     // 15
+extern float   codeRateEffiency;  // 16
 
 ///////////////////////////////////
 // extern int code_protect_inhibit_on;		// 30

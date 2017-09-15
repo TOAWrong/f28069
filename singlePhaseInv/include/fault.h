@@ -48,16 +48,9 @@ Hardware System : In this software, suported PCB is EwInv-55k-v1 2008.04.05
 #define ERR_OVER_CURRENT_R_PHASE			836 
 #define ERR_OVER_CURRENT_S_PHASE			837 
 //#define ERR_OVER_CURRENT_T_PHASE			838 
-
-
-
-
 #define ERR_UNKNOWN_ERR						900
 #define ERR_INVALID_CTRL_MODE				901
-
-
 #define	ERR_NAME_PLATE_PAR_MISMATCH			910
-
 #define	ERR_PM_Is							844
 #define	ERR_GM_Is							845
 #define	ERR_K_Damp_Is						846
@@ -116,9 +109,8 @@ struct TRIP_INFO_DEFINE {
 	int		CODE;				// 1
 	float	CURRENT;			// 5
 	float	VDC;				// 6
-	float	HZ;					// 7
+	float	RPM;				// 7
 	float	DATA;				// 4
-	char 	TIME[31];			// 3
 	char 	MSG[41];			// 2
 };
 
@@ -130,13 +122,11 @@ struct PROTECT_BITS {      // bits description
 	Uint16  OVER_I  	:1; 
 	Uint16  LOW_I		:1; 
 	Uint16  OVER_I_ADC	:1; 
-	Uint16  CONV_ADC	:1;
 	Uint16  OVER_LOAD	:1; 
 	Uint16  LOW_LOAD	:1;
 	Uint16  OVER_SPEED	:1; 
 	Uint16  LOW_SPEED	:1; 
 	Uint16  IGBT_FAULT	:1;
-	Uint16  IGBT_FAULT2	:1;
 	Uint16  EX_TRIP		:1; 
 	Uint16	OVER_HEAT	:1;
 };

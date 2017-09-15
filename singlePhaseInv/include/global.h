@@ -1,6 +1,33 @@
 #ifndef		__GLOBAL_VARIABLES_
 #define		__GLOBAL_VARIABLES_
 
+float Vdc;
+float Is_max;
+
+float sensVdc;
+float sensIm;
+float sensIa;
+
+float lpfVdc;
+float lpfIm;
+float lpfIa;
+float rmsIm;
+float rmsIa;
+
+
+float lpfVdcCutoffFreq = 1000.0;
+float lpfVdcIn[3];
+float lpfVdcOut[3];
+float lpfVdcK[4];
+
+float lpfIrmsCutOffRreq = 1.0;
+float lpfImIn[3];
+float lpfImOut[3];
+float lpfIrmsK[4];
+//float lpfIrmsCutOffRreq = 1.0;
+float lpfIaIn[3];
+float lpfIaOut[3];
+
 int init_charge_flag = 0;
 
 int scib_rx_msg_flag = 0;
@@ -39,6 +66,7 @@ float inv_MAX_PWM_CNT;
 
 
 //=============================================
+
 float	Freq_set=0.0;
 float	Re_Power=0.0;
 float	Im_Power=0.0;
@@ -49,17 +77,6 @@ float	inv_Is_rat;
 float	we_rat;
 float inv_motor_rate_hz;
 
-float	Is_abc[3]={0.0,0.0,0.0};
-float	Is_dq[2]={0.0,0.0};
-
-float RMS_Ia = 0.;
-float RMS_Ib = 0.;
-
-float	Is_mag=0.0;
-float	Is_mag_rms=0.0;
-float	Is_max;					// �ִ� �������
-
-float	Vdc=0.0;
 float	Vs_max=0.0;
 
 float	Freq_out=0.0;
@@ -153,10 +170,10 @@ int	gPWMTripCode;
 int gTripSavePoint;     //
 
 // analog to digital converter
-int adc_result[16]={0};
+int adc_result[6]={0};
 
-int adcIuPhase;
-int adcIvPhase;
+int adcIm;
+int adcIa;
 int adcVdc;
 int adcIgbtTemperature;
 int adcExSensor;
@@ -166,17 +183,17 @@ union DIGITAL_FUNCTION func_flag;	// ������ �Է��� ���
 
 union DIGITAL_OUT_FUNC relay_flag;
 
-TRIP_INFO TripInfo = {0,0,0,0,0,"2008:07:24  00:01:23"," No Trip Data       "};
+TRIP_INFO TripInfo = {0,0,0,0,0," No Trip Data       "};
 
 //TRIP_INFO TripInfoNow={0,0,0,0,0,"01234567890123456789","01234567890123456789"};
-TRIP_INFO TripInfoNow = {0,0,0,0,0,"2008:07:24  00:01:23"," No Trip Data       "};
+TRIP_INFO TripInfoNow = {0,0,0,0,0," No Trip Data       "};
 
 int gTripFlag = 0;
 float AnaCmdReference=0;
 
 Uint16	MAX_PWM_CNT;
 
-char MonitorMsg[30]={0};
+char MonitorMsg[25]={0};
 
 int gRunFlag=0;
 int gTripSaveFlag=0;
@@ -197,13 +214,13 @@ float   codeSpeed1;             // 5
 float   codeSpeed2;             // 6
 float   codeProtectOff;         // 7
 
-float   codeMotorRatePower;     // 10
-float   codeMotorRateVolt;      // 11
-float   codeMotorRateCurrent;   // 12
-float   codeMotorRateHz;        // 13
-float   codeMotorRateRpm;       // 14
+float   codeRatePower;          // 10
+float   codeRateVolt;           // 11
+float   codeRateCurrent;        // 12
+float   codeRateHz;             // 13
+float   codeRateRpm;            // 14
 float   codeMotorPole;          // 15
-float   codeMotorRateEffiency;  // 16
+float   codeRateEffiency;       // 16
 // #define CODE_END                17
 
 ///////////////////////////

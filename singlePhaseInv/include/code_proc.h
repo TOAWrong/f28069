@@ -16,13 +16,13 @@
 #define CODE_speed2						6
 #define CODE_protect_off                7
 
-#define CODE_motor_rate_power			10
-#define CODE_motor_rate_volt			11
-#define CODE_motor_rate_current			12
-#define CODE_motor_rate_hz				13
-#define CODE_motor_rate_rpm				14
+#define CODE_rate_power			10
+#define CODE_rate_volt			11
+#define CODE_rate_current			12
+#define CODE_rate_hz				13
+#define CODE_rate_rpm				14
 #define CODE_motor_pole					15
-#define CODE_motor_rate_effiency		16
+#define CODE_rate_effiency		16
 #define CODE_END                        17
 
 #define CODE_Data_Check						800

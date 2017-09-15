@@ -3,24 +3,72 @@
 
 void monitor_proc()		// need_edit
 {
+    static int monitorCount=0;
 	int temp;
+	char str[30]= {0};
+
 	Uint32 RunTimeMsec=0 ;
 	static unsigned long StartTimeMsec = 0 ;
 
 	RunTimeMsec = ulGetTime_mSec( StartTimeMsec);
-
-	if(RunTimeMsec < 500) return;	// 500msec ¸¶´Ù ÇÑ¹ø¾¿ 
-
+	if(RunTimeMsec < 500) return;	// 500msec ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¹ï¿½ï¿½ï¿½ 
 	StartTimeMsec = ulGetNow_mSec( );
 
 	if( gMachineState == STATE_POWER_ON ){
-		
-//		GetTimeAndDateStr(gStr1);	gStr1[20] =0;
-//		load_sci_tx_mail_box(gStr1); delay_msecs(20);
-		
 		temp = (int)(floor(Vdc +0.5));
 		snprintf( gStr1,10," VDC =%4d",temp);
 		load_sci_tx_mail_box(gStr1);delay_msecs(20);
+        snprintf( str,19,"No%d adc=%4d",monitorCount,adc_result[monitorCount]);
+        load_scia_tx_mail_box(str); delay_msecs(10);
+        monitorCount++;
+        if(monitorCount>5) monitorCount = 0;
+	}
+    else if( gMachineState == STATE_TRIP ){
+        if( monitorCount == 0 ){
+            load_scia_tx_mail_box("TRIP");
+       }
+        else if( monitorCount == 1 ){
+            load_scia_tx_mail_box(TripInfoNow.MSG);
+        }
+        else if( monitorCount == 2 ){
+            snprintf( str,10,"Trip CODE= %d",TripInfo.CODE); load_scia_tx_mail_box(str);
+        }
+        else if( monitorCount == 3 ){
+            snprintf( str,10,"Trip DATA= %e",TripInfo.DATA); load_scia_tx_mail_box(str);
+        }
+        else if( monitorCount == 4 ){
+            snprintf( str,10,"Trip DATA= %e",TripInfo.CURRENT); load_scia_tx_mail_box(str);
+        }
+        else if( monitorCount == 5 ){
+            snprintf( str,10,"Trip Vdc= %e",TripInfo.RPM); load_scia_tx_mail_box(str);
+        }
+        else{
+            monitorCount = 0;
+        }
+        monitorCount ++;
+        if(monitorCount>5) monitorCount = 0;
+    }
+    else {
+        if( monitorCount == 0 ){
+            load_scia_tx_mail_box(MonitorMsg);
+       }
+        else if( monitorCount == 1 ){
+            temp = (int)(floor(rmsIm * 10 + 0.5));
+            snprintf( str,10,"Im  =%2d.%d ",temp/10, temp%10); load_scia_tx_mail_box(str);
+        }
+        else if( monitorCount == 2 ){
+            temp = (int)(floor(rmsIa * 10 + 0.5));
+            snprintf( str,10,"Ia  =%2d.%d ",temp/10, temp%10); load_scia_tx_mail_box(str);
+        }
+        else if( monitorCount == 3 ){
+            temp = (int)(floor(lpfVdc  + 0.5));
+            snprintf( str,10,"Vdc =%4d",temp); load_scia_tx_mail_box(str);
+        }
+        else{
+            monitorCount = 0;
+        }
+        monitorCount ++;
+        if(monitorCount>3) monitorCount = 0;
 	}
 }
 

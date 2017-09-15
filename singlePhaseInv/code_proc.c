@@ -47,34 +47,34 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
         set_code_default(0,1,1,codeProtectOff,0,codes);
         break;
 
-    case CODE_motor_rate_power:
+    case CODE_rate_power:
         strncpy(codes->disp, "motor_rate_power",40);
-        if( cmd == CMD_WRITE_RAM ) codeMotorRatePower = codes->code_value;
-        set_code_default(100,2.0e+6,400,codeMotorRatePower,0,codes);
+        if( cmd == CMD_WRITE_RAM ) codeRatePower = codes->code_value;
+        set_code_default(100,2.0e+6,400,codeRatePower,0,codes);
         break;
 
-    case CODE_motor_rate_volt:
+    case CODE_rate_volt:
         strncpy(codes->disp, "motor_rate_volt (Vrms)",40);
-        if( cmd == CMD_WRITE_RAM ) codeMotorRateVolt = codes->code_value;
-        set_code_default(100.0,500.0,220.0,codeMotorRateVolt,0,codes);
+        if( cmd == CMD_WRITE_RAM ) codeRateVolt = codes->code_value;
+        set_code_default(100.0,500.0,220.0,codeRateVolt,0,codes);
         break;
 
-    case CODE_motor_rate_current:
+    case CODE_rate_current:
         strncpy(codes->disp, "motor_rate_current (A)",40);
-        if( cmd == CMD_WRITE_RAM ) codeMotorRateCurrent = codes->code_value;
-        set_code_default(1.0,2000.0,2.3,codeMotorRateCurrent,0,codes);
+        if( cmd == CMD_WRITE_RAM ) codeRateCurrent = codes->code_value;
+        set_code_default(1.0,2000.0,2.3,codeRateCurrent,0,codes);
         break;
 
-    case CODE_motor_rate_hz:
+    case CODE_rate_hz:
         strncpy(codes->disp, "motor_rate_hz (Hz)",40);
-        if( cmd == CMD_WRITE_RAM ) codeMotorRateHz = codes->code_value;
-        set_code_default(30.0,120.0,60.0,codeMotorRateHz,0,codes);
+        if( cmd == CMD_WRITE_RAM ) codeRateHz = codes->code_value;
+        set_code_default(30.0,120.0,60.0,codeRateHz,0,codes);
         break;
 
-    case CODE_motor_rate_rpm:
+    case CODE_rate_rpm:
         strncpy(codes->disp, "motor_rate_rpm",40);
-        if( cmd == CMD_WRITE_RAM ) codeMotorRateRpm = codes->code_value;
-        set_code_default(500,8000.0,1680.0,codeMotorRateRpm,0,codes);
+        if( cmd == CMD_WRITE_RAM ) codeRateRpm = codes->code_value;
+        set_code_default(500,8000.0,1680.0,codeRateRpm,0,codes);
         break;
 
     case CODE_motor_pole:
@@ -83,10 +83,10 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
         set_code_default(2,20,4,codeMotorPole,0,codes);
         break;
 
-    case CODE_motor_rate_effiency:
+    case CODE_rate_effiency:
         strncpy(codes->disp, "motor_rate_effiency (p.u)",40);
-        if( cmd == CMD_WRITE_RAM ) codeMotorRateEffiency = codes->code_value;
-        set_code_default(0.2,0.99,0.65,codeMotorRateEffiency,0,codes);
+        if( cmd == CMD_WRITE_RAM ) codeRateEffiency = codes->code_value;
+        set_code_default(0.2,0.99,0.65,codeRateEffiency,0,codes);
         break;
 
 	case CODE_END:

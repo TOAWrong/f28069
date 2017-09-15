@@ -49,26 +49,36 @@ void ADC_SOC_CNF( )
     EDIS;
 }
 #define SET_VDC         1
-#define adcIuOffset     2095
-#define adcIvOffset     2095
+#define adcIuOffset     2585
+#define adcIvOffset     2578
+//--- 전류의 계산 : 66mV / A  :  3.3V -> 50A, 1 count = 50 / 4096 = 0.012207
 #define I_RATIO         0.012207
-float ADC_Vdc;
 __interrupt void adcIsr(void)
 {
-    adcIuPhase = AdcResult.ADCRESULT0;
-    adcIvPhase = AdcResult.ADCRESULT1;
-    adcVdc       = AdcResult.ADCRESULT2;
-    adcIgbtTemperature = AdcResult.ADCRESULT3;
-    adcExSensor = AdcResult.ADCRESULT4;
-    adcCmdAnalog = AdcResult.ADCRESULT5;
+    adc_result[0] = adcIm   = AdcResult.ADCRESULT0;
+    adc_result[1] = adcIa   = AdcResult.ADCRESULT1;
+    adc_result[2] = adcVdc  = AdcResult.ADCRESULT2;
+    adc_result[3] = adcIgbtTemperature = AdcResult.ADCRESULT3;
+    adc_result[4] = adcExSensor = AdcResult.ADCRESULT4;
+    adc_result[5] = adcCmdAnalog = AdcResult.ADCRESULT5;
 // 전류의 계산 : 66mV / A  :  3.3V -> 50A, 1 count = 50 / 4096 = 0.012207
-    Is_abc[0] = ( adcIuPhase - adcIuOffset ) * I_RATIO;
-    Is_abc[1] = ( adcIvPhase - adcIvOffset ) * I_RATIO;
 
-    ADC_Vdc = Vdc_factor * (double) adcVdc + Vdc_calc_offset ;
-    LPF_Vdc_in[0] = ADC_Vdc;
-    LPF_2nd( LPF_Vdc_in, LPF_Vdc_out, LPF_Vdc_K);
-    Vdc = LPF_Vdc_out[0];
+    sensIm = ( adcIm - adcIuOffset ) * I_RATIO;
+    sensIa = ( adcIa - adcIvOffset ) * I_RATIO;
+
+    sensVdc = Vdc_factor * (double) adcVdc + Vdc_calc_offset ;
+
+    lpfVdcIn[0] = sensVdc;
+    lpf2nd( lpfVdcIn, lpfVdcOut, lpfVdcK);
+    Vdc = lpfVdc = lpfVdcOut[0];
+
+    lpfImIn[0] = sensIm;
+    lpf2nd( lpfImIn, lpfImOut, lpfIrmsK);
+    rmsIm = lpfImOut[0] * INV_ROOT2;
+
+    lpfIaIn[0] = sensIa;
+    lpf2nd( lpfIaIn, lpfIaOut, lpfIrmsK);
+    rmsIa = lpfIaOut[0] * INV_ROOT2;
 
     if(SET_VDC == 1){
         Vdc =300.0;

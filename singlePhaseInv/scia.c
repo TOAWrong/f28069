@@ -9,10 +9,10 @@
 #define SCI_FREQ    115200
 #define SCI_PRD     (LSPCLK_FREQ/(SCI_FREQ*8))-1
 
-#define UARTA_BAUD_RATE          SCI_PRD     // 38400
+#define UARTA_BAUD_RATE          SCI_PRD     // 115200
 
 #define SCIA_RX_BUF_MAX		30
-#define SCIA_TX_BUF_MAX		48
+#define SCIA_TX_BUF_MAX		50
 
 int scia_rx_start_addr=0;
 int scia_rx_end_addr=0;
@@ -65,25 +65,28 @@ void scia_fifo_init()
 
 void load_scia_tx_mail_box( char * st)
 {
+    size_t len = strlen(st);
 	int loop_ctrl = 1;
-	char * str;
+    char c = '\r';
+    char * str = malloc(len + 1 + 1 + 1);
 
-	str = st;
+    strcpy(str,st);
+    str[len] = c;
+    str[len+1] = '\0';
 
-	SciaRegs.SCIFFTX.bit.TXFFIENA = 0;	// Clear SCI Interrupt flag
+    SciaRegs.SCIFFTX.bit.TXFFIENA = 0;	// Clear SCI Interrupt flag
 
-	while(loop_ctrl){
- 		scia_tx_msg_box[scia_tx_end_addr] = * str++;
-		
-		if(scia_tx_end_addr < ( SCIA_TX_BUF_MAX-1)) scia_tx_end_addr ++;
-		else										scia_tx_end_addr = 0;
-
+    while(loop_ctrl){
+ 		scia_tx_msg_box[scia_tx_end_addr++] = * str++;
+ 		if(scia_tx_end_addr >= SCIA_TX_BUF_MAX ) scia_tx_end_addr = 0;
 		if(scia_tx_end_addr == scia_tx_start_addr){
-			if(scia_tx_end_addr < (SCIA_TX_BUF_MAX-1)) scia_tx_start_addr++;
-			else									   scia_tx_start_addr = 0;
+		    scia_tx_start_addr++;
+			if(scia_tx_start_addr >= (SCIA_TX_BUF_MAX-1)) scia_tx_start_addr = 0;
 		}
-		if( *str == '\0') loop_ctrl = 0;
+		if( *str == '\0')  loop_ctrl = 0;
 	}
+
+	free(str);
 	SciaRegs.SCIFFTX.bit.TXFFIENA = 1;	// Clear SCI Interrupt flag
 }
 		
@@ -101,7 +104,7 @@ interrupt void sciaTxFifoIsr(void)
 		if(scia_tx_end_addr == scia_tx_start_addr) break;
 
 		i++;
-		if( i > 4 ) break;
+		if( i > 3 ) break;
 	}
 
 	if(scia_tx_end_addr == scia_tx_start_addr) SciaRegs.SCIFFTX.bit.TXFFIENA = 0;	// Clear SCI Interrupt flag
@@ -207,57 +210,23 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
      else if(scia_rx_msg_box[2] == '4'){
 
          if(addr == 901){    //  monitor state
-             check = (int)data;
-             if(check == 0){
-                 switch(gMachineState){
-                     case STATE_POWER_ON:    load_scia_tx_mail_box("[POWE_ON] "); break;
-                     case STATE_READY:       load_scia_tx_mail_box("[READY]   "); break;
-                     case STATE_RUN:         load_scia_tx_mail_box("[RUN ]    "); break;
-                     case STATE_TRIP:        load_scia_tx_mail_box("[TRIP]    "); break;
-                     case STATE_INIT_RUN:    load_scia_tx_mail_box("[INIT]    "); break;
-                     case STATE_GO_STOP:     load_scia_tx_mail_box("[GO_STOP] "); break;
-                     case STATE_WAIT_BREAK_OFF: load_scia_tx_mail_box("STATE_WAIT_BREAK_OFF"); break;
-                     default:                load_scia_tx_mail_box("Unknown State"); break;
-                 }
+             switch(gMachineState){
+                 case STATE_POWER_ON:    load_scia_tx_mail_box("[POWE_ON] "); break;
+                 case STATE_READY:       load_scia_tx_mail_box("[READY]   "); break;
+                 case STATE_RUN:         load_scia_tx_mail_box("[RUN ]    "); break;
+                 case STATE_TRIP:        load_scia_tx_mail_box("[TRIP]    "); break;
+                 case STATE_INIT_RUN:    load_scia_tx_mail_box("[INIT]    "); break;
+                 case STATE_GO_STOP:     load_scia_tx_mail_box("[GO_STOP] "); break;
+                 case STATE_WAIT_BREAK_OFF: load_scia_tx_mail_box("STATE_WAIT_BREAK_OFF"); break;
+                 default:                load_scia_tx_mail_box("Unknown State"); break;
              }
              return;
          }
-         else if(addr == 902){   //  ³»ºÎ º¯¼ö read
-             check = (int)data;
-
-             switch( check ){
-             case 0 :
-                 temp = (int)(floor(Freq_out +0.5));
-                 snprintf( str,10,"Fq=%3d[hz]",temp); load_scia_tx_mail_box(str);
-                 break;
-
-             case 1 :
-                 temp = (int)(floor(rpm +0.5));
-                 snprintf( str,10,"RPM =%4d ",temp); load_scia_tx_mail_box(str);
-                 break;
-             case 2 :
-                 temp = (int)(floor(Vdc +0.5));
-                 snprintf( str,10," VDC =%4d",temp); load_scia_tx_mail_box(str);
-                 break;
-             case 3 :
-                 temp = (int)(floor( RMS_Ia * 10 + 0.5 ) );
-                 snprintf( str,10,"I1  =%2d.%d ",temp/10, temp%10); load_scia_tx_mail_box(str);
-                 break;
-             case 4 :
-                 temp = (int)(floor( RMS_Ib * 10 + 0.5 ) );
-                 snprintf( str,10,"I2  =%2d.%d ",temp/10, temp%10); load_scia_tx_mail_box(str);
-                 break;
-             case 5 : // Reset;
-                 gMachineState = STATE_POWER_ON;
-                 Nop();
-                 asm (" .ref _c_int00"); // ;Branch to start of boot.asm in RTS library
-                 asm (" LB _c_int00"); // ;Branch to start of boot.asm in RTS library
-                 break;
-             default:
-                 break;
-             }
-
-             return;
+         else if(addr == 902){   // read inverter status
+             gMachineState = STATE_POWER_ON;
+             Nop();
+             asm (" .ref _c_int00"); // ;Branch to start of boot.asm in RTS library
+             asm (" LB _c_int00"); // ;Branch to start of boot.asm in RTS library
          }
          else if(addr == 903){   //  EEPROM TRIP DATA
              check = (int)data;
@@ -267,9 +236,8 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
                  load_scia_tx_mail_box(str); delay_msecs(180);
 
                  load_scia_tx_mail_box(TripInfoNow.MSG); delay_msecs(220);
-                 load_scia_tx_mail_box(TripInfoNow.TIME); delay_msecs(180);
 
-                 dbtemp = TripInfoNow.HZ;
+                 dbtemp = TripInfoNow.RPM;
                  temp = (int)(floor(dbtemp +0.5));
                  snprintf( str,10,"Fq=%3d[hz]",temp);
                  load_scia_tx_mail_box(str); delay_msecs(180);
@@ -300,9 +268,8 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
                  load_scia_tx_mail_box(str); delay_msecs(180);
 
                  load_scia_tx_mail_box(TripData->MSG); delay_msecs(220);
-                 load_scia_tx_mail_box(TripData->TIME); delay_msecs(180);
 
-                 dbtemp = TripData->HZ;
+                 dbtemp = TripData->RPM;
                  temp = (int)(floor(dbtemp +0.5));
                  snprintf( str,10,"Fq=%3d[hz]",temp);
                  load_scia_tx_mail_box(str); delay_msecs(180);
@@ -351,10 +318,12 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
              return;
          }
          else if (( addr > 979) && ( addr < 996)){
+             /*
              check = addr - 980;
              snprintf( str,19,"adc =%4d",adc_result[check]);
              load_scia_tx_mail_box(str);
              delay_msecs(10);
+             */
              return;
          }
 

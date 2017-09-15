@@ -5,6 +5,12 @@ void VariInit()
 {
 	float x1,x2,y1,y2;
 // for Vdc calc 
+
+    code_adc_vdc_low    = 100;
+    code_Vdc_calc_low   = 10;
+    code_adc_vdc_high   = 2500;
+    code_Vdc_calc_high  = 300;
+
 	x1 = code_adc_vdc_low;		y1 = code_Vdc_calc_low;
 	x2 = code_adc_vdc_high;		y2 = code_Vdc_calc_high;
 	Vdc_factor = ( y2-y1) / ( x2 - x1 );
@@ -25,28 +31,13 @@ void VariInit()
 	//
 	frequency=0.0;
 	theta=0.0;
-	SinTheta=0.0;
-	CosTheta=1.0;
 
 	we_in=0.0;
 	we=0.0;
-	we0=0.0;
 	rpm=0.0;
 	rpm_ref=0.0;
-	
-	//
-	RMS_Ia = 0.0;
-	RMS_Ib = 0.0;
 
-	Is_dq[ds]=Is_dq[qs]=0.0;
-	Is_mag=0.0;
-	Is_mag_rms=0.0;
-	
-	Is_DQ[DS]=Is_DQ[QS]=0.0;
-
-	//
 	Vs_max=0.0;	
-
 	//
 	Te_max=0.0;
 	Te_ref=0.0;
@@ -65,6 +56,25 @@ void VariInit()
 	Vs_IR_comp=0.0;
 	del_Vs_comp=0.0;
 }	
+
+int HardwareParameterVerification()
+{
+    if ( codeRatePower >(0.99*sqrt(3.0) * codeRateVolt * codeRateCurrent)){
+        trip_recording( CODE_rate_power, codeRatePower,"PW FACTOR OVER"); // POWER FACTOR OVER
+        return  CODE_rate_power;
+    }
+    //
+    if (codeRatePower<(0.2*sqrt(3.0)*codeRateVolt * codeRateCurrent)){
+        trip_recording( CODE_rate_power, codeRatePower,"PW FACTOR UNDER"); // POWER FACTOR UNDER
+        return  CODE_rate_power;
+    }
+    //
+    if ( codeRateRpm < (0.85*120.0 * codeRateHz / codeMotorPole)){
+        trip_recording( CODE_rate_rpm, codeRateRpm,"RATE RPM UNDER");
+        return  CODE_rate_rpm;
+    }
+    return  0;
+}
 
 //-----------------------------------
 //  End of ParameterSect.c

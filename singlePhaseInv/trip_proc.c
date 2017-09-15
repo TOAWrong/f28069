@@ -7,71 +7,54 @@
 // 
 #include	<header.h>
 #include	<extern.h>
-
 int CheckOverCurrent( )
 {
-
-	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIuPhase) > 3000)){
+	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIm) > 3500)){
 		return ERR_OVER_CURRENT_U_PHASE;
 	}
-	
-	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIuPhase) < 1000)){
+	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIm) < 500)){
 		return ERR_OVER_CURRENT_U_PHASE;
 	}
-
-	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIvPhase) > 3000)){
+	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIa) > 3500)){
 		return ERR_OVER_CURRENT_V_PHASE;
 	}
-
-	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIvPhase) < 1000)){
+	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIa) < 500)){
 		return ERR_OVER_CURRENT_V_PHASE;
 	}
-
 	return 	0; 
 }
-
-//-----------------------------------------------
-//  ������ ������ ��ȣ 
-//-----------------------------------------------
 #define CODE_OC_level 		301
 float code_over_volt_set = 380.0;
-
 int CheckOverVolt( )
 {
 	static int OverVoltCount = 0;
 
 	if( protect_reg.bit.OVER_VOLT == 0 ) return 0;
 
-	if (Vdc > code_over_volt_set ) OverVoltCount++;
+	if (lpfVdc > code_over_volt_set ) OverVoltCount++;
 	else if( OverVoltCount > 0) OverVoltCount --;
 
 	if (OverVoltCount > 5 )
 	{
 		OverVoltCount = 6;
-
 		return CODE_OC_level;
 	}
 	return 0;
 }
 
-//-----------------------------------------------
-//  ������ ��ȣ 
-//-----------------------------------------------
 #define code_under_volt_set     180.0
-
 int CheckUndeVolt( )
 {
 	static int UnderVoltCount = 0;
 
 	if( protect_reg.bit.UNVER_VOLT == 0 ) return 0;
 
-	if (Vdc < code_under_volt_set) 	UnderVoltCount++;
+	if (lpfVdc < code_under_volt_set) 	UnderVoltCount++;
 	else if( UnderVoltCount > 0) 	UnderVoltCount--;
 
 	if (UnderVoltCount > 5 )
 	{
 		UnderVoltCount = 6;
-
 		return CODE_under_volt_set;
 	}
 	return 0;
@@ -83,36 +66,25 @@ int CheckIGBTFault( )
 	return 0;
 }
 
-
 int CheckOverHeat( )
 {
 	static int OverHeatCount = 0;
 
 	if( protect_reg.bit.OVER_HEAT == 0 ) return 0;
+	if( adcIgbtTemperature < 1000 )		OverHeatCount++;
+	else if( OverHeatCount > 0) 	    OverHeatCount--;
 
-
-	if( adcIgbtTemperature < 1000 )					OverHeatCount ++;
-	else if( OverHeatCount > 0) 	OverHeatCount--;
-
-	if( OverHeatCount > 10 )	// debug// Low --> High
-	{
+	if( OverHeatCount > 10 ){	// debug// Low --> High
 		OverHeatCount = 11;
 		return ERR_OVER_HEAT;
 	}
 	return 0 ;
 }
 
-//-----------------------------------------------
-//
-//  ��ȣ ��� 
-//		�� ����Ī ���� �̸� ���� �Ѵ�. 
-//----------------------------------------------
 int trip_check()
 {
 	int TripCode;
-
 	TripCode = 0;
-
 	if( ( TripCode = CheckOverCurrent()) != 0 ) return TripCode ;	// debug
 	if( ( TripCode = CheckOverVolt()   ) != 0 ) return TripCode ;
 	if( ( TripCode = CheckUndeVolt()   ) != 0 ) return TripCode ;	// ���������� ������ �Ѵ�. 
@@ -121,25 +93,20 @@ int trip_check()
 	return TripCode;
 }
 
-//-----------------------------------
-// Ʈ�� �߻� �����̸� On �ϰ� 
-// Reset�� ��ٸ���. 
-//-----------------------------------
-// Trip Message�� Ʈ���� �߻��� ������ ������ �Ѵ�. 
-//
 void trip_recording(int trip_code,float trip_data,char * st)
 {
-	if(gRunFlag)	gTripSaveFlag = 1;
-	else			gTripSaveFlag = 0;
 
 	TripInfoNow.CODE	= trip_code;
 	TripInfoNow.DATA	= trip_data;
 	strncpy( TripInfoNow.MSG,st,20) ;
 
 	gMachineState 		= STATE_TRIP;
-	TripInfoNow.CURRENT	= Is_mag_rms;
-	TripInfoNow.VDC 	= Vdc;
-//	TripInfoNow.HZ 		= Freq_out;
+	TripInfoNow.CURRENT	= rmsIm;
+	TripInfoNow.VDC 	= lpfVdc;
+	TripInfoNow.RPM		= codeRateRpm * reference_out;
+
+	if(gRunFlag)    gTripSaveFlag = 1;
+    else            gTripSaveFlag = 0;
 }	
 
 void GetTripInfo(int Point,TRIP_INFO * TripData )
@@ -151,39 +118,30 @@ void GetTripInfo(int Point,TRIP_INFO * TripData )
 	UNION32 u32data;
 
 	strncpy(TripData->MSG ,NULL,41);
-	strncpy(TripData->TIME ,NULL,31);
 
 	if( Point == 0){
-
 //		* TripData = &TripInfoNow;
 		TripData->CURRENT 	= TripInfoNow.CURRENT;
 		TripData->DATA 		= TripInfoNow.DATA;
-		TripData->HZ 		= TripInfoNow.HZ;
+		TripData->RPM 		= TripInfoNow.RPM;
 		TripData->CODE 		= TripInfoNow.CODE;
 		TripData->VDC 		= TripInfoNow.VDC;
 		strncpy(TripData->MSG  ,TripInfoNow.MSG,20);
-		strncpy(TripData->TIME ,TripInfoNow.TIME,20);
 		return ;
 	}
 
 	I2CA_ReadData(ADDR_24LC32,EPROM_ADDR_TRIP_POINT,&TripDataPoint);
-
-// erased  
 	if( ( 1 > Point ) || ( Point > 10) || (TripDataPoint == 0x00ff))
 	{
 		TripData->CURRENT = 0.0;
 		TripData->DATA = 0.0;
-		TripData->HZ = 0.0;
+		TripData->RPM = 0.0;
 		TripData->CODE = 0.0;
 		TripData->VDC = 0.0;
-		if( TripDataPoint == 0x00ff){
-			strncpy(TripData->MSG  ," NO TRIP DATA       ",20);
-			strncpy(TripData->TIME ,"2008:07:24  00:57:00",20);
-		}
-		else {
-			strncpy(TripData->MSG  ," Invalid Trip Code  ",20);
-			strncpy(TripData->TIME ,"2008:07:24  00:57:00",20);
-		}
+
+		if( TripDataPoint == 0x00ff) strncpy(TripData->MSG  ," NO TRIP DATA       ",20);
+		else  strncpy(TripData->MSG  ," Invalid Trip Code  ",20);
+
 		return ;
 	}
 
@@ -192,14 +150,9 @@ void GetTripInfo(int Point,TRIP_INFO * TripData )
 		TripDataPoint = 1;
 	}
 	EepromSaveFlag = 1;
-// ����� �� �����͸� ���Ѵ�. 
 	iTemp = TripDataPoint - Point + 1;		// iPoint = 1~10;
-
 	if( iTemp <= 0 ) iTemp += 10;
-
 	TripBaseAddr = TRIP_BACKUP_ADDR + iTemp * 100;
-
-	// Code
 	read_eprom_data( TripBaseAddr+ 0, & u32data);
 		TripData->CODE =  u32data.dword;
 
@@ -213,7 +166,7 @@ void GetTripInfo(int Point,TRIP_INFO * TripData )
 
 	// HZ
 	read_eprom_data( TripBaseAddr+ 12, & u32data);
-	TripData->HZ =  u32data.dword;
+	TripData->RPM =  u32data.dword;
 
 	// VDC
 	read_eprom_data( TripBaseAddr+16, & u32data);
@@ -221,7 +174,6 @@ void GetTripInfo(int Point,TRIP_INFO * TripData )
 
 	// Time
 	ReadTripString( TripBaseAddr+20,str);
-	strncpy(TripData->TIME,str,20);
 
 	ReadTripString( TripBaseAddr+40,str);
 	strncpy(TripData->MSG,str,20);
@@ -289,17 +241,13 @@ void SaveTripDataToEeprom()
 	u32data.dword = TripInfoNow.CURRENT;
 	write_code_2_eeprom( TripBaseAddr+ 8, u32data);
 
-// HZ
-	u32data.dword = TripInfoNow.HZ;
+// RPM
+	u32data.dword = TripInfoNow.RPM;
 	write_code_2_eeprom( TripBaseAddr+ 12, u32data);
 
 // VDC
 	u32data.dword = TripInfoNow.VDC;
 	write_code_2_eeprom( TripBaseAddr+16, u32data);
-
-// Time
-	strncpy(str,TripInfoNow.TIME,20);
-	WriteTripString( TripBaseAddr+20,str);
 
 // Msg
 	strncpy(str,TripInfoNow.MSG,20);
@@ -337,8 +285,6 @@ void ClearTripDataToEeprom()
 		write_code_2_eeprom( TripBaseAddr+ 8, u32data);
 		write_code_2_eeprom( TripBaseAddr+ 12, u32data);
 		write_code_2_eeprom( TripBaseAddr+16, u32data);
-		strncpy(str,"2010:01:01  00:00:00",20);
-		WriteTripString( TripBaseAddr+20,str);
 		strncpy(str," NO TRIP DATA       ",20);
 		WriteTripString( TripBaseAddr+40,str);
 	}
@@ -348,36 +294,34 @@ void ClearTripDataToEeprom()
 
 void tripProc()
 {
+    gMachineState = STATE_TRIP;
 	GATE_DRIVER_CLEAR;
 	MAIN_CHARGE_OFF;
 	ePwmPortOff();
-
-	for(; ;){
-	    Nop();
-	}
-//start input 이 되어 있는 상태에서 트립이 발생한다. 일반적으로
+/*
+// start input 이 되어 있는 상태에서 트립이 발생한다. 일반적으로
 // - 이때 다시 스톱을 하고 시작을
 // 다시 스톱 하면 리셋이 된다.
 // 리셋이 되고 있다는 신호를 줘야 한다.
 // - 초기 충전 릴레이?
 //	트립과 동시에 충전 릴레이는 off가 된다.
 // 리모트 리셋도 가능하다.
-
-	while( RUN_INPUT==0)Nop();
+*/
+	while( RUN_INPUT == 0 ){
+	    monitor_proc( );
+	}
 	delay_msecs(100);
-	while( RUN_INPUT)Nop();
-	delay_msecs(50);
-	while( RUN_INPUT==0)Nop();
-
-	gMachineState = STATE_TRIP;
-
+	while( RUN_INPUT){
+	    gMachineState = STATE_TO_RESET;
+        monitor_proc( );
+	}
+	while( RUN_INPUT==0){
+	    gMachineState = STATE_TO_RESET;
+	    monitor_proc( );
+    }
+	gMachineState = STATE_POWER_ON;
     Nop();
     asm (" .ref _c_int00"); // ;Branch to start of boot.asm in RTS library
     asm (" LB _c_int00"); // ;Branch to start of boot.asm in RTS library
 }
-
-
-//------------------------------
-// End
-//------------------------------
-
+//--- end of Trip_proc.c

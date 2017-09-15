@@ -15,22 +15,22 @@ void common_variable_init()
 	Ts = 1.0 / SWITCHING_FREQ;	// pwm switching frequency
 	inv_Ts = SWITCHING_FREQ;
 
-	Freq_rat = codeMotorRateHz;
+	Freq_rat = codeRateHz;
     inv_Freq_rat=1.0/Freq_rat;
-    inv_motor_rate_hz = 1.0 / codeMotorRateHz; //   csk_check 2009.10.30.
+    inv_motor_rate_hz = 1.0 / codeRateHz; //   csk_check 2009.10.30.
 
-    we_rat=PI_2*codeMotorRateHz;
-    wr_rat=PI_2*codeMotorPole * codeMotorRateRpm/120.0;         // rpm -> rad/sec
+    we_rat=PI_2*codeRateHz;
+    wr_rat=PI_2*codeMotorPole * codeRateRpm/120.0;         // rpm -> rad/sec
     wm_rat=wr_rat*(2.0/codeMotorPole);
 
-	Vs_rat = sqrt(2.0)/sqrt(3.0) * codeMotorRateVolt;			// �������� ��ũ ��
+	Vs_rat = sqrt(2.0)/sqrt(3.0) * codeRateVolt;			// �������� ��ũ ��
 
-	Is_rat=sqrt(2.0) * codeMotorRateCurrent;
+	Is_rat=sqrt(2.0) * codeRateCurrent;
     inv_Is_rat=1.0/Is_rat;
     Is_max = Is_rat * max_I_ratio;
     OverCurLimit = Is_max * 2.0;            // added 2009.11.01  _debug
 
-    Te_rat=codeMotorRatePower/wm_rat;
+    Te_rat=codeRatePower/wm_rat;
     inv_Te_rat=1.0/Te_rat;
 
     Fs_rat=Vs_rat/we_rat;

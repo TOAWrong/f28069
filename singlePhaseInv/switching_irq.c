@@ -49,7 +49,7 @@ interrupt void MainPWM(void)
 	case STATE_GO_STOP:
 	case STATE_WAIT_BREAK_OFF:		
 
-	    we = codeMotorRateHz * reference_out;
+	    we = codeRateHz * reference_out;
 	    theta += we * Ts;
         if (theta > PI_2 )     theta -= PI_2;
         else if (theta < 0.0 ) theta = 0.0;

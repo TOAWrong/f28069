@@ -104,12 +104,13 @@ typedef union
 #define	SWITCHING_TIME		4e-4
 
 #define	STATE_POWER_ON			0
-#define	STATE_READY				'0'
-#define	STATE_RUN				'1'
-#define	STATE_TRIP				'2'
-#define	STATE_INIT_RUN			'3'
-#define	STATE_GO_STOP			'4'
-#define	STATE_WAIT_BREAK_OFF	'5'
+#define	STATE_READY				1
+#define	STATE_RUN				2
+#define STATE_TRIP              3
+#define STATE_TO_RESET          4
+#define	STATE_INIT_RUN			5
+#define	STATE_GO_STOP			6
+#define	STATE_WAIT_BREAK_OFF	7
 
 //--- I2C
 #define ADDR_24LC32	0x0050		// address of 24ls32 serial eeprom

@@ -35,14 +35,13 @@ extern void ePwmPortOff();
 extern void ePwmEnable();
 extern void InitGpio(void);
 // low_pass_filter.c
-extern void LPF_2nd(float * x,float * y, float * K);
-extern void LPF_2nd_INIT( float cutoff_freq, float T_sample, float *x, float *y, float *k);
-// low_pass_filter.c
-extern void Init_Filters( );
+extern void lpf2nd(float * x,float * y, float * K);
+extern void lpf2ndCoeffInit( float cutoff_freq, float T_sample, float *x, float *y, float *k);
 // MonitorProc.c
 extern void monitor_proc();     // need_edit
 // ParameterSet.c
 extern void VariInit();
+extern int HardwareParameterVerification();
 // RefFunc.c
 extern void ramp_proc(  float set_ref, float * out_ref);
 // scia.c
@@ -53,6 +52,7 @@ extern void scia_fifo_init(void);
 extern void load_scia_tx_mail_box(char *st);
 // set_dac_point.c
 extern void set_dac_point();
+
 // File : "svm.c"
 extern  void SpaceVectorModulation(float *Vs_dq );
 extern  void VoltageEstimation();
@@ -98,20 +98,12 @@ extern void estim_ReqLeq_pwm();
 extern void estim_Rs_pwm();
 extern void	estim_Ls_pwm( );
 extern void estim_Jm_pwm();
-
-// FILE:	F28335_Gpio.c
-
 // SCI.C
-
 extern void GetInputMark(char * str);
-
 // main.c
-
 extern void InitEPwm_ACIM_Inverter();
 extern void Start_CheckSum();
-
 // EwInv.C
-
 extern void Nop();
 extern void SetSensorOffset();
 extern void PowerOnReset();
@@ -119,9 +111,7 @@ extern unsigned long ulGetTime_mSec(unsigned long Start_mSec);
 extern unsigned long ulGetNow_mSec( );
 extern void delay_msecs( unsigned long ulmSec);
 extern void GetSensorValue( );
-
 // refunc.c
-
 extern void RefFunc( float CommandRef,float * OutRef);
 
 // I2C_eeprom.c
