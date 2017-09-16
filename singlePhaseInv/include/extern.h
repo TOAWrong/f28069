@@ -339,15 +339,16 @@ extern float   codeDecelTime1;         //
 extern float   codeMotorCtrlMode;      //
 extern float   codeSpeed1;             // 5
 extern float   codeSpeed2;             // 6
-extern float   codeProtectOff;         // 7
+extern float   codeSetVdc;             // 7
+extern float   codeProtectOff;         // 8
 
-extern float   codeRatePower;     // 10
-extern float   codeRateVolt;      // 11
-extern float   codeRateCurrent;   // 12
-extern float   codeRateHz;        // 13
-extern float   codeRateRpm;       // 14
-extern float   codeMotorPole;     // 15
-extern float   codeRateEffiency;  // 16
+extern float   codeRatePower;           // 10
+extern float   codeRateVolt;            // 11
+extern float   codeRateCurrent;         // 12
+extern float   codeRateHz;              // 13
+extern float   codeRateRpm;             // 14
+extern float   codeMotorPole;           // 15
+extern float   codeRateEffiency;        // 16
 
 ///////////////////////////////////
 // extern int code_protect_inhibit_on;		// 30

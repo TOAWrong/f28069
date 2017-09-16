@@ -11,7 +11,7 @@ float Vdc_fnd_data;
 
 void main( void )
 {
-    int trip_code,i,loop_ctrl;
+    int trip_code,i,loop_ctrl,temp;
 	int cmd;
 	float ref_in0;
 
@@ -77,13 +77,18 @@ void main( void )
 
 
     ADC_SOC_CNF();
-
+    strncpy(MonitorMsg,"POWER_ON",20);
     gPWMTripCode = 0;		//
 	//init_eprom_data();
-	i = load_code2ram();
-	if( i !=0 ) tripProc();
-	VariInit();
+
+    if( load_code2ram() != 0 ) tripProc();
 	if(HardwareParameterVerification() !=0 ) tripProc();
+
+    VariInit();
+    //lpf2ndCoeffInit( LPF_VDC_CUTOFF_FREQ,Ts, lpfVdcIn, lpfVdcOut, lpfVdcK);
+    lpf2ndCoeffInit( 1000.0, Ts, lpfVdcIn, lpfVdcOut, lpfVdcK);
+    lpf2ndCoeffInit( 1.0, Ts, lpfImIn, lpfImOut, lpfIrmsK);
+    lpf2ndCoeffInit( 1.0, Ts, lpfIaIn, lpfIaOut, lpfIrmsK);
 
 	IER &= ~M_INT3;      // debug for PWM
 	InitEPwm_ACIM_Inverter(); 	// debug
@@ -92,14 +97,11 @@ void main( void )
 
 	gfRunTime = 0.0; 
 
-	//lpf2ndCoeffInit( LPF_VDC_CUTOFF_FREQ,Ts, lpfVdcIn, lpfVdcOut, lpfVdcK);
-    lpf2ndCoeffInit( 1000.0, Ts, lpfVdcIn, lpfVdcOut, lpfVdcK);
-    lpf2ndCoeffInit( 1.0, Ts, lpfImIn, lpfImOut, lpfIrmsK);
-    lpf2ndCoeffInit( 1.0, Ts, lpfIaIn, lpfIaOut, lpfIrmsK);
-
     delay_msecs(500);
 
-	if( (int)(floor(codeProtectOff+0.5)) == 1)
+    temp = (int)(floor(codeProtectOff+0.5));
+
+    if( temp != 0 )
 	{
 		protect_reg.bit.UNVER_VOLT = 0;			// udd �߰� 
 		protect_reg.bit.EX_TRIP = 0;
@@ -117,7 +119,7 @@ void main( void )
 		if(code_protect_ex_trip_off == 0 ) 	protect_reg.bit.EX_TRIP = 1;
 	}
 	init_charge_flag = 1;	
-	while( gfRunTime < 3.0){
+	while( gfRunTime < 5.0){
 		get_command( & cmd, & ref_in0);
 		monitor_proc();
 		Nop();
@@ -152,8 +154,6 @@ void main( void )
 	strncpy(gStr1,"READY",20);
 	load_sci_tx_mail_box(gStr1); delay_msecs(20);
 
-	trip_recording(123,456.789,"Test Trip Message Print");
-	tripProc();
 
 	GATE_DRIVER_ENABLE;
 	for( ; ; )
@@ -163,7 +163,7 @@ void main( void )
 		if( gPWMTripCode !=0 )	tripProc();
 		get_command( & cmd, & ref_in0);
 //		analog_out_proc( );
-		monitor_proc();
+//		monitor_proc();
 		if(cmd == CMD_START){	// if( cmd == CMD_START )
 			trip_code = vf_loop_control(ref_in0);		//
 			if( trip_code !=0 )	tripProc();
@@ -175,6 +175,7 @@ void InitEPwm_ACIM_Inverter()
 {  
 	EPwm1Regs.ETSEL.bit.INTEN = 0;    		        // Enable INT
 	MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / SWITCHING_FREQ ) * 0.5 * 0.5 * 0.5);
+	// MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / codePwmFreq ) * 0.5 * 0.5 * 0.5);
 	inv_MAX_PWM_CNT = 1.0 / MAX_PWM_CNT;
 
 //--- PWM Module1

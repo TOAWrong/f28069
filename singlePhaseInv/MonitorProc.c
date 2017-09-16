@@ -24,38 +24,35 @@ void monitor_proc()		// need_edit
         monitorCount++;
         if(monitorCount>5) monitorCount = 0;
 	}
-    else if( gMachineState == STATE_TRIP ){
-        if( monitorCount == 0 ){
-            load_scia_tx_mail_box("TRIP");
-       }
-        else if( monitorCount == 1 ){
-            load_scia_tx_mail_box(TripInfoNow.MSG);
-        }
-        else if( monitorCount == 2 ){
-            snprintf( str,20,"CODE=%d",TripInfoNow.CODE); load_scia_tx_mail_box(str);
-        }
-        else if( monitorCount == 3 ){
-            //snprintf( str,25,"Trip DATA= %.2f",TripInfoNow.DATA); load_scia_tx_mail_box(str);
-            sprintf( str,"DATA=%e",TripInfoNow.DATA); load_scia_tx_mail_box(str);
-        }
-        else if( monitorCount == 4 ){
-            //snprintf( str,25,"Trip DATA= %.2f",TripInfoNow.CURRENT); load_scia_tx_mail_box(str);
-            ftemp = (floor(TripInfoNow.CURRENT +0.5));
-            sprintf( str,"Irms=%e",ftemp); load_scia_tx_mail_box(str);
-        }
-        else if( monitorCount == 5 ){
-            // snprintf( str,20,"Trip Vdc= %.2f",TripInfoNow.RPM); load_scia_tx_mail_box(str);
-            sprintf( str,"RPM =%e",TripInfoNow.RPM); load_scia_tx_mail_box(str);
-        }
-        else if( monitorCount == 6 ){
-            // snprintf( str,20,"Trip Vdc= %.2f",TripInfoNow.RPM); load_scia_tx_mail_box(str);
-            sprintf( str,"VDC =%e",TripInfoNow.VDC); load_scia_tx_mail_box(str);
-        }
-        else{
-            monitorCount = 0;
-        }
+	else if( gMachineState == STATE_TRIP ){
         monitorCount ++;
-        if(monitorCount>6) monitorCount = 0;
+        if( monitorCount > 6 ) monitorCount = 0;
+	    switch(monitorCount){
+	    case 0 :
+	        load_scia_tx_mail_box("TRIP");
+	        return;
+	    case 1 :
+	        load_scia_tx_mail_box(TripInfoNow.MSG);
+	        return;
+	    case 2 :
+	        sprintf( gStr1,"CODE=%d",TripInfoNow.CODE)    ; load_scia_tx_mail_box(gStr1);
+	        return;
+	    case 3 :
+	        sprintf( gStr1,"DATA=%e",TripInfoNow.DATA)    ; load_scia_tx_mail_box(gStr1);
+	        return;
+	    case 4 :
+	        sprintf( gStr1,"Irms=%e",TripInfoNow.CURRENT) ; load_scia_tx_mail_box(gStr1);
+	        return;
+	    case 5 :
+	        sprintf( gStr1,"RPM =%e",TripInfoNow.RPM)     ; load_scia_tx_mail_box(gStr1);
+	        return;
+	    case 6 :
+	        sprintf( gStr1,"VDC =%e",TripInfoNow.VDC)     ; load_scia_tx_mail_box(gStr1);
+	        return;
+	    default :
+	        monitorCount = 0;
+	        return;
+	    }
     }
     else {
         if( monitorCount == 0 ){
@@ -63,15 +60,15 @@ void monitor_proc()		// need_edit
        }
         else if( monitorCount == 1 ){
             temp = (int)(floor(rmsIm * 10 + 0.5));
-            snprintf( str,10,"Im  =%2d.%d ",temp/10, temp%10); load_scia_tx_mail_box(str);
+            snprintf( gStr1,20,"Im  =%2d.%d ",temp/10, temp%10); load_scia_tx_mail_box(gStr1);
         }
         else if( monitorCount == 2 ){
             temp = (int)(floor(rmsIa * 10 + 0.5));
-            snprintf( str,10,"Ia  =%2d.%d ",temp/10, temp%10); load_scia_tx_mail_box(str);
+            snprintf( gStr1,20,"Ia  =%2d.%d ",temp/10, temp%10); load_scia_tx_mail_box(gStr1);
         }
         else if( monitorCount == 3 ){
             temp = (int)(floor(lpfVdc  + 0.5));
-            snprintf( str,10,"Vdc =%4d",temp); load_scia_tx_mail_box(str);
+            snprintf( gStr1,20,"Vdc =%4d",temp); load_scia_tx_mail_box(gStr1);
         }
         else{
             monitorCount = 0;

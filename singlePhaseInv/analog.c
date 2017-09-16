@@ -48,13 +48,14 @@ void ADC_SOC_CNF( )
 //    AdcRegs.ADCSAMPLEMODE.all = 0;      // Simultaneous sample mode
     EDIS;
 }
-#define SET_VDC         1
 #define adcIuOffset     2585
 #define adcIvOffset     2578
 //--- 전류의 계산 : 66mV / A  :  3.3V -> 50A, 1 count = 50 / 4096 = 0.012207
 #define I_RATIO         0.012207
 __interrupt void adcIsr(void)
 {
+    int temp;
+
     adc_result[0] = adcIm   = AdcResult.ADCRESULT0;
     adc_result[1] = adcIa   = AdcResult.ADCRESULT1;
     adc_result[2] = adcVdc  = AdcResult.ADCRESULT2;
@@ -80,9 +81,8 @@ __interrupt void adcIsr(void)
     lpf2nd( lpfIaIn, lpfIaOut, lpfIrmsK);
     rmsIa = lpfIaOut[0] * INV_ROOT2;
 
-    if(SET_VDC == 1){
-        Vdc =300.0;
-    }
+    temp = (int)(floor(codeSetVdc+0.5));
+    if(temp != 0 ) Vdc =300.0;
 
     AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;   // Acknowledge interrupt to PIE

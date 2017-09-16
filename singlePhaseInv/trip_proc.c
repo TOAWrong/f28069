@@ -294,11 +294,21 @@ void ClearTripDataToEeprom()
 
 void tripProc()
 {
+    int cmd;
+    float ref_in0;
+
     gMachineState = STATE_TRIP;
 	GATE_DRIVER_CLEAR;
 	MAIN_CHARGE_OFF;
 	ePwmPortOff();
-/*
+    load_scia_tx_mail_box("TRIP"); delay_msecs(20);
+    load_scia_tx_mail_box(TripInfoNow.MSG); delay_msecs(20);
+    sprintf( gStr1,"CODE=%d",TripInfoNow.CODE)    ; load_scia_tx_mail_box(gStr1);delay_msecs(20);
+    sprintf( gStr1,"DATA=%e",TripInfoNow.DATA)    ; load_scia_tx_mail_box(gStr1);delay_msecs(20);
+    sprintf( gStr1,"Irms=%e",TripInfoNow.CURRENT) ; load_scia_tx_mail_box(gStr1);delay_msecs(20);
+    sprintf( gStr1,"RPM =%e",TripInfoNow.RPM)     ; load_scia_tx_mail_box(gStr1);delay_msecs(20);
+    sprintf( gStr1,"VDC =%e",TripInfoNow.VDC)     ; load_scia_tx_mail_box(gStr1);delay_msecs(20);
+	/*
 // start input 이 되어 있는 상태에서 트립이 발생한다. 일반적으로
 // - 이때 다시 스톱을 하고 시작을
 // 다시 스톱 하면 리셋이 된다.
@@ -308,20 +318,24 @@ void tripProc()
 // 리모트 리셋도 가능하다.
 */
 	while( RUN_INPUT == 0 ){
-	    monitor_proc( );
+        get_command( & cmd, & ref_in0);
+        monitor_proc();
+	    Nop();
 	}
 	delay_msecs(100);
 	while( RUN_INPUT){
-	    // gMachineState = STATE_TO_RESET;
-        monitor_proc( );
+        get_command( & cmd, & ref_in0);
+        monitor_proc();
+	    Nop();
 	}
 	while( RUN_INPUT==0){
-	    // gMachineState = STATE_TO_RESET;
-	    monitor_proc( );
-    }
-	gMachineState = STATE_POWER_ON;
-    Nop();
-    asm (" .ref _c_int00"); // ;Branch to start of boot.asm in RTS library
-    asm (" LB _c_int00"); // ;Branch to start of boot.asm in RTS library
+        get_command( & cmd, & ref_in0);
+        monitor_proc();
+	    Nop();
+	}
+
+	gMachineState = STATE_POWER_ON; Nop();
+    asm (" .ref _c_int00");     // Branch to start of boot.asm in RTS library
+    asm (" LB _c_int00");       // Branch to start of boot.asm in RTS library
 }
 //--- end of Trip_proc.c

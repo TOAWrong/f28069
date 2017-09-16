@@ -212,7 +212,8 @@ float   codeDecelTime1;         //
 float   codeMotorCtrlMode;      //
 float   codeSpeed1;             // 5
 float   codeSpeed2;             // 6
-float   codeProtectOff;         // 7
+float   codeSetVdc;             // 7
+float   codeProtectOff;         // 8
 
 float   codeRatePower;          // 10
 float   codeRateVolt;           // 11
