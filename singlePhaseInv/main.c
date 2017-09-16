@@ -163,7 +163,10 @@ void main( void )
 		if( gPWMTripCode !=0 )	tripProc();
 		get_command( & cmd, & ref_in0);
 //		analog_out_proc( );
-//		monitor_proc();
+		if(cmd == CMD_READ_ALL ){
+		    readAllCodes();
+		}
+		monitor_proc();
 		if(cmd == CMD_START){	// if( cmd == CMD_START )
 			trip_code = vf_loop_control(ref_in0);		//
 			if( trip_code !=0 )	tripProc();

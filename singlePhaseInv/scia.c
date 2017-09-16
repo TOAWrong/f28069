@@ -65,28 +65,22 @@ void scia_fifo_init()
 
 void load_scia_tx_mail_box( char * st)
 {
-    size_t len = strlen(st);
-	int loop_ctrl = 1;
-    char c = '\r';
-    char * str = malloc(len + 1 + 1 + 1);
+	int i;
+	char * str;
 
-    strcpy(str,st);
-    str[len] = c;
-    str[len+1] = '\0';
+	str = st;
 
-    SciaRegs.SCIFFTX.bit.TXFFIENA = 0;	// Clear SCI Interrupt flag
+	SciaRegs.SCIFFTX.bit.TXFFIENA = 0;	// Clear SCI Interrupt flag
 
-    while(loop_ctrl){
+	for( i = 0 ; i < 30 ; i++){
  		scia_tx_msg_box[scia_tx_end_addr++] = * str++;
  		if(scia_tx_end_addr >= SCIA_TX_BUF_MAX ) scia_tx_end_addr = 0;
 		if(scia_tx_end_addr == scia_tx_start_addr){
 		    scia_tx_start_addr++;
 			if(scia_tx_start_addr >= (SCIA_TX_BUF_MAX-1)) scia_tx_start_addr = 0;
 		}
-		if( *str == '\0')  loop_ctrl = 0;
+		if( *str == '\0')  break;
 	}
-
-	free(str);
 	SciaRegs.SCIFFTX.bit.TXFFIENA = 1;	// Clear SCI Interrupt flag
 }
 		
@@ -209,7 +203,12 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
  //====================
      else if(scia_rx_msg_box[2] == '4'){
 
-         if(addr == 901){    //  monitor state
+         if(addr == 900){    //  monitor state
+             * sci_cmd = CMD_READ_ALL;  * sci_ref = 0.0;
+             load_scia_tx_mail_box("ok! read code all");
+             return;
+         }
+         else if(addr == 901){    //  monitor state
              switch(gMachineState){
                  case STATE_POWER_ON:    load_scia_tx_mail_box("[POWE_ON] "); break;
                  case STATE_READY:       load_scia_tx_mail_box("[READY]   "); break;
@@ -335,25 +334,28 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
              switch(check)
              {
              case 0:
+                 snprintf( str,19,"CODE=%4d/t",addr); load_scia_tx_mail_box(str);
+                 snprintf( str,20,"Data =%.3e/t",code_inform.code_value);load_scia_tx_mail_box(str);
+                 load_scia_tx_mail_box(code_inform.disp);
+                 load_scia_tx_mail_box(" \r\n");delay_msecs(10);
+                 break;
+             case 1:
                  snprintf( str,19,"CODE=%4d",addr);
                  load_scia_tx_mail_box(str);
                   delay_msecs(10);
                  break;
-             case 1:
+             case 2:
                  load_scia_tx_mail_box(code_inform.disp);delay_msecs(10);
                  break;
-             case 2:
+             case 3:
                  snprintf( str,20,"Data =%10.3e",code_inform.code_value);
                  load_scia_tx_mail_box(str); delay_msecs(10);
                  break;
              default:
-                 snprintf( str,19,"CODE=%4d",addr);
-                 load_scia_tx_mail_box(str);delay_msecs(10);
-                 load_scia_tx_mail_box(code_inform.disp);delay_msecs(10);
-
-                 snprintf( str,20,"Data =%10.3e",code_inform.code_value);
-                 load_scia_tx_mail_box(str); delay_msecs(10);
-
+                 snprintf( str,19,"CODE=%4d/t",addr); load_scia_tx_mail_box(str);
+                 snprintf( str,20,"Data =%.3e/t",code_inform.code_value);load_scia_tx_mail_box(str);
+                 load_scia_tx_mail_box(code_inform.disp);
+                 load_scia_tx_mail_box(" \r\n");delay_msecs(10);
                  break;
              }
          }

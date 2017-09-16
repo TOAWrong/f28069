@@ -56,25 +56,30 @@ void monitor_proc()		// need_edit
     }
     else {
         if( monitorCount == 0 ){
+            load_scia_tx_mail_box("\r");
             load_scia_tx_mail_box(MonitorMsg);
+            load_scia_tx_mail_box(" : ");
        }
         else if( monitorCount == 1 ){
-            temp = (int)(floor(rmsIm * 10 + 0.5));
-            snprintf( gStr1,20,"Im  =%2d.%d ",temp/10, temp%10); load_scia_tx_mail_box(gStr1);
+            sprintf( gStr1,"Out =%.1f",codeRateHz * reference_out); load_scia_tx_mail_box(gStr1);
+            load_scia_tx_mail_box(" : ");
         }
         else if( monitorCount == 2 ){
-            temp = (int)(floor(rmsIa * 10 + 0.5));
-            snprintf( gStr1,20,"Ia  =%2d.%d ",temp/10, temp%10); load_scia_tx_mail_box(gStr1);
+            sprintf( gStr1,"Im  =%.1f",rmsIm); load_scia_tx_mail_box(gStr1);
+            load_scia_tx_mail_box(" : ");
         }
         else if( monitorCount == 3 ){
-            temp = (int)(floor(lpfVdc  + 0.5));
-            snprintf( gStr1,20,"Vdc =%4d",temp); load_scia_tx_mail_box(gStr1);
+            sprintf( gStr1,"Ia  =%.1f",rmsIa); load_scia_tx_mail_box(gStr1);
+            load_scia_tx_mail_box(" : ");
+        }
+        else if( monitorCount == 4 ){
+            sprintf( gStr1,"Vdc =%.f",lpfVdc); load_scia_tx_mail_box(gStr1);
         }
         else{
             monitorCount = 0;
         }
         monitorCount ++;
-        if(monitorCount>3) monitorCount = 0;
+        if(monitorCount > 4) monitorCount = 0;
 	}
 }
 

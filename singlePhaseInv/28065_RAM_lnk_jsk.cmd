@@ -83,7 +83,8 @@ SECTIONS
    .switch          : > RAMM0,     PAGE = 0
    .reset           : > RESET,     PAGE = 0, TYPE = DSECT /* not used, */
 
-   .stack           : > RAMM1,     PAGE = 1
+/*   .stack           : > RAMM1,     PAGE = 1  */
+   .stack           : > RAML0_L3,  PAGE = 0
    .ebss            : > RAML4,     PAGE = 1
    .econst          : > RAML4,     PAGE = 1
    .esysmem         : > RAML4,     PAGE = 1

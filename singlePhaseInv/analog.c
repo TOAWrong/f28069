@@ -73,11 +73,11 @@ __interrupt void adcIsr(void)
     lpf2nd( lpfVdcIn, lpfVdcOut, lpfVdcK);
     Vdc = lpfVdc = lpfVdcOut[0];
 
-    lpfImIn[0] = sensIm;
+    lpfImIn[0] = sensIm * sensIm;
     lpf2nd( lpfImIn, lpfImOut, lpfIrmsK);
     rmsIm = lpfImOut[0] * INV_ROOT2;
 
-    lpfIaIn[0] = sensIa;
+    lpfIaIn[0] = sensIa * sensIa;
     lpf2nd( lpfIaIn, lpfIaOut, lpfIrmsK);
     rmsIa = lpfIaOut[0] * INV_ROOT2;
 

@@ -181,7 +181,7 @@ void backup_data_load()
 }
 float CheckSum()
 {
-
+    return 0.0;
 }
 
 int SaveDataProc(int addr, float data)
@@ -330,4 +330,27 @@ int init_eprom_data()
     }
 	return 0;
 }
+
+void readAllCodes()
+{
+    int check;
+    int addr,cmd;
+
+    load_scia_tx_mail_box(" \r\n");delay_msecs(10);
+    load_scia_tx_mail_box("//---Read all code data\r\n");delay_msecs(10);
+    load_scia_tx_mail_box("code  data       discription \r\n");delay_msecs(10);
+    load_scia_tx_mail_box("-----------------\r\n");delay_msecs(10);
+    cmd = CMD_READ_DATA;
+    for( addr = 0 ; addr <= CODE_END ; addr++){
+        check = get_code_information( addr, cmd , & code_inform);
+        if( !check ){
+            snprintf( gStr1,20,"%4d: ",addr); load_scia_tx_mail_box(gStr1);
+            snprintf( gStr1,20,"%.3e ",code_inform.code_value);load_scia_tx_mail_box(gStr1);
+            delay_msecs(10);
+            load_scia_tx_mail_box(code_inform.disp);
+            load_scia_tx_mail_box(" \r\n");delay_msecs(10);
+        }
+    }
+}
+
 //--- end of code_proc.c
