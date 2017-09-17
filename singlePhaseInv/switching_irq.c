@@ -51,8 +51,8 @@ interrupt void MainPWM(void)
 
 	    we = codeRateHz * reference_out;
 	    theta += we * Ts;
-        if (theta > PI_2 )     theta -= PI_2;
-        else if (theta < 0.0 ) theta = 0.0;
+        while (theta >= PI_2 ){ theta -= PI_2;}
+        if (theta < 0.0 ) theta = 0.0;
 
         modulationRatio = reference_out;
         singlePhaseModulation(modulationRatio, theta, DutyRatio);
@@ -85,11 +85,6 @@ interrupt void MainPWM(void)
 	    dacCount ++;
 	}
 	else dacCount = 0;
-
-	EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
-    EPwm2Regs.CMPA.half.CMPA = (MAX_PWM_CNT>>2);
-    EPwm3Regs.CMPA.half.CMPA = 500;
-
 
 	EPwm1Regs.ETCLR.bit.INT = 1;	
 	PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;

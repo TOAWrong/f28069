@@ -21,6 +21,7 @@ void main( void )
 	gfRunTime = 0.0; 
 	protect_reg.all = gDeChargeFlag = 0;
 	MAIN_CHARGE_OFF;
+
 	INIT_CHARGE_CLEAR;
 
 	init_charge_flag = 0;
@@ -54,7 +55,7 @@ void main( void )
   	EDIS;    // This is needed to disable write to EALLOW protected registers
 
   	InitAdc();
-    AdcOffsetSelfCal();
+//    AdcOffsetSelfCal();
 
   	EALLOW;
      SysCtrlRegs.PCLKCR0.bit.TBCLKSYNC = 1;

@@ -31,6 +31,11 @@
 			<locationURI>INSTALLROOT_F2806x/common/source/F2806x_Adc.c</locationURI>
 		</link>
 		<link>
+			<name>F2806x_CSMPasswords.asm</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/f2806x/common/source/F2806x_CSMPasswords.asm</locationURI>
+		</link>
+		<link>
 			<name>F2806x_CodeStartBranch.asm</name>
 			<type>1</type>
 			<locationURI>INSTALLROOT_F2806x/common/source/F2806x_CodeStartBranch.asm</locationURI>

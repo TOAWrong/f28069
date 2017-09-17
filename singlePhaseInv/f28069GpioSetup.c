@@ -284,7 +284,6 @@ void InitGpio(void)
     GpioDataRegs.GPBCLEAR.bit.GPIO58= 1; // output clear
     GpioCtrlRegs.GPBMUX2.bit.GPIO58 = 0; //
     GpioCtrlRegs.GPBDIR.bit.GPIO58 = 1;  // output
-
     EDIS;
 }
 

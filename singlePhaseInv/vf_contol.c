@@ -14,7 +14,6 @@ int vf_loop_control(float cmd_ref)
 
 	VariInit();
 	trip_code = HardwareParameterVerification();
-	common_variable_init();
 	reference_in = cmd_ref;
 
 	if( trip_code !=0 ) return trip_code;
@@ -87,7 +86,7 @@ int vf_loop_control(float cmd_ref)
 			}				
 			else if ((fabs(reference_out) <= min_vf_ref )){
                 strncpy(MonitorMsg,"READY",20);
-				gMachineState = STATE_READY; Freq_out = 0; LoopCtrl = 0;
+				gMachineState = STATE_READY; reference_out = Freq_out = 0.0; LoopCtrl = 0;
 			}
 			else{
 				reference_in = 0.0;
