@@ -1,11 +1,22 @@
 /*
 */
+
+#define DELAY   50000L
 #include	"header.h"
 #include	"extern.h"
 #include	"global.h"
 
+#pragma CODE_SECTION(MainPWM, "ramfuncs");
+#pragma CODE_SECTION(adcIsr, "ramfuncs");
+
+extern Uint16 RamfuncsLoadStart;
+extern Uint16 RamfuncsLoadEnd;
+extern Uint16 RamfuncsRunStart;
+Uint16 RamfuncsLoadSize;
+
+void InitWatchDog();
 extern interrupt void MainPWM(void);
-extern __interrupt void adcIsr(void);
+extern interrupt void adcIsr(void);
 
 float Vdc_fnd_data;
 
@@ -29,6 +40,9 @@ void main( void )
 
 	gMachineState = STATE_POWER_ON; 
 	DINT;
+	memcpy(&RamfuncsRunStart, &RamfuncsLoadStart, (Uint32)&RamfuncsLoadSize);
+
+	InitFlash();
 
 	InitPieCtrl();
 	IER = 0x0000;   IFR = 0x0000;
@@ -76,11 +90,16 @@ void main( void )
     EINT;   // Enable Global interrupt INTM
 	ERTM;	// Enable Global realtime interrupt DBGM
 
+    InitWatchDog();
 
     ADC_SOC_CNF();
     strncpy(MonitorMsg,"POWER_ON",20);
     gPWMTripCode = 0;		//
 	//init_eprom_data();
+
+    for( ; ; ){
+        Nop();
+    }
 
     if( load_code2ram() != 0 ) tripProc();
 	if(HardwareParameterVerification() !=0 ) tripProc();
@@ -133,7 +152,7 @@ void main( void )
 	if((codeProtectOff == 0 ) & (code_protect_uv_off == 0 )){
 		while( loop_ctrl == 1){
 			if( Vdc > under_volt_set ) loop_ctrl = 0;
-			if( gfRunTime > 3.0) loop_ctrl = 0;
+			if( gfRunTime > 5.0) loop_ctrl = 0;
 		}
 		if( Vdc < under_volt_set ){
 			trip_recording( CODE_under_volt_set,Vdc,"Trip Under Volt");
@@ -179,7 +198,7 @@ void InitEPwm_ACIM_Inverter()
 {  
 	EPwm1Regs.ETSEL.bit.INTEN = 0;    		        // Enable INT
 	MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / SWITCHING_FREQ ) * 0.5 * 0.5 * 0.5);
-	// MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / codePwmFreq ) * 0.5 * 0.5 * 0.5);
+	//MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / codePwmFreq ) * 0.5 * 0.5 * 0.5);
 	inv_MAX_PWM_CNT = 1.0 / MAX_PWM_CNT;
 
 //--- PWM Module1

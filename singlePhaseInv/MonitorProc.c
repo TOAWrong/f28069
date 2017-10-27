@@ -5,7 +5,7 @@ void monitor_proc()		// need_edit
 {
     static int monitorCount=0;
     int i, temp;
-    float ftemp;
+//    float ftemp;
 	char str[50]= {0};
 
 	Uint32 RunTimeMsec=0 ;

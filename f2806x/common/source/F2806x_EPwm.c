@@ -76,21 +76,6 @@ InitEPwmGpio(void)
     #if DSP28_EPWM3
         InitEPwm3Gpio();
     #endif // endif DSP28_EPWM3
-    #if DSP28_EPWM4
-        InitEPwm4Gpio();
-    #endif // endif DSP28_EPWM4
-    #if DSP28_EPWM5
-        InitEPwm5Gpio();
-    #endif // endif DSP28_EPWM5
-    #if DSP28_EPWM6
-        InitEPwm6Gpio();
-    #endif // endif DSP28_EPWM6
-    #if DSP28_EPWM7
-        InitEPwm7Gpio();
-    #endif // endif DSP28_EPWM7
-    #if DSP28_EPWM8
-        InitEPwm8Gpio();
-    #endif // endif DSP28_EPWM8
 }
 
 #if DSP28_EPWM1

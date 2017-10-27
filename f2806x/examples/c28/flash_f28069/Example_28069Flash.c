@@ -112,7 +112,9 @@
 //
 // Defines that make this long enough so that we can see an LED toggle
 //
-#define DELAY 1000000L
+//#define DELAY 1000000L
+//#define DELAY 500000L
+#define DELAY 5000L
 
 //
 // Functions that will be run from RAM need to be assigned to
@@ -121,6 +123,7 @@
 //
 #pragma CODE_SECTION(epwm1_timer_isr, "ramfuncs");
 #pragma CODE_SECTION(epwm2_timer_isr, "ramfuncs");
+// #pragma CODE_SECTION(InitFlash, "ramfuncs");
 
 //
 // Function Prototypes
@@ -137,6 +140,10 @@ Uint32  EPwm1TimerIntCount;
 Uint32  EPwm2TimerIntCount;
 Uint32  EPwm3TimerIntCount;
 Uint32  LoopCount;
+
+int i ;
+
+float j,k;
 
 //
 // These are defined by the linker (see F2808.cmd)
@@ -157,14 +164,12 @@ void main(void)
     // This example function is found in the F2806x_SysCtrl.c file.
     //
     InitSysCtrl();
-
     //
     // Step 2. Initalize GPIO:
     // This example function is found in the F2806x_Gpio.c file and
     // illustrates how to set the GPIO to it's default state.
     //
-    // InitGpio();  // Skipped for this example
-
+    InitGpio();
     //
     // Step 3. Clear all interrupts and initialize PIE vector table:
     // Disable CPU interrupts
@@ -199,18 +204,18 @@ void main(void)
     // Interrupts that are used in this example are re-mapped to
     // ISR functions found within this file.
     //
-    EALLOW;  // This is needed to write to EALLOW protected registers
-    PieVectTable.EPWM1_INT = &epwm1_timer_isr;
-    PieVectTable.EPWM2_INT = &epwm2_timer_isr;
-    PieVectTable.EPWM3_INT = &epwm3_timer_isr;
-    EDIS;    // This is needed to disable write to EALLOW protected registers
+//    EALLOW;  // This is needed to write to EALLOW protected registers
+//    PieVectTable.EPWM1_INT = &epwm1_timer_isr;
+//    PieVectTable.EPWM2_INT = &epwm2_timer_isr;
+//    PieVectTable.EPWM3_INT = &epwm3_timer_isr;
+//    EDIS;    // This is needed to disable write to EALLOW protected registers
 
     //
     // Step 4. Initialize all the Device Peripherals:
     // This function is found in F2806x_InitPeripherals.c
     //
     // InitPeripherals();  // Not required for this example
-    InitEPwmTimer();    // For this example, only initialize the ePWM Timers
+//    InitEPwmTimer();    // For this example, only initialize the ePWM Timers
 
     //
     // Step 5. User specific code, enable interrupts
@@ -234,52 +239,46 @@ void main(void)
     //
     // Initalize counters
     //
-    EPwm1TimerIntCount = 0;
-    EPwm2TimerIntCount = 0;
-    EPwm3TimerIntCount = 0;
+//    EPwm1TimerIntCount = 0;
+//    EPwm2TimerIntCount = 0;
+//    EPwm3TimerIntCount = 0;
     LoopCount = 0;
 
     //
     // Enable CPU INT3 which is connected to EPWM1-3 INT
     //
-    IER |= M_INT3;
+//    IER |= M_INT3;
 
     //
     // Enable EPWM INTn in the PIE: Group 3 interrupt 1-3
     //
-    PieCtrlRegs.PIEIER3.bit.INTx1 = PWM1_INT_ENABLE;
-    PieCtrlRegs.PIEIER3.bit.INTx2 = PWM2_INT_ENABLE;
-    PieCtrlRegs.PIEIER3.bit.INTx3 = PWM3_INT_ENABLE;
+//    PieCtrlRegs.PIEIER3.bit.INTx1 = PWM1_INT_ENABLE;
+//    PieCtrlRegs.PIEIER3.bit.INTx2 = PWM2_INT_ENABLE;
+//    PieCtrlRegs.PIEIER3.bit.INTx3 = PWM3_INT_ENABLE;
 
     //
     // Enable global Interrupts and higher priority real-time debug events
     //
-    EINT;   // Enable Global interrupt INTM
-    ERTM;   // Enable Global realtime interrupt DBGM
+//    EINT;   // Enable Global interrupt INTM
+//    ERTM;   // Enable Global realtime interrupt DBGM
 
     //
     // Step 6. IDLE loop. Just sit and loop forever (optional)
     //
-    EALLOW;
-    GpioCtrlRegs.GPBMUX1.bit.GPIO34 = 0;
-    GpioCtrlRegs.GPBDIR.bit.GPIO34 = 1;
-    EDIS;
-
+    j = k = 0;
     for(;;)
     {
-        //
-        // This loop will be interrupted, so the overall delay between pin 
-        // toggles will be longer.
-        //
         DELAY_US(DELAY);
-        LoopCount++;
-        GpioDataRegs.GPBTOGGLE.bit.GPIO34 = 1;
+/*
+        for( i = 1 ; i < 1000; i++){
+            j = sin(( 3.14/1000.0) * i);
+            k = cos((3.14/1000.0) * i);
+        }
+  */
+        GpioDataRegs.GPATOGGLE.bit.GPIO7 = 1;
     }
 }
 
-//
-// InitEPwmTimer - 
-//
 void
 InitEPwmTimer()
 {
