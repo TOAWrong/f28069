@@ -96,11 +96,11 @@ void main( void )
     strncpy(MonitorMsg,"POWER_ON",20);
     gPWMTripCode = 0;		//
 	//init_eprom_data();
-
+/*
     for( ; ; ){
         Nop();
     }
-
+*/
     if( load_code2ram() != 0 ) tripProc();
 	if(HardwareParameterVerification() !=0 ) tripProc();
 

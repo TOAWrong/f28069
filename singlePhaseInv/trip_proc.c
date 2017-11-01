@@ -319,18 +319,18 @@ void tripProc()
 */
 	while( RUN_INPUT == 0 ){
         get_command( & cmd, & ref_in0);
-        monitor_proc();
+//        monitor_proc();
 	    Nop();
 	}
 	delay_msecs(100);
 	while( RUN_INPUT){
         get_command( & cmd, & ref_in0);
-        monitor_proc();
+//        monitor_proc();
 	    Nop();
 	}
 	while( RUN_INPUT==0){
         get_command( & cmd, & ref_in0);
-        monitor_proc();
+//        monitor_proc();
 	    Nop();
 	}
 
