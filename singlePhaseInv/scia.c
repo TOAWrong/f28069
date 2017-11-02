@@ -32,8 +32,8 @@ void scia_fifo_init()
 	SciaRegs.SCICCR.all =0x0007;   // 1stopbit,No parity,8 char bits, async mode, idle-line protocol
 	SciaRegs.SCICTL1.all =0x0003;  // enable TX, RX, internal SCICLK,Disable RX ERR, SLEEP, TXWAKE
 	SciaRegs.SCICTL2.bit.TXINTENA 	=1;	// debug
-	SciaRegs.SCICTL2.bit.RXBKINTENA     =0;
-	// SciaRegs.SCICTL2.bit.RXBKINTENA     = 1;    // 2017
+//	SciaRegs.SCICTL2.bit.RXBKINTENA     =0;
+	SciaRegs.SCICTL2.bit.RXBKINTENA     = 1;    // 2017
 	SciaRegs.SCIHBAUD = 0x0000;
 	SciaRegs.SCILBAUD = UARTA_BAUD_RATE;
 	SciaRegs.SCICCR.bit.LOOPBKENA =0; // Enable loop back
@@ -111,7 +111,7 @@ interrupt void sciaRxFifoIsr(void)
 {
     static Uint32 modebus_start_time=0;
     static int scia_rx_count=0;
-
+    Nop();
     // .
     if( ulGetTime_mSec(modebus_start_time) > 10 ){
         modebus_start_time = ulGetNow_mSec( );

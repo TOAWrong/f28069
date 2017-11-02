@@ -74,7 +74,8 @@
 //
 #define CPU_FREQ    90E6
 #define LSPCLK_FREQ CPU_FREQ/4
-#define SCI_FREQ    100E3
+//#define SCI_FREQ    100E3
+#define SCI_FREQ    115200
 #define SCI_PRD     (LSPCLK_FREQ/(SCI_FREQ*8))-1
 
 //
@@ -91,9 +92,10 @@ void error(void);
 //
 // Globals
 //
-Uint16 sdataA[2];    // Send data for SCI-A
-Uint16 rdataA[2];    // Received data for SCI-A
+Uint16 sdataA[10];    // Send data for SCI-A
+Uint16 rdataA[10];    // Received data for SCI-A
 Uint16 rdata_pointA; // Used for checking the received data
+Uint16 rxBuf;           // Send data for SCI-A
 
 //
 // Main
@@ -176,19 +178,20 @@ void main(void)
     // Init send data.  After each transmission this data
     // will be updated for the next transmission
     //
-    for(i = 0; i<2; i++)
+    for(i = 0; i<10; i++)
     {
-        sdataA[i] = i;
+        sdataA[i] = '0' + i;
     }
 
-    rdata_pointA = sdataA[0];
+    // rdata_pointA = sdataA[0];
+    rdata_pointA = 0;
     
     //
     // Enable interrupts required for this example
     //
     PieCtrlRegs.PIECTRL.bit.ENPIE = 1;   // Enable the PIE block
     PieCtrlRegs.PIEIER9.bit.INTx1=1;     // PIE Group 9, INT1
-    PieCtrlRegs.PIEIER9.bit.INTx2=1;     // PIE Group 9, INT2
+    PieCtrlRegs.PIEIER9.bit.INTx2=1;   // PIE Group 9, INT2
     IER = 0x100;                         // Enable CPU INT
     EINT;
 
@@ -219,11 +222,13 @@ sciaTxFifoIsr(void)
     {
         SciaRegs.SCITXBUF=sdataA[i];     // Send data
     }
-
+/*
     for(i=0; i< 2; i++)                 //Increment send data for next cycle
     {
         sdataA[i] = (sdataA[i]+1) & 0x00FF;
     }
+*/
+    SciaRegs.SCIFFTX.bit.TXFFIENA = 0;   // Clear SCI Interrupt flag
 
     SciaRegs.SCIFFTX.bit.TXFFINTCLR=1;  // Clear SCI Interrupt flag
     PieCtrlRegs.PIEACK.all|=0x100;      // Issue PIE ACK
@@ -235,23 +240,10 @@ sciaTxFifoIsr(void)
 __interrupt void
 sciaRxFifoIsr(void)
 {
-    Uint16 i;
-    for(i=0;i<2;i++)
-    {
-        rdataA[i]=SciaRegs.SCIRXBUF.all;  // Read data
-    }
-    for(i=0;i<2;i++)                     // Check received data
-    {
-       if(rdataA[i] != ( (rdata_pointA+i) & 0x00FF) )
-       {
-           error();
-       }
-    }
-    rdata_pointA = (rdata_pointA+1) & 0x00FF;
+    rxBuf = SciaRegs.SCIRXBUF.all;  // Read data
 
     SciaRegs.SCIFFRX.bit.RXFFOVRCLR=1;   // Clear Overflow flag
     SciaRegs.SCIFFRX.bit.RXFFINTCLR=1;   // Clear Interrupt flag
-
     PieCtrlRegs.PIEACK.all|=0x100;       // Issue PIE ack
 }
 
@@ -275,7 +267,8 @@ scia_fifo_init()
     SciaRegs.SCICTL2.bit.RXBKINTENA =1;
     SciaRegs.SCIHBAUD = 0x0000;
     SciaRegs.SCILBAUD = SCI_PRD;
-    SciaRegs.SCICCR.bit.LOOPBKENA =1;   // Enable loop back
+//    SciaRegs.SCICCR.bit.LOOPBKENA =1;   // Enable loop back
+    SciaRegs.SCICCR.bit.LOOPBKENA = 0;   // testing
     SciaRegs.SCIFFTX.all=0xC022;
     SciaRegs.SCIFFRX.all=0x0022;
     SciaRegs.SCIFFCT.all=0x00;

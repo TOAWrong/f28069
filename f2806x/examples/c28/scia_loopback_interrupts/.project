@@ -87,7 +87,7 @@
 		</variable>
 		<variable>
 			<name>INSTALLROOT_FASTRTS</name>
-			<value>$%7BPARENT-5-PROJECT_LOC%7D/libraries/math/FPUfastRTS/c28</value>
+			<value>file:/home/eunwho/f28069/libraries/math/FPUfastRTS/c28</value>
 		</variable>
 		<variable>
 			<name>INSTALLROOT_HCCAL</name>
@@ -95,7 +95,7 @@
 		</variable>
 		<variable>
 			<name>INSTALLROOT_IQMATH</name>
-			<value>$%7BPARENT-5-PROJECT_LOC%7D/libraries/math/IQmath/c28</value>
+			<value>file:/home/eunwho/f28069/libraries/math/IQmath/c28</value>
 		</variable>
 	</variableList>
 </projectDescription>

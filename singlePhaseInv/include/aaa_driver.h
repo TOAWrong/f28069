@@ -10,16 +10,14 @@
 //*******************************************
 // Program Control 
 //*******************************************
+#define FLASH_RUN               0
 #define MAIN_POWER_OFF			0			// Vdc == 300.0
 #define CONVERTER_ON			0
-
 #define USE_UART_A              1
-
 #define SLIP_COMP_SCALAR		0
 #define USE_GRAPH				1
 #define TEST_ADC_CENTER			1
 #define ENCODER_ON				1
-#define SCALAR_TEST             1
 
 #define GRAPH_NUMBER			300
 

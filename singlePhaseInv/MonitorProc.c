@@ -12,7 +12,7 @@ void monitor_proc()		// need_edit
 	static unsigned long StartTimeMsec = 0 ;
 
 	RunTimeMsec = ulGetTime_mSec( StartTimeMsec);
-	if(RunTimeMsec < 1500) return;	// 1500msec
+	if(RunTimeMsec < 2000) return;	// 1500msec
 	StartTimeMsec = ulGetNow_mSec( );
 
 	if( gMachineState == STATE_POWER_ON ){
