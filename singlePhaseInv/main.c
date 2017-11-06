@@ -25,7 +25,7 @@ float Vdc_fnd_data;
 
 void main( void )
 {
-    int trip_code,i,loop_ctrl,temp;
+    int trip_code,loop_ctrl,temp;
 	int cmd;
 	float ref_in0;
 

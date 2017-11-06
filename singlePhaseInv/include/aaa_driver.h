@@ -10,7 +10,7 @@
 //*******************************************
 // Program Control 
 //*******************************************
-#define FLASH_RUN               0
+#define FLASH_RUN               1
 #define MAIN_POWER_OFF			0			// Vdc == 300.0
 #define CONVERTER_ON			0
 #define USE_UART_A              1
