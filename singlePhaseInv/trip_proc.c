@@ -7,54 +7,79 @@
 // 
 #include	<header.h>
 #include	<extern.h>
+
+void trip_recording(int trip_code,float trip_data,char * st)
+{
+
+    TripInfoNow.CODE    = trip_code;
+    TripInfoNow.DATA    = trip_data;
+    strncpy( TripInfoNow.MSG,st,30) ;
+
+    gMachineState       = STATE_TRIP;
+    TripInfoNow.CURRENT = rmsIm;
+    TripInfoNow.VDC     = lpfVdc;
+    TripInfoNow.RPM     = codeRateRpm * reference_out;
+
+    if(gRunFlag)    gTripSaveFlag = 1;
+    else            gTripSaveFlag = 0;
+}
+
 int CheckOverCurrent( )
 {
 	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIm) > 3500)){
+        trip_recording( ERR_OVER_CURRENT_U_PHASE, (float)(adcIm),"I adc over U ph");
 		return ERR_OVER_CURRENT_U_PHASE;
 	}
 	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIm) < 500)){
+        trip_recording( ERR_OVER_CURRENT_U_PHASE, (float)(adcIm),"I adc under U ph");
 		return ERR_OVER_CURRENT_U_PHASE;
 	}
 	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIa) > 3500)){
+        trip_recording( ERR_OVER_CURRENT_V_PHASE, (float)(adcIa),"I adc over V ph");
 		return ERR_OVER_CURRENT_V_PHASE;
 	}
 	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIa) < 500)){
+        trip_recording( ERR_OVER_CURRENT_V_PHASE, (float)(adcIa),"I adc under V ph");
 		return ERR_OVER_CURRENT_V_PHASE;
 	}
 	return 	0; 
 }
 #define CODE_OC_level 		301
-float code_over_volt_set = 380.0;
+#define OVER_V_LEVEL        380.0
 int CheckOverVolt( )
 {
 	static int OverVoltCount = 0;
 
 	if( protect_reg.bit.OVER_VOLT == 0 ) return 0;
 
-	if (lpfVdc > code_over_volt_set ) OverVoltCount++;
+	if (lpfVdc > OVER_V_LEVEL ) OverVoltCount++;
 	else if( OverVoltCount > 0) OverVoltCount --;
+	else    OverVoltCount = 0;
 
 	if (OverVoltCount > 5 )
 	{
 		OverVoltCount = 6;
+        trip_recording( CODE_OC_level, lpfVdc,"Over Voltage");
 		return CODE_OC_level;
 	}
 	return 0;
 }
 
-#define code_under_volt_set     180.0
+#define UNDER_VOLT_LEVEL     180.0
 int CheckUndeVolt( )
 {
 	static int UnderVoltCount = 0;
 
 	if( protect_reg.bit.UNVER_VOLT == 0 ) return 0;
 
-	if (lpfVdc < code_under_volt_set) 	UnderVoltCount++;
+	if (lpfVdc < UNDER_VOLT_LEVEL) 	UnderVoltCount++;
 	else if( UnderVoltCount > 0) 	UnderVoltCount--;
+	else                            UnderVoltCount = 0;
 
 	if (UnderVoltCount > 5 )
 	{
 		UnderVoltCount = 6;
+        trip_recording( CODE_OC_level, lpfVdc,"Under Voltage");
 		return CODE_under_volt_set;
 	}
 	return 0;
@@ -62,7 +87,10 @@ int CheckUndeVolt( )
 
 int CheckIGBTFault( )
 {
-	if( GATE_DRIVER_FAULT == 0)	return ERR_PWM;
+	if( GATE_DRIVER_FAULT == 0){
+        trip_recording( ERR_PWM, 0.0,"Trip GateDriver");
+	    return ERR_PWM;
+	}
 	return 0;
 }
 
@@ -76,6 +104,7 @@ int CheckOverHeat( )
 
 	if( OverHeatCount > 10 ){	// debug// Low --> High
 		OverHeatCount = 11;
+        trip_recording( ERR_OVER_HEAT, 11.0,"Trip Over Heat");
 		return ERR_OVER_HEAT;
 	}
 	return 0 ;
@@ -85,29 +114,13 @@ int trip_check()
 {
 	int TripCode;
 	TripCode = 0;
-	if( ( TripCode = CheckOverCurrent()) != 0 ) return TripCode ;	// debug
+	if( ( TripCode = CheckOverCurrent()) != 0 ) return TripCode ;	//
 	if( ( TripCode = CheckOverVolt()   ) != 0 ) return TripCode ;
-	if( ( TripCode = CheckUndeVolt()   ) != 0 ) return TripCode ;	// ���������� ������ �Ѵ�. 
+	if( ( TripCode = CheckUndeVolt()   ) != 0 ) return TripCode ;	//
 	if( ( TripCode = CheckOverHeat()   ) != 0 ) return TripCode ;
 	if( ( TripCode = CheckIGBTFault()  ) != 0 ) return TripCode ;
 	return TripCode;
 }
-
-void trip_recording(int trip_code,float trip_data,char * st)
-{
-
-	TripInfoNow.CODE	= trip_code;
-	TripInfoNow.DATA	= trip_data;
-	strncpy( TripInfoNow.MSG,st,30) ;
-
-	gMachineState 		= STATE_TRIP;
-	TripInfoNow.CURRENT	= rmsIm;
-	TripInfoNow.VDC 	= lpfVdc;
-	TripInfoNow.RPM		= codeRateRpm * reference_out;
-
-	if(gRunFlag)    gTripSaveFlag = 1;
-    else            gTripSaveFlag = 0;
-}	
 
 void GetTripInfo(int Point,TRIP_INFO * TripData )
 {
@@ -294,20 +307,40 @@ void ClearTripDataToEeprom()
 
 void tripProc()
 {
-    int cmd;
+    int cmd,temp;
     float ref_in0;
+    float dbtemp;
+    char str[30]={0};
 
     gMachineState = STATE_TRIP;
 	GATE_DRIVER_CLEAR;
 	MAIN_CHARGE_OFF;
 	ePwmPortOff();
-    load_scia_tx_mail_box("TRIP"); delay_msecs(20);
+    load_scia_tx_mail_box("\nTRIP\t"); delay_msecs(20);
     load_scia_tx_mail_box(TripInfoNow.MSG); delay_msecs(20);
-    sprintf( gStr1,"CODE=%d",TripInfoNow.CODE)    ; load_scia_tx_mail_box(gStr1);delay_msecs(20);
-    sprintf( gStr1,"DATA=%e",TripInfoNow.DATA)    ; load_scia_tx_mail_box(gStr1);delay_msecs(20);
-    sprintf( gStr1,"Irms=%e",TripInfoNow.CURRENT) ; load_scia_tx_mail_box(gStr1);delay_msecs(20);
-    sprintf( gStr1,"RPM =%e",TripInfoNow.RPM)     ; load_scia_tx_mail_box(gStr1);delay_msecs(20);
-    sprintf( gStr1,"VDC =%e",TripInfoNow.VDC)     ; load_scia_tx_mail_box(gStr1);delay_msecs(20);
+
+    snprintf( str,12,"\nCODE=%3d",TripInfoNow.CODE)    ;
+    load_scia_tx_mail_box(str);delay_msecs(20);
+
+    dbtemp = TripInfoNow.RPM;
+    temp = (int)(floor(dbtemp +0.5));
+    snprintf( str,13,"\tFq=%3d[hz]",temp);
+    load_scia_tx_mail_box(str); delay_msecs(20);
+
+    dbtemp = TripInfoNow.VDC;
+    temp = (int)(floor(dbtemp +0.5));
+    snprintf( str,13,"\tVDC =%4d",temp);
+    load_scia_tx_mail_box(str); delay_msecs(20);
+
+    dbtemp = TripInfoNow.CURRENT;
+    temp = (int)(floor(dbtemp +0.5));
+    snprintf( str,13,"\tI1  =%4d ",temp);
+    load_scia_tx_mail_box(str); delay_msecs(20);
+
+    dbtemp = TripInfoNow.DATA;
+    temp = (int)(floor(dbtemp +0.5));
+    snprintf( str,13," \tDATA=%4d\n",temp);
+    load_scia_tx_mail_box(str); delay_msecs(20);
 	/*
 // start input 이 되어 있는 상태에서 트립이 발생한다. 일반적으로
 // - 이때 다시 스톱을 하고 시작을

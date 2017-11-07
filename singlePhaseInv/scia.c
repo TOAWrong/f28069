@@ -231,29 +231,29 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
              check = (int)data;
 
              if( data == 0 ){
-                 snprintf( str,4,"%03d:",TripInfoNow.CODE);
+                 snprintf( str,20,"\nTripCODE: %03d \t",TripInfoNow.CODE);
                  load_scia_tx_mail_box(str); delay_msecs(180);
 
                  load_scia_tx_mail_box(TripInfoNow.MSG); delay_msecs(220);
 
                  dbtemp = TripInfoNow.RPM;
                  temp = (int)(floor(dbtemp +0.5));
-                 snprintf( str,10,"Fq=%3d[hz]",temp);
+                 snprintf( str,13,"\nFq=%3d[hz]",temp);
                  load_scia_tx_mail_box(str); delay_msecs(180);
 
                  dbtemp = TripInfoNow.VDC;
                  temp = (int)(floor(dbtemp +0.5));
-                 snprintf( str,10," VDC =%4d",temp);
+                 snprintf( str,13,"\tVDC =%4d",temp);
                  load_scia_tx_mail_box(str); delay_msecs(180);
 
                  dbtemp = TripInfoNow.CURRENT;
                  temp = (int)(floor(dbtemp +0.5));
-                 snprintf( str,10,"I1  =%4d ",temp);
+                 snprintf( str,13,"\tI1  =%4d ",temp);
                  load_scia_tx_mail_box(str); delay_msecs(180);
 
                  dbtemp = TripInfoNow.DATA;
                  temp = (int)(floor(dbtemp +0.5));
-                 snprintf( str,10," DATA=%4d",temp);
+                 snprintf( str,13," \tDATA=%4d\n",temp);
                  load_scia_tx_mail_box(str); delay_msecs(180);
              }
              else{

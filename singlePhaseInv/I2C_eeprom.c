@@ -34,7 +34,7 @@ Uint16 I2CA_WriteData(int iSlaveAddr,int iMemAddr,int iData)
     I2caRegs.I2CMDR.all = 0x0020;   // Take I2C out of reset
 
     BACKUP_ENABLE;
-    DSP28x_usDelay(100);
+    DELAY_US(100L);
 
 	I2caRegs.I2CFFTX.bit.TXFFINTCLR = 1;	 
 	I2caRegs.I2CCNT = 3;
@@ -43,11 +43,10 @@ Uint16 I2CA_WriteData(int iSlaveAddr,int iMemAddr,int iData)
   	I2caRegs.I2CDXR = iMemAddr & 0x00ff;
 	I2caRegs.I2CDXR = iData;		// byte write
   	I2caRegs.I2CMDR.all = 0x6E20;			
-    DSP28x_usDelay(20000);
-    DSP28x_usDelay(20000);
-    DSP28x_usDelay(20000);
+  	delay_msecs(5);
 //	while(I2caRegs.I2CSTR.bit.SCD == 0); 
-	BACKUP_DISABLE;
+
+  	BACKUP_DISABLE;
 	return I2C_SUCCESS;
 }
 
@@ -59,7 +58,8 @@ Uint16 I2CA_ReadData(int iSlaveAddr, int iMemAddr, int * data)
     I2caRegs.I2CDXR = iMemAddr & 0x00ff;
 //   I2caRegs.I2CMDR.all = 0x6620;			
     I2caRegs.I2CMDR.all = 0x2620;
-    DSP28x_usDelay(20000);
+    delay_msecs(10);
+//    DSP28x_usDelay(20000);
 
     //while(I2caRegs.I2CSTR.bit.ARDY == 0);  // test jsk
 	I2caRegs.I2CFFRX.bit.RXFFRST = 0;		// RXFIFO Operation disable	 
@@ -67,7 +67,8 @@ Uint16 I2CA_ReadData(int iSlaveAddr, int iMemAddr, int * data)
 	I2caRegs.I2CSAR = iSlaveAddr;
 	I2caRegs.I2CCNT = 1;
 	I2caRegs.I2CMDR.all = 0x6C20;			// Send restart as master receiver stop
-	DSP28x_usDelay(20000);
+    delay_msecs(10);
+	// DSP28x_usDelay(20000);
 	//while(I2caRegs.I2CSTR.bit.SCD == 0);  // test jsk
 	* data = I2caRegs.I2CDRR;
  	return I2C_SUCCESS;
