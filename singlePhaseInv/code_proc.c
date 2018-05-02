@@ -94,13 +94,25 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
         if( cmd == CMD_WRITE_RAM ) codeRateEffiency = codes->code_value;
         set_code_default(0.2,0.99,0.65,codeRateEffiency,0,codes);
         break;
-/*
+
     case CODE_pwm_freq:
         strncpy(codes->disp, "PWM Freq",20);
         if( cmd == CMD_WRITE_RAM ) codePwmFreq = codes->code_value;
         set_code_default(500.0,10000.0,8000.0,codePwmFreq,0,codes);
         break;
-*/
+
+    case CODE_IaOffset:
+        strncpy(codes->disp, "Ia Offset",20);
+        if( cmd == CMD_WRITE_RAM ) codeIaOffset = codes->code_value;
+        set_code_default(2000.0,2600.0,2400.0,codeIaOffset,0,codes);
+        break;
+
+    case CODE_IbOffset:
+        strncpy(codes->disp, "Ib Offset",20);
+        if( cmd == CMD_WRITE_RAM ) codeIbOffset = codes->code_value;
+        set_code_default(2000.0,2600.0,2400.0,codeIbOffset,0,codes);
+        break;
+
 	case CODE_END:
 		return -2;
 			
@@ -336,21 +348,17 @@ void readAllCodes()
     int check;
     int addr,cmd;
 
-    load_scia_tx_mail_box(" \r\n");delay_msecs(10);
-    load_scia_tx_mail_box("//---Read all code data\r\n");delay_msecs(10);
-    load_scia_tx_mail_box("code  data       discription \r\n");delay_msecs(10);
-    load_scia_tx_mail_box("-----------------\r\n");delay_msecs(10);
     cmd = CMD_READ_DATA;
     for( addr = 0 ; addr <= CODE_END ; addr++){
         check = get_code_information( addr, cmd , & code_inform);
         if( !check ){
-            snprintf( gStr1,20,"%4d: ",addr); load_scia_tx_mail_box(gStr1);
-            snprintf( gStr1,20,"%.3e ",code_inform.code_value);load_scia_tx_mail_box(gStr1);
-            delay_msecs(10);
+            snprintf( gStr1,20,"%d,",addr); load_scia_tx_mail_box(gStr1);
+            snprintf( gStr1,20,"%.3e,",code_inform.code_value);load_scia_tx_mail_box(gStr1); delay_msecs(10);
             load_scia_tx_mail_box(code_inform.disp);
-            load_scia_tx_mail_box(" \r\n");delay_msecs(10);
+            snprintf( gStr1,20,",%.3e,",code_inform.code_min);load_scia_tx_mail_box(gStr1); delay_msecs(10);
+            snprintf( gStr1,20,"%.3e;",code_inform.code_max);load_scia_tx_mail_box(gStr1); delay_msecs(10);
         }
     }
+    load_scia_tx_mail_box("\n");
 }
-
 //--- end of code_proc.c

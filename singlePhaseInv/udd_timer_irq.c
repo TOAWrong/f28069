@@ -15,6 +15,5 @@ interrupt void cpu_timer0_isr(void)
     CpuTimer0.InterruptCount++;
     if( ref_time < 1.0e+30) ref_time += 0.001;
     if( gfRunTime < 1.0e+30 ) gfRunTime += 0.001;
-    GpioDataRegs.GPATOGGLE.bit.GPIO7 = 1;
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
 }

@@ -64,8 +64,8 @@ __interrupt void adcIsr(void)
     adc_result[5] = adcCmdAnalog = AdcResult.ADCRESULT5;
 // 전류의 계산 : 66mV / A  :  3.3V -> 50A, 1 count = 50 / 4096 = 0.012207
 
-    sensIm = ( adcIm - adcIuOffset ) * I_RATIO;
-    sensIa = ( adcIa - adcIvOffset ) * I_RATIO;
+    sensIm = ( adcIm - codeIaOffset ) * I_RATIO;
+    sensIa = ( adcIa - codeIbOffset ) * I_RATIO;
 
     sensVdc = Vdc_factor * (double) adcVdc + Vdc_calc_offset ;
 

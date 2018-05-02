@@ -124,6 +124,9 @@ void main( void )
 
     temp = (int)(floor(codeProtectOff+0.5));
 
+    code_protect_uv_off = 1;
+    code_protect_ov_off = 1;
+
     if( temp != 0 )
 	{
 		protect_reg.bit.UNVER_VOLT = 0;			// udd �߰� 
@@ -141,10 +144,11 @@ void main( void )
 		if(code_protect_IGBT_off == 0 ) 	protect_reg.bit.IGBT_FAULT = 1;		
 		if(code_protect_ex_trip_off == 0 ) 	protect_reg.bit.EX_TRIP = 1;
 	}
+
 	init_charge_flag = 1;	
 	while( gfRunTime < 5.0){
 		get_command( & cmd, & ref_in0);
-		monitor_proc();
+//		monitor_proc();
 		Nop();
 	}
 
@@ -176,8 +180,6 @@ void main( void )
 	strncpy(MonitorMsg,"READY",20);delay_msecs(20);
 	strncpy(gStr1,"READY",20);
 	load_sci_tx_mail_box(gStr1); delay_msecs(20);
-
-
 	GATE_DRIVER_ENABLE;
 	for( ; ; )
 	{
@@ -189,7 +191,6 @@ void main( void )
 		if(cmd == CMD_READ_ALL ){
 		    readAllCodes();
 		}
-		monitor_proc();
 		if(cmd == CMD_START){	// if( cmd == CMD_START )
 			trip_code = vf_loop_control(ref_in0);		//
 			if( trip_code !=0 )	tripProc();
@@ -200,8 +201,8 @@ void main( void )
 void InitEPwm_ACIM_Inverter()
 {  
 	EPwm1Regs.ETSEL.bit.INTEN = 0;    		        // Enable INT
-	MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / SWITCHING_FREQ ) * 0.5 * 0.5 * 0.5);
-	//MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / codePwmFreq ) * 0.5 * 0.5 * 0.5);
+//	MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / SWITCHING_FREQ ) * 0.5 * 0.5 * 0.5);
+	MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / codePwmFreq ) * 0.5 * 0.5 * 0.5);
 	inv_MAX_PWM_CNT = 1.0 / MAX_PWM_CNT;
 
 //--- PWM Module1

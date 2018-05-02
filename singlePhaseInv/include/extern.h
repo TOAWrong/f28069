@@ -349,6 +349,10 @@ extern float   codeRateHz;              // 13
 extern float   codeRateRpm;             // 14
 extern float   codeMotorPole;           // 15
 extern float   codeRateEffiency;        // 16
+extern float   codePwmFreq;            // 17
+
+extern float   codeIaOffset;           // 20
+extern float   codeIbOffset;           // 21
 
 ///////////////////////////////////
 // extern int code_protect_inhibit_on;		// 30

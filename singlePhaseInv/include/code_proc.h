@@ -23,8 +23,12 @@
 #define CODE_rate_hz				    13
 #define CODE_rate_rpm				    14
 #define CODE_motor_pole					15
-#define CODE_rate_effiency		        16
-#define CODE_END                        17
+#define CODE_rate_effiency              16
+#define CODE_pwm_freq                   17
+
+#define CODE_IaOffset                   20
+#define CODE_IbOffset                   21
+#define CODE_END                        22
 
 #define CODE_Data_Check						800
 #define CODE_Data_Backup					801

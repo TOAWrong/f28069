@@ -37,7 +37,6 @@ int vf_loop_control(float cmd_ref)
 		if( trip_code !=0 ){
 			LoopCtrl = 0;
 		}
-		monitor_proc();
 		get_command( & command, & ref_in0);	            //
 		Nop();
 

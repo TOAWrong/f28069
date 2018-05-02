@@ -222,7 +222,12 @@ float   codeRateHz;             // 13
 float   codeRateRpm;            // 14
 float   codeMotorPole;          // 15
 float   codeRateEffiency;       // 16
-// #define CODE_END                17
+float   codePwmFreq;            // 17
+
+float   codeIaOffset;           // 20
+float   codeIbOffset;           // 21
+
+// #define CODE_END                22
 
 ///////////////////////////
 //int code_protect_inhibit_on;	// 30

@@ -15,7 +15,7 @@ void monitor_proc()		// need_edit
 	StartTimeMsec = ulGetNow_mSec( );
 
 	if( gMachineState == STATE_POWER_ON ){
-        load_scia_tx_mail_box(" \r");
+        load_scia_tx_mail_box(" \n");
 		snprintf( gStr1,10,"Vdc =%.f : ",Vdc);
 		load_sci_tx_mail_box(gStr1);delay_msecs(10);
 		for( i = 0 ; i < 5 ; i++ ){
@@ -24,7 +24,7 @@ void monitor_proc()		// need_edit
 		}
 	}
 	else if( gMachineState == STATE_TRIP ){
-        load_scia_tx_mail_box(" \r");
+        load_scia_tx_mail_box(" \n");
         load_scia_tx_mail_box("TRIP");
         load_scia_tx_mail_box(TripInfoNow.MSG);
         sprintf( gStr1,"CODE=%d : ",TripInfoNow.CODE)    ; load_scia_tx_mail_box(gStr1);
@@ -34,7 +34,7 @@ void monitor_proc()		// need_edit
         sprintf( gStr1,"Vdc =%.2e",TripInfoNow.VDC)     ; load_scia_tx_mail_box(gStr1);
     }
     else {
-        load_scia_tx_mail_box("\r");
+        load_scia_tx_mail_box("\n");
         load_scia_tx_mail_box(MonitorMsg);
         load_scia_tx_mail_box(" : ");
         sprintf( gStr1,"Out =%.1f",codeRateHz * reference_out); load_scia_tx_mail_box(gStr1);
@@ -44,6 +44,7 @@ void monitor_proc()		// need_edit
         sprintf( gStr1,"Ia  =%.1f",rmsIa); load_scia_tx_mail_box(gStr1);
         load_scia_tx_mail_box(" : ");
         sprintf( gStr1,"Vdc =%.f",lpfVdc); load_scia_tx_mail_box(gStr1);
+        //load_scia_tx_mail_box("Rod Mckuen Welcome to winter!\n");
 	}
 }
 

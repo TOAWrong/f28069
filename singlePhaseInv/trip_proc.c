@@ -359,11 +359,17 @@ void tripProc()
 	while( RUN_INPUT){
         get_command( & cmd, & ref_in0);
 //        monitor_proc();
-	    Nop();
+        if(cmd == CMD_READ_ALL ){
+            readAllCodes();
+        }
+        Nop();
 	}
 	while( RUN_INPUT==0){
         get_command( & cmd, & ref_in0);
 //        monitor_proc();
+        if(cmd == CMD_READ_ALL ){
+            readAllCodes();
+        }
 	    Nop();
 	}
 

@@ -11,8 +11,8 @@
 
 #define UARTA_BAUD_RATE          SCI_PRD     // 115200
 
-#define SCIA_RX_BUF_MAX		30
-#define SCIA_TX_BUF_MAX		50
+#define SCIA_RX_BUF_MAX		100
+#define SCIA_TX_BUF_MAX		100
 
 int scia_rx_start_addr=0;
 int scia_rx_end_addr=0;
@@ -22,7 +22,7 @@ int scia_tx_start_addr=0;
 int scia_tx_end_addr=0;
 int scia_rx_msg_flag = 0;
 
-char msg_box[20]={0};
+char msg_box[100]={0};
 char sciaRxIrqBox[SCIA_RX_BUF_MAX] = {0};
 char scia_rx_msg_box[SCIA_RX_BUF_MAX] = {0};
 char scia_tx_msg_box[SCIA_TX_BUF_MAX] = {0};
@@ -205,19 +205,18 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
 
          if(addr == 900){    //  monitor state
              * sci_cmd = CMD_READ_ALL;  * sci_ref = 0.0;
-             load_scia_tx_mail_box("ok! read code all");
              return;
          }
          else if(addr == 901){    //  monitor state
              switch(gMachineState){
-                 case STATE_POWER_ON:    load_scia_tx_mail_box("[POWE_ON] "); break;
-                 case STATE_READY:       load_scia_tx_mail_box("[READY]   "); break;
-                 case STATE_RUN:         load_scia_tx_mail_box("[RUN ]    "); break;
-                 case STATE_TRIP:        load_scia_tx_mail_box("[TRIP]    "); break;
-                 case STATE_INIT_RUN:    load_scia_tx_mail_box("[INIT]    "); break;
-                 case STATE_GO_STOP:     load_scia_tx_mail_box("[GO_STOP] "); break;
-                 case STATE_WAIT_BREAK_OFF: load_scia_tx_mail_box("STATE_WAIT_BREAK_OFF"); break;
-                 default:                load_scia_tx_mail_box("Unknown State"); break;
+                 case STATE_POWER_ON:    load_scia_tx_mail_box("[POWE_ON] \n"); break;
+                 case STATE_READY:       load_scia_tx_mail_box("[READY]   \n"); break;
+                 case STATE_RUN:         load_scia_tx_mail_box("[RUN ]    \n"); break;
+                 case STATE_TRIP:        load_scia_tx_mail_box("[TRIP]  \n"); break;
+                 case STATE_INIT_RUN:    load_scia_tx_mail_box("[INIT]   \n"); break;
+                 case STATE_GO_STOP:     load_scia_tx_mail_box("[GO_STOP]\n"); break;
+                 case STATE_WAIT_BREAK_OFF: load_scia_tx_mail_box("STATE_WAIT_BREAK_OFF\n"); break;
+                 default:                load_scia_tx_mail_box("Unknown State\n"); break;
              }
              return;
          }
@@ -330,14 +329,20 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
 
          if( check == 0 ){
              check = (int)data;
-
+             // write data format  "9:6:123:1.234e-3"
+             snprintf( str,19,"v1.0,%d,",addr); load_scia_tx_mail_box(str);
+             snprintf( str,20,"%.3e,",code_inform.code_value);load_scia_tx_mail_box(str);
+             load_scia_tx_mail_box(code_inform.disp);
+             load_scia_tx_mail_box("\n");delay_msecs(10);
+             /*
              switch(check)
              {
              case 0:
-                 snprintf( str,19,"CODE=%4d/t",addr); load_scia_tx_mail_box(str);
-                 snprintf( str,20,"Data =%.3e/t",code_inform.code_value);load_scia_tx_mail_box(str);
+                 // write data format  "9:6:123:1.234e-3"
+                 snprintf( str,19,"v1.0,%d,",addr); load_scia_tx_mail_box(str);
+                 snprintf( str,20,"%.3e,",code_inform.code_value);load_scia_tx_mail_box(str);
                  load_scia_tx_mail_box(code_inform.disp);
-                 load_scia_tx_mail_box(" \r\n");delay_msecs(10);
+                 load_scia_tx_mail_box("\n");delay_msecs(10);
                  break;
              case 1:
                  snprintf( str,19,"CODE=%4d",addr);
@@ -352,12 +357,13 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
                  load_scia_tx_mail_box(str); delay_msecs(10);
                  break;
              default:
-                 snprintf( str,19,"CODE=%4d/t",addr); load_scia_tx_mail_box(str);
-                 snprintf( str,20,"Data =%.3e/t",code_inform.code_value);load_scia_tx_mail_box(str);
+                 snprintf( str,19,"v1.0,%d,",addr); load_scia_tx_mail_box(str);
+                 snprintf( str,20,"%.3e,",code_inform.code_value);load_scia_tx_mail_box(str);
                  load_scia_tx_mail_box(code_inform.disp);
-                 load_scia_tx_mail_box(" \r\n");delay_msecs(10);
+                 load_scia_tx_mail_box("\n");delay_msecs(10);
                  break;
              }
+         */
          }
          else{
              load_scia_tx_mail_box("Error Invalid Address");delay_msecs(10);

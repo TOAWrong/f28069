@@ -17,8 +17,10 @@ void VariInit()
 	Vdc_factor = ( y2-y1) / ( x2 - x1 );
 	Vdc_calc_offset = (( y1 * x2 - y2 * x1 )/ (x2- x1));
 
-    Ts = 1.0 / SWITCHING_FREQ;  // pwm switching frequency
-    inv_Ts = SWITCHING_FREQ;
+    // Ts = 1.0 / SWITCHING_FREQ;  // pwm switching frequency
+    // inv_Ts = SWITCHING_FREQ;
+    Ts = 1.0 / codePwmFreq;  // pwm switching frequency
+    inv_Ts = codePwmFreq;
 
     Freq_rat = codeRateHz;
     inv_Freq_rat=1.0/Freq_rat;
