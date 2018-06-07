@@ -1,6 +1,12 @@
 #ifndef		__VARIABLES_
 #define		__VARIABLES_
 
+extern float rpmOut;
+
+extern int sendAdcDataFlag;
+extern int graphCount;
+extern UNION16 adcData[4][GRAPH_NUMBER+1];
+
 extern float    Is_max;                 // �ִ� �������
 
 extern float sensVdc;

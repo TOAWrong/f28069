@@ -10,16 +10,8 @@
 //*******************************************
 // Program Control 
 //*******************************************
-#define FLASH_RUN               1
-#define MAIN_POWER_OFF			0			// Vdc == 300.0
-#define CONVERTER_ON			0
-#define USE_UART_A              1
-#define SLIP_COMP_SCALAR		0
-#define USE_GRAPH				1
 #define TEST_ADC_CENTER			1
-#define ENCODER_ON				1
-
-#define GRAPH_NUMBER			300
+#define GRAPH_NUMBER			100
 
 //*******************************************
 
@@ -77,6 +69,19 @@ typedef union
 		unsigned byte3	:8;	/* exponent */
 	} byte;
 } UNION32;
+
+typedef union
+{
+    int   INTEGER;          /* float word : 32bit */
+    struct
+    {
+        unsigned LSB  :8; /* LSB */
+        unsigned MSB  :8;
+    } byte;
+} UNION16;
+
+#define SCIA_RX_BUF_MAX     30
+#define SCIA_TX_BUF_MAX     1300
 
 //--- button_proc.c
 #define BUTTON_ROOT				0

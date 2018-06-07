@@ -1,6 +1,12 @@
 #ifndef		__GLOBAL_VARIABLES_
 #define		__GLOBAL_VARIABLES_
 
+float rpmOut;
+
+int sendAdcDataFlag;
+int graphCount=0;
+UNION16 adcData[4][GRAPH_NUMBER+1];
+
 float Vdc;
 float Is_max;
 
@@ -356,7 +362,6 @@ float wr_rat;
 float rpm_Coeff;
 float wm_rat;
 float sgn_Is[3];
-
 #endif
 
 

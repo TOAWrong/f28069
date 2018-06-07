@@ -74,19 +74,18 @@ interrupt void MainPWM(void)
 
 	digital_out_proc();
 //---
+    if( !sendAdcDataFlag ){
+        if(graphCount<GRAPH_NUMBER){
+            adcData[0][graphCount].INTEGER = adc_result[0];
+            adcData[1][graphCount].INTEGER = adc_result[1];
+            adcData[2][graphCount].INTEGER = adc_result[2];
+            adcData[3][graphCount].INTEGER = adc_result[3];
+            graphCount ++;
+        }
+        else graphCount = 0;
+    }
 
-	if(dacCount<300){
-	    y1_data[dacCount] = DutyRatio[1];
-	    y2_data[dacCount] = DutyRatio[2];
-        //y1_data[dacCount] = adcIuPhase /4096.0 ;
-        //y2_data[dacCount] = adcIvPhase /4096.0 ;
-        //y1_data[dacCount] = adcExSensor /4096.0 ;
-        //y2_data[dacCount] = adcCmdAnalog /4096.0 ;
-	    dacCount ++;
-	}
-	else dacCount = 0;
-
-	EPwm1Regs.ETCLR.bit.INT = 1;	
+    EPwm1Regs.ETCLR.bit.INT = 1;
 	PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;
 
 #if TEST_ADC_CENTER

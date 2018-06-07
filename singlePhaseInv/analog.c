@@ -84,6 +84,8 @@ __interrupt void adcIsr(void)
     temp = (int)(floor(codeSetVdc+0.5));
     if(temp != 0 ) Vdc =300.0;
 
+    rpmOut = 60 * 60 * MOTOR_POLE * 0.5 * reference_out ;
+
     AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;   // Acknowledge interrupt to PIE
     return;

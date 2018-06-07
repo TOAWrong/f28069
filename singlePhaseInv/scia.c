@@ -1,18 +1,14 @@
 #include	<header.h>
 #include	<extern.h>
-// include <scia,h>
-
-#if	USE_UART_A
 
 #define CPU_FREQ    90E6
 #define LSPCLK_FREQ CPU_FREQ/4
-#define SCI_FREQ    115200
+//#define SCI_FREQ    115200
+#define SCI_FREQ    230400
 #define SCI_PRD     (LSPCLK_FREQ/(SCI_FREQ*8))-1
 
 #define UARTA_BAUD_RATE          SCI_PRD     // 115200
 
-#define SCIA_RX_BUF_MAX		100
-#define SCIA_TX_BUF_MAX		100
 
 int scia_rx_start_addr=0;
 int scia_rx_end_addr=0;
@@ -62,6 +58,77 @@ void scia_fifo_init()
 	//PieCtrlRegs.PIEIER9.bit.INTx2=0;     // SCI_TX_INT_A --> PIE Group 9, INT1
 	IER |= M_INT9;		// M == 0x0100 scia irq
 }
+void sciaMonitor()     // need_edit
+{
+    int temp;
+    float fTemp;
+    char str[21] ={0};
+
+    switch(gMachineState){
+        case STATE_POWER_ON:    strncpy(MonitorMsg,"[POWON]",7); break;
+        case STATE_READY:       strncpy(MonitorMsg,"[READY]",7); break;
+        case STATE_RUN:         strncpy(MonitorMsg,"[RUN ]",7); break;
+        case STATE_INIT_RUN:    strncpy(MonitorMsg,"[INIT]",7); break;
+        case STATE_GO_STOP:     strncpy(MonitorMsg,"[GOSTP]",7); break;
+        case STATE_TRIP:
+            strncpy(MonitorMsg,"[TRIP] ",7);
+            break;
+        default:  strncpy(MonitorMsg,"[SYERR]",7); break;
+    }
+    snprintf( str,20,"%s : ",MonitorMsg);
+    load_scia_tx_mail_box(str);
+
+    //    fTemp = Iout;
+    fTemp = rmsIm;
+    temp = (int)(floor(fTemp*10 +0.5));
+    snprintf( str,20,"I_m = %3d.%1dA : ",(temp/10),temp%10);
+    load_scia_tx_mail_box(str);
+
+    fTemp = rmsIa;
+    temp = (int)(floor(fTemp*10 +0.5));
+    snprintf( str,20,"I_a = %3d.%1dA : ",(temp/10),temp%10);
+    load_scia_tx_mail_box(str);
+
+    fTemp = rpmOut;
+    temp = (int)(floor(fTemp+0.5));
+    snprintf( str,20,"RPM = %4d : ", temp);
+    load_scia_tx_mail_box(str);
+
+    fTemp = Vdc;
+    temp = (int)(floor(fTemp +0.5));
+    snprintf( str,20,"Vdc = %4dV : ",temp);
+    load_scia_tx_mail_box(str);
+    load_scia_tx_mail_box("\r\n");
+}
+
+int load_scia_tx_mail_box_char( char msg)
+{
+    if( msg == 0 ) return -1;
+
+    scia_tx_msg_box[scia_tx_end_addr] = msg;
+
+    if(scia_tx_end_addr < ( SCIA_TX_BUF_MAX-1)) scia_tx_end_addr ++;
+    else                                        scia_tx_end_addr = 0;
+
+    if(scia_tx_end_addr == scia_tx_start_addr){
+        if(scia_tx_end_addr < (SCIA_TX_BUF_MAX-1)) scia_tx_start_addr++;
+        else                                        scia_tx_start_addr = 0;
+    }
+    return 0;
+}
+void loadSciaTxMailBox( char * st)
+{
+    int loop_count;
+    char * str;
+    str = st;
+    SciaRegs.SCIFFTX.bit.TXFFIENA = 0;  // Clear SCI Interrupt flag
+    loop_count = 0;
+     while((*str != 0) && ( loop_count < 20)) {
+         load_scia_tx_mail_box_char(*str++);
+         loop_count ++;
+     }
+    SciaRegs.SCIFFTX.bit.TXFFIENA = 1;  // Clear SCI Interrupt flag
+}
 
 void load_scia_tx_mail_box( char * st)
 {
@@ -82,6 +149,32 @@ void load_scia_tx_mail_box( char * st)
 		if( *str == '\0')  break;
 	}
 	SciaRegs.SCIFFTX.bit.TXFFIENA = 1;	// Clear SCI Interrupt flag
+}
+
+// channel 100,101,102,103
+void loadSciaTxBufAdc(int channel )
+{
+    int i,j;
+    char str[10]={0};
+
+    scia_tx_start_addr =0;
+    j = channel - 100;
+    if( j > 3 ) return;
+
+    sendAdcDataFlag = 1;    // data update blocking
+    for(j = 0; j < 4 ; j++ ){
+//        SciaRegs.SCIFFTX.bit.TXFFIENA = 0;  // Clear SCI Interrupt flag
+        for( i = 0 ; i < 100 ; i++){
+            snprintf( str,6,"%04d,",adcData[j][i].INTEGER); load_scia_tx_mail_box(str);
+        }
+        strncpy(str,"ch0\r\n",5);
+        str[2] += j;
+        load_scia_tx_mail_box(str);
+//        SciaRegs.SCIFFTX.bit.TXFFIENA = 1;  // Clear SCI Interrupt flag
+        delay_msecs(15);
+    }
+    // SciaRegs.SCIFFTX.bit.TXFIFOXRESET=1;
+    sendAdcDataFlag = 0;
 }
 		
 interrupt void sciaTxFifoIsr(void)
@@ -371,8 +464,6 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
          return;
      }
  }
-#endif
-
 //==================================
 // End of file.
 //==================================
