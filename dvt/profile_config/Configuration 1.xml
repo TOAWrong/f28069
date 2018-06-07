@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_112" class="java.beans.XMLDecoder">
+ <object class="com.ti.dvt.profile.Model">
+  <void property="name">
+   <string>Configuration 1</string>
+  </void>
+  <void property="targetType">
+   <string>140280</string>
+  </void>
+ </object>
+</java>
