@@ -22,9 +22,11 @@ PAGE 0 :   /* Program Memory */
    OTP         : origin = 0x3D7800, length = 0x000400     /* on-chip OTP */
 
 /*   FLASHH      : origin = 0x3D8000, length = 0x004000     /* on-chip FLASH */
-   FLASHHG     : origin = 0x3D8000, length = 0x008000     /* on-chip FLASH */
+/*   FLASHHG     : origin = 0x3D8000, length = 0x008000     /* on-chip FLASH */
 /*   FLASHG      : origin = 0x3DC000, length = 0x004000     /* on-chip FLASH */
-   FLASHF      : origin = 0x3E0000, length = 0x004000     /* on-chip FLASH */
+
+   FLASHG      : origin = 0x3D8000, length = 0x00C000     /* on-chip FLASH */
+/*   FLASHF      : origin = 0x3E0000, length = 0x004000     /* on-chip FLASH */
    FLASHE      : origin = 0x3E4000, length = 0x004000     /* on-chip FLASH */   
    FLASHD      : origin = 0x3E8000, length = 0x004000     /* on-chip FLASH */
    FLASHC      : origin = 0x3EC000, length = 0x004000     /* on-chip FLASH */
@@ -74,7 +76,7 @@ SECTIONS
    /* Allocate program areas: */
    .cinit              : > FLASHA,     PAGE = 0
    .pinit              : > FLASHA,     PAGE = 0
-   .text               : > FLASHHG,     PAGE = 0
+   .text               : > FLASHG,     PAGE = 0
    codestart           : > BEGIN,      PAGE = 0
    ramfuncs            : LOAD = FLASHD,
                          RUN = RAML0,
@@ -102,11 +104,6 @@ SECTIONS
    
    /* Allocate FPU math areas: */
    FPUmathTables       : > FPUTABLES,  PAGE = 0, TYPE = NOLOAD
-   
-/*   DMARAML5	           : > RAML5,      PAGE = 1			*/
-/*   DMARAML6	           : > RAML6,      PAGE = 1			*/
-/*   DMARAML7	           : > RAML7,      PAGE = 1			*/
-/*   DMARAML8	           : > RAML8,      PAGE = 1			*/
    .reset              : > RESET,      PAGE = 0, TYPE = DSECT
    vectors             : > VECTORS,    PAGE = 0, TYPE = DSECT
 

@@ -277,6 +277,9 @@ extern unsigned long gulStartCount;
 extern unsigned int gStartInitFinish; 
 
 // Sci.c
+extern int scia_tx_start_addr;
+extern int scia_tx_end_addr;
+extern int scia_rx_msg_flag;
 
 extern char gStr1[50];
 extern char gStr2[10];

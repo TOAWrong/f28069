@@ -8,6 +8,7 @@ extern void analog_out_proc( );
 extern int check_sensor_trip();
 __interrupt void adcIsr(void);
 // code_proc.c
+extern void loadSciaTxMailBox( char * st);
 extern int get_code_information(int address,int cmd , CODE_INFO *  codes);
 extern void set_code_default(float min, float max, float defaults, float value,int open_level, CODE_INFO * codes );
 extern int check_backup_data();

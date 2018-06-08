@@ -1,24 +1,22 @@
 #include	<header.h>
 #include	<extern.h>
+// include <scia,h>
 
 #define CPU_FREQ    90E6
 #define LSPCLK_FREQ CPU_FREQ/4
 //#define SCI_FREQ    115200
+//#define SCI_FREQ    38400
 #define SCI_FREQ    230400
 #define SCI_PRD     (LSPCLK_FREQ/(SCI_FREQ*8))-1
 
 #define UARTA_BAUD_RATE          SCI_PRD     // 115200
 
-
 int scia_rx_start_addr=0;
 int scia_rx_end_addr=0;
 int sciRxPoint=0;
 
-int scia_tx_start_addr=0;
-int scia_tx_end_addr=0;
-int scia_rx_msg_flag = 0;
 
-char msg_box[100]={0};
+char msg_box[20]={0};
 char sciaRxIrqBox[SCIA_RX_BUF_MAX] = {0};
 char scia_rx_msg_box[SCIA_RX_BUF_MAX] = {0};
 char scia_tx_msg_box[SCIA_TX_BUF_MAX] = {0};
@@ -58,6 +56,7 @@ void scia_fifo_init()
 	//PieCtrlRegs.PIEIER9.bit.INTx2=0;     // SCI_TX_INT_A --> PIE Group 9, INT1
 	IER |= M_INT9;		// M == 0x0100 scia irq
 }
+
 void sciaMonitor()     // need_edit
 {
     int temp;
@@ -78,7 +77,6 @@ void sciaMonitor()     // need_edit
     snprintf( str,20,"%s : ",MonitorMsg);
     load_scia_tx_mail_box(str);
 
-    //    fTemp = Iout;
     fTemp = rmsIm;
     temp = (int)(floor(fTemp*10 +0.5));
     snprintf( str,20,"I_m = %3d.%1dA : ",(temp/10),temp%10);
@@ -101,6 +99,21 @@ void sciaMonitor()     // need_edit
     load_scia_tx_mail_box("\r\n");
 }
 
+void loadSciaTxMailBox_bk( char * st)
+{
+    int i;
+    char * str;
+    str = st;
+    i =0;
+//    SciaRegs.SCIFFTX.bit.TXFFIENA = 0;  // Clear SCI Interrupt flag
+    while( (i < 20 ) && ( !(* str))){
+        scia_tx_msg_box[scia_tx_end_addr ++] = *str ++;
+        i++;
+    }
+    Nop();
+//    SciaRegs.SCIFFTX.bit.TXFFIENA = 1;  // Clear SCI Interrupt flag
+}
+
 int load_scia_tx_mail_box_char( char msg)
 {
     if( msg == 0 ) return -1;
@@ -116,6 +129,7 @@ int load_scia_tx_mail_box_char( char msg)
     }
     return 0;
 }
+
 void loadSciaTxMailBox( char * st)
 {
     int loop_count;
@@ -132,25 +146,17 @@ void loadSciaTxMailBox( char * st)
 
 void load_scia_tx_mail_box( char * st)
 {
-	int i;
-	char * str;
-
-	str = st;
-
-	SciaRegs.SCIFFTX.bit.TXFFIENA = 0;	// Clear SCI Interrupt flag
-
-	for( i = 0 ; i < 30 ; i++){
- 		scia_tx_msg_box[scia_tx_end_addr++] = * str++;
- 		if(scia_tx_end_addr >= SCIA_TX_BUF_MAX ) scia_tx_end_addr = 0;
-		if(scia_tx_end_addr == scia_tx_start_addr){
-		    scia_tx_start_addr++;
-			if(scia_tx_start_addr >= (SCIA_TX_BUF_MAX-1)) scia_tx_start_addr = 0;
-		}
-		if( *str == '\0')  break;
-	}
-	SciaRegs.SCIFFTX.bit.TXFFIENA = 1;	// Clear SCI Interrupt flag
+    int loop_count;
+    char * str;
+    str = st;
+    SciaRegs.SCIFFTX.bit.TXFFIENA = 0;  // Clear SCI Interrupt flag
+    loop_count = 0;
+     while(( * str != 0) && ( loop_count < 40)) {
+         load_scia_tx_mail_box_char(*str++);
+         loop_count ++;
+     }
+    SciaRegs.SCIFFTX.bit.TXFFIENA = 1;  // Clear SCI Interrupt flag
 }
-
 // channel 100,101,102,103
 void loadSciaTxBufAdc(int channel )
 {
@@ -176,26 +182,28 @@ void loadSciaTxBufAdc(int channel )
     // SciaRegs.SCIFFTX.bit.TXFIFOXRESET=1;
     sendAdcDataFlag = 0;
 }
-		
+
 interrupt void sciaTxFifoIsr(void)
 {
     Uint16 i=0;
+    static int irqTxCount = 0;
 
-	while( scia_tx_end_addr != scia_tx_start_addr){
-
+    while( scia_tx_end_addr != scia_tx_start_addr){
  		SciaRegs.SCITXBUF = scia_tx_msg_box[scia_tx_start_addr];
+		if(scia_tx_start_addr <  ( SCIA_TX_BUF_MAX - 1) )   scia_tx_start_addr ++;
+		else									            scia_tx_start_addr =0;
 
-		if(scia_tx_start_addr < ( SCIA_TX_BUF_MAX-1)) scia_tx_start_addr ++;
-		else											scia_tx_start_addr=0;
+		irqTxCount ++;
 
-		if(scia_tx_end_addr == scia_tx_start_addr) break;
-
+        if( ( irqTxCount >= SCIA_TX_BUF_MAX ) || (scia_tx_end_addr == scia_tx_start_addr)) {
+            irqTxCount = 0;
+            scia_tx_end_addr = scia_tx_start_addr = 0;
+            SciaRegs.SCIFFTX.bit.TXFFIENA = 0;           // Clear SCI Interrupt flagbreak;
+            break;
+        }
 		i++;
 		if( i > 3 ) break;
 	}
-
-	if(scia_tx_end_addr == scia_tx_start_addr) SciaRegs.SCIFFTX.bit.TXFFIENA = 0;	// Clear SCI Interrupt flag
-
 	SciaRegs.SCIFFTX.bit.TXFFINTCLR=1;	// Clear SCI Interrupt flag
 	PieCtrlRegs.PIEACK.all|=0x0100;     // IN9 
 }
@@ -205,7 +213,7 @@ interrupt void sciaRxFifoIsr(void)
     static Uint32 modebus_start_time=0;
     static int scia_rx_count=0;
     Nop();
-    // .
+
     if( ulGetTime_mSec(modebus_start_time) > 10 ){
         modebus_start_time = ulGetNow_mSec( );
         msg_box[0] = SciaRegs.SCIRXBUF.all;  // Read data
@@ -259,7 +267,7 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
 
     scia_rx_msg_box[16]=0;
     data =  atof( & scia_rx_msg_box[8]);
-
+    Nop();
     if( scia_rx_msg_box[2] == '6'){
          if( addr == 900 ){
              check = (int)data;
@@ -280,9 +288,24 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
                  * sci_cmd = CMD_SAVE;  * sci_ref = 0.0;
                  load_scia_tx_mail_box("UART CMD_SAVE");
              }
-             else{
+             else if( data == 50 ){
+                   * sci_cmd = CMD_READ_ALL;  * sci_ref = 0.0;
+                   load_scia_tx_mail_box("UART CMD_READ_ALL");
+            }
+            else if( data == 80 ){
+                   * sci_cmd = CMD_NULL;  * sci_ref = 0.0;
+//                   get_adc_offset();
+            }
+            else if( data == 90 ){
+                   * sci_cmd = CMD_NULL;  * sci_ref = 0.0;
+                   load_scia_tx_mail_box("EEPROM init Start");
+                   check = init_eprom_data();      // 0이 아니면 address value
+                   if( check != 0) load_scia_tx_mail_box("EEPROM init Fail");
+                   else        load_scia_tx_mail_box("EEPROM init OK");
+            }
+            else{
                  load_scia_tx_mail_box("Illegal CMD data");
-             }
+            }
          }
          else{
              // registor_write_proc(addr,data);
@@ -290,38 +313,47 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
              Nop();
          }
      }
-
- //==================
- //   read routine
- //====================
+//---   read routine
      else if(scia_rx_msg_box[2] == '4'){
-
          if(addr == 900){    //  monitor state
-             * sci_cmd = CMD_READ_ALL;  * sci_ref = 0.0;
+             check = (int)data;
+             if( check >= 100 ){
+                 sendAdcDataFlag = 1;
+                 loadSciaTxBufAdc(check);
+                 sendAdcDataFlag = 0;
+             }
+             else {
+                 sciaMonitor();
+                 // load_scia_tx_mail_box(monitOut);
+                 // load_scia_tx_mail_box("\r\n");
+                 Nop();
+             }
              return;
          }
          else if(addr == 901){    //  monitor state
-             switch(gMachineState){
-                 case STATE_POWER_ON:    load_scia_tx_mail_box("[POWE_ON] \n"); break;
-                 case STATE_READY:       load_scia_tx_mail_box("[READY]   \n"); break;
-                 case STATE_RUN:         load_scia_tx_mail_box("[RUN ]    \n"); break;
-                 case STATE_TRIP:        load_scia_tx_mail_box("[TRIP]  \n"); break;
-                 case STATE_INIT_RUN:    load_scia_tx_mail_box("[INIT]   \n"); break;
-                 case STATE_GO_STOP:     load_scia_tx_mail_box("[GO_STOP]\n"); break;
-                 case STATE_WAIT_BREAK_OFF: load_scia_tx_mail_box("STATE_WAIT_BREAK_OFF\n"); break;
-                 default:                load_scia_tx_mail_box("Unknown State\n"); break;
+             check = (int)data;
+             if(check==0){
+                 * sci_cmd = CMD_READ_ALL;  * sci_ref = 0.0;
+                 // readAllCodes();
              }
              return;
          }
          else if(addr == 902){   // read inverter status
-             gMachineState = STATE_POWER_ON;
-             Nop();
-             asm (" .ref _c_int00"); // ;Branch to start of boot.asm in RTS library
-             asm (" LB _c_int00"); // ;Branch to start of boot.asm in RTS library
+             check = (int)data;
+             switch( check ){
+             case 5 : // Reset;
+                 gMachineState = STATE_POWER_ON;
+                 Nop();
+                 asm (" .ref _c_int00"); // ;Branch to start of boot.asm in RTS library
+                 asm (" LB _c_int00"); // ;Branch to start of boot.asm in RTS library
+                 break;
+             default:
+                 break;
+             }
+             return;
          }
          else if(addr == 903){   //  EEPROM TRIP DATA
              check = (int)data;
-
              if( data == 0 ){
                  snprintf( str,20,"\nTripCODE: %03d \t",TripInfoNow.CODE);
                  load_scia_tx_mail_box(str); delay_msecs(180);
@@ -347,6 +379,8 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
                  temp = (int)(floor(dbtemp +0.5));
                  snprintf( str,13," \tDATA=%4d\n",temp);
                  load_scia_tx_mail_box(str); delay_msecs(180);
+                 free(TripData);
+                 return;
              }
              else{
 
@@ -379,7 +413,6 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
                  temp = (int)(floor(dbtemp +0.5));
                  snprintf( str,10," DATA=%4d",temp);
                  load_scia_tx_mail_box(str); delay_msecs(180);
-
                  free(TripData);
              }
              return;
@@ -390,7 +423,7 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
              switch( check ){
              case 0:
                  * sci_cmd = CMD_START;
-                 * sci_ref = 0.1 ; // code_btn_start_ref;
+                 // * sci_ref = code_btn_start_ref;
                  break;
              case 1:
                  * sci_cmd = CMD_STOP;
@@ -409,61 +442,27 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
              return;
          }
          else if (( addr > 979) && ( addr < 996)){
-             /*
              check = addr - 980;
              snprintf( str,19,"adc =%4d",adc_result[check]);
              load_scia_tx_mail_box(str);
              delay_msecs(10);
-             */
              return;
          }
-
+// read code proc
          check = get_code_information( addr, CMD_READ_DATA , & code_inform);
-
-         if( check == 0 ){
-             check = (int)data;
-             // write data format  "9:6:123:1.234e-3"
-             snprintf( str,19,"v1.0,%d,",addr); load_scia_tx_mail_box(str);
-             snprintf( str,20,"%.3e,",code_inform.code_value);load_scia_tx_mail_box(str);
-             load_scia_tx_mail_box(code_inform.disp);
-             load_scia_tx_mail_box("\n");delay_msecs(10);
-             /*
-             switch(check)
-             {
-             case 0:
-                 // write data format  "9:6:123:1.234e-3"
-                 snprintf( str,19,"v1.0,%d,",addr); load_scia_tx_mail_box(str);
-                 snprintf( str,20,"%.3e,",code_inform.code_value);load_scia_tx_mail_box(str);
-                 load_scia_tx_mail_box(code_inform.disp);
-                 load_scia_tx_mail_box("\n");delay_msecs(10);
-                 break;
-             case 1:
-                 snprintf( str,19,"CODE=%4d",addr);
-                 load_scia_tx_mail_box(str);
-                  delay_msecs(10);
-                 break;
-             case 2:
-                 load_scia_tx_mail_box(code_inform.disp);delay_msecs(10);
-                 break;
-             case 3:
-                 snprintf( str,20,"Data =%10.3e",code_inform.code_value);
-                 load_scia_tx_mail_box(str); delay_msecs(10);
-                 break;
-             default:
-                 snprintf( str,19,"v1.0,%d,",addr); load_scia_tx_mail_box(str);
-                 snprintf( str,20,"%.3e,",code_inform.code_value);load_scia_tx_mail_box(str);
-                 load_scia_tx_mail_box(code_inform.disp);
-                 load_scia_tx_mail_box("\n");delay_msecs(10);
-                 break;
-             }
-         */
+         if(check != 0 ){
+             snprintf( str,10,"CODE=%4d:",addr); load_scia_tx_mail_box(str);
+             load_scia_tx_mail_box("Error Invalid Address \r\n");delay_msecs(10);
+             return;
          }
-         else{
-             load_scia_tx_mail_box("Error Invalid Address");delay_msecs(10);
-         }
+         snprintf( str,10,"CODE=%4d:",addr); load_scia_tx_mail_box(str);
+         snprintf( str,20,"Data=%.3e:",code_inform.code_value);load_scia_tx_mail_box(str);
+         load_scia_tx_mail_box(code_inform.disp);
+         load_scia_tx_mail_box("\r\n");delay_msecs(10);
          return;
      }
  }
+
 //==================================
 // End of file.
 //==================================

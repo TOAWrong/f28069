@@ -6,14 +6,12 @@
 #include	"extern.h"
 #include	"global.h"
 
-#if FLASH_RUN
 #pragma CODE_SECTION(MainPWM, "ramfuncs");
 #pragma CODE_SECTION(adcIsr, "ramfuncs");
 extern Uint16 RamfuncsLoadStart;
 extern Uint16 RamfuncsLoadEnd;
 extern Uint16 RamfuncsRunStart;
 Uint16 RamfuncsLoadSize;
-#endif
 
 void InitWatchDog();
 extern interrupt void MainPWM(void);
@@ -43,10 +41,10 @@ void main( void )
 
 	gMachineState = STATE_POWER_ON; 
 	DINT;
-#if FLASH_RUN
+
 	memcpy(&RamfuncsRunStart, &RamfuncsLoadStart, (Uint32)&RamfuncsLoadSize);
 	InitFlash();
-#endif
+
 	InitPieCtrl();
 	IER = 0x0000;   IFR = 0x0000;
 	InitPieVectTable();

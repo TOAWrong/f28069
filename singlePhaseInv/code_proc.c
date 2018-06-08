@@ -342,23 +342,24 @@ int init_eprom_data()
     }
 	return 0;
 }
-
 void readAllCodes()
 {
     int check;
     int addr,cmd;
-
-    cmd = CMD_READ_DATA;
+    char * str;
+    scia_tx_end_addr = 0;
+    scia_tx_start_addr = 0;
+    loadSciaTxMailBox("//Read code data:");
+    loadSciaTxMailBox("code  data  Disc:");
     for( addr = 0 ; addr <= CODE_END ; addr++){
         check = get_code_information( addr, cmd , & code_inform);
         if( !check ){
-            snprintf( gStr1,20,"%d,",addr); load_scia_tx_mail_box(gStr1);
-            snprintf( gStr1,20,"%.3e,",code_inform.code_value);load_scia_tx_mail_box(gStr1); delay_msecs(10);
+            snprintf( str, 6 ,"%4d,",addr); load_scia_tx_mail_box(str);
+            snprintf( str,20,"%.3e,",code_inform.code_value);load_scia_tx_mail_box(str);
             load_scia_tx_mail_box(code_inform.disp);
-            snprintf( gStr1,20,",%.3e,",code_inform.code_min);load_scia_tx_mail_box(gStr1); delay_msecs(10);
-            snprintf( gStr1,20,"%.3e;",code_inform.code_max);load_scia_tx_mail_box(gStr1); delay_msecs(10);
+            load_scia_tx_mail_box(" : ");
         }
     }
-    load_scia_tx_mail_box("\n");
+    load_scia_tx_mail_box("endOfReadall.\r\n");
 }
 //--- end of code_proc.c

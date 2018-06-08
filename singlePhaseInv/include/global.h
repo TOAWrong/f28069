@@ -42,12 +42,6 @@ int scic_rx_msg_flag = 0;
 float analog_ref_a;
 float analog_ref_b;
 
-
-#if USE_GRAPH
-	float y1_data[GRAPH_NUMBER]={0.0};
-	float y2_data[GRAPH_NUMBER]={0.0};
-#endif
-
 float Vdc_factor;			// 2010 01 13
 float Vdc_calc_offset;		// 2010 01 13 for Vdc calc
 
@@ -146,6 +140,10 @@ unsigned long gulStartCount;
 unsigned int gStartInitFinish; 
 
 // Sci.c
+
+int scia_tx_start_addr=0;
+int scia_tx_end_addr=0;
+int scia_rx_msg_flag = 0;
 
 char gStr1[50] = {0};
 char gStr2[10] = {0};
