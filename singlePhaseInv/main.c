@@ -30,6 +30,10 @@ void main( void )
 	InitSysCtrl();
 	InitGpio();
 
+	GATE_DRIVER_ENABLE;
+
+	GATE_DRIVER_CLEAR;
+
 	gfRunTime = 0.0; 
 	protect_reg.all = gDeChargeFlag = 0;
 	MAIN_CHARGE_OFF;

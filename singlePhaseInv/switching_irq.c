@@ -1,9 +1,8 @@
-// Company 	: Eunwho Power Electonics  
 // FILE		: switching_irq.c
 // Project 	: KERI back2back inverter
 // PCB		: regen_dsp_110513 & regen_sen_110513
-// date		: 2011-0105	by Cheoung Soon-Gil
-// rev data : 2011.1013  cheoung soon gil
+// Company  : Eunwho Power Electonics
+// date		: 2018.0608	by soonkil jung
 
 #include        <header.h>
 #include        <extern.h>
@@ -60,12 +59,10 @@ interrupt void MainPWM(void)
         DutyCount[0] = MAX_PWM_CNT * DutyRatio[0];
         DutyCount[1] = MAX_PWM_CNT * DutyRatio[1];
         DutyCount[2] = MAX_PWM_CNT * DutyRatio[2];
-
         EPwm1Regs.CMPA.half.CMPA = DutyCount[0];
         EPwm2Regs.CMPA.half.CMPA = DutyCount[1];
         EPwm3Regs.CMPA.half.CMPA = DutyCount[2];
         break;
-
 	default: 
 		invt_PWM_Port_Set_flag = 0;
 		ePwmPortOff(); // converter PWM gate OFF
@@ -84,14 +81,11 @@ interrupt void MainPWM(void)
         }
         else graphCount = 0;
     }
-
     EPwm1Regs.ETCLR.bit.INT = 1;
 	PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;
-
 #if TEST_ADC_CENTER
 	J8_2_CLEAR;	// debug
 #endif
-
 }
 
  // end of switching_irq.c 

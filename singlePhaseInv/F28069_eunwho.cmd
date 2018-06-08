@@ -25,10 +25,10 @@ PAGE 0 :   /* Program Memory */
 /*   FLASHHG     : origin = 0x3D8000, length = 0x008000     /* on-chip FLASH */
 /*   FLASHG      : origin = 0x3DC000, length = 0x004000     /* on-chip FLASH */
 
-   FLASHG      : origin = 0x3D8000, length = 0x00C000     /* on-chip FLASH */
+   FLASHG      : origin = 0x3D8000, length = 0x014000     /* on-chip FLASH */
 /*   FLASHF      : origin = 0x3E0000, length = 0x004000     /* on-chip FLASH */
-   FLASHE      : origin = 0x3E4000, length = 0x004000     /* on-chip FLASH */   
-   FLASHD      : origin = 0x3E8000, length = 0x004000     /* on-chip FLASH */
+/*   FLASHE      : origin = 0x3E4000, length = 0x004000     /* on-chip FLASH */
+/*   FLASHD      : origin = 0x3E8000, length = 0x004000     /* on-chip FLASH */
    FLASHC      : origin = 0x3EC000, length = 0x004000     /* on-chip FLASH */
    FLASHA      : origin = 0x3F4000, length = 0x003F80     /* on-chip FLASH */
    CSM_RSVD    : origin = 0x3F7F80, length = 0x000076     /* Part of FLASHA.  Program with all 0x0000 when CSM is in use. */
@@ -62,23 +62,14 @@ PAGE 1 :   /* Data Memory */
    FLASHB      : origin = 0x3F0000, length = 0x004000     /* on-chip FLASH */     
 }
 
-/* Allocate sections to memory blocks.
-   Note:
-         codestart user defined section in DSP28_CodeStartBranch.asm used to redirect code
-                   execution when booting to flash
-         ramfuncs  user defined section to store functions that will be copied from Flash into RAM
-*/
-
-
 SECTIONS
 {
-
    /* Allocate program areas: */
    .cinit              : > FLASHA,     PAGE = 0
    .pinit              : > FLASHA,     PAGE = 0
    .text               : > FLASHG,     PAGE = 0
    codestart           : > BEGIN,      PAGE = 0
-   ramfuncs            : LOAD = FLASHD,
+   ramfuncs            : LOAD = FLASHC,
                          RUN = RAML0,
                          LOAD_START(_RamfuncsLoadStart),
                          LOAD_END(_RamfuncsLoadEnd),

@@ -74,6 +74,34 @@ void sciaMonitor()     // need_edit
             break;
         default:  strncpy(MonitorMsg,"[SYERR]",7); break;
     }
+
+    if(gMachineState == STATE_TRIP){
+        // TripData = (TRIP_INFO*)malloc(sizeof(TRIP_INFO));
+        snprintf( str,20,"TripCode=%03d : ",TripInfoNow.CODE);
+        load_scia_tx_mail_box(str);
+        load_scia_tx_mail_box(TripInfoNow.MSG);
+
+        fTemp = TripInfoNow.RPM;
+        temp = (int)(floor(fTemp + 0.5));
+        snprintf( str,20," : TripRpm= %4d :",temp);
+        load_scia_tx_mail_box(str);
+
+        temp = (int)(floor(TripInfoNow.VDC +0.5));
+        snprintf( str,20,"tripVDC=%4d : ",temp);
+        load_scia_tx_mail_box(str);
+
+        fTemp = TripInfoNow.CURRENT;
+        temp = (int)(floor(fTemp*10 +0.5));
+        snprintf( str,20,"tripI = %3d.%1dA : ",(temp/10),temp%10);
+        load_scia_tx_mail_box(str);
+
+        temp = (int)(floor(TripInfoNow.DATA +0.5));
+        snprintf( str,20,"tripData=%4d \r\n",temp);
+        load_scia_tx_mail_box(str);
+        // free(TripData);
+        return;
+    }
+
     snprintf( str,20,"%s : ",MonitorMsg);
     load_scia_tx_mail_box(str);
 
@@ -355,6 +383,7 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
          else if(addr == 903){   //  EEPROM TRIP DATA
              check = (int)data;
              if( data == 0 ){
+                 TripData = (TRIP_INFO*)malloc(sizeof(TRIP_INFO));
                  snprintf( str,20,"\nTripCODE: %03d \t",TripInfoNow.CODE);
                  load_scia_tx_mail_box(str); delay_msecs(180);
 
@@ -383,10 +412,8 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
                  return;
              }
              else{
-
-                TripData = (TRIP_INFO*)malloc(sizeof(TRIP_INFO));
+                 TripData = (TRIP_INFO*)malloc(sizeof(TRIP_INFO));
                 GetTripInfo(check + 1,TripData);
-
                  strncpy(gStr1,TripInfoNow.MSG,20);
 
                  snprintf( str,4,"%03d:",TripData->CODE);
