@@ -55,6 +55,7 @@ void ADC_SOC_CNF( )
 __interrupt void adcIsr(void)
 {
     int temp;
+    float sensIa,sensIb;
 
     adc_result[0] = adcIm   = AdcResult.ADCRESULT0;
     adc_result[1] = adcIa   = AdcResult.ADCRESULT1;
@@ -64,8 +65,8 @@ __interrupt void adcIsr(void)
     adc_result[5] = adcCmdAnalog = AdcResult.ADCRESULT5;
 // 전류의 계산 : 66mV / A  :  3.3V -> 50A, 1 count = 50 / 4096 = 0.012207
 
-    sensIm = ( adcIm - codeIaOffset ) * I_RATIO;
-    sensIa = ( adcIa - codeIbOffset ) * I_RATIO;
+    sensIa = ( adcIm - codeIaOffset ) * I_RATIO;
+    sensIb = ( adcIa - codeIbOffset ) * I_RATIO;
 
     sensVdc = Vdc_factor * (double) adcVdc + Vdc_calc_offset ;
 
@@ -80,6 +81,15 @@ __interrupt void adcIsr(void)
     lpfIaIn[0] = sensIa * sensIa;
     lpf2nd( lpfIaIn, lpfIaOut, lpfIrmsK);
     rmsIa = lpfIaOut[0] * INV_ROOT2;
+
+    Is_abc[as] = sensIa;
+    Is_abc[bs] = sensIb;
+    Is_abc[cs]= -(Is_abc[as]+Is_abc[bs]);
+
+    Is_dq[ds] = Is_abc[as];
+    Is_dq[qs] = 0.577350 * Is_abc[as] + 1.15470 * Is_abc[bs];
+    Is_mag = sqrt( Is_abc[as] *Is_abc[as] + Is_abc[bs] *Is_abc[bs]);           // 전류크기
+    Is_mag_rms = 0.707106*Is_mag;
 
     temp = (int)(floor(codeSetVdc+0.5));
     if(temp != 0 ) Vdc =300.0;

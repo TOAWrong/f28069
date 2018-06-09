@@ -16,9 +16,15 @@ float sensIa;
 
 float lpfVdc;
 float lpfIm;
+
+float Is_abc[3];
+float Is_dq[2];
+
 float lpfIa;
 float rmsIm;
 float rmsIa;
+float Is_mag;
+float Is_mag_rms;
 
 
 float lpfVdcCutoffFreq = 1000.0;

@@ -1,17 +1,17 @@
 #include	<header.h>
 #include	<extern.h>
 
+void LPF1(float Ts,float pole,float in,float *out)
+{
+    *out+=pole*(in-*out)*Ts;
+}
+
 float linear_eq(float x1, float x2, float y1, float y2, float x )
 {
 	float y;
 
 	y = (( y2-y1) / ( x2 - x1 )) * x  + (( y1 * x2 - y2 * x1 )/ (x2- x1));
 	return y;
-}
-
-void LPF1(float Ts,float pole,float in,float *out)
-{
-	*out+=pole*(in-*out)*Ts;
 }
 
 void Nop()

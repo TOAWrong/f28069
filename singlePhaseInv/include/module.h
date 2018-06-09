@@ -18,10 +18,12 @@ extern int init_eprom_data();
 extern float CheckSum();
 extern void readAllCodes();
 // common_module.c
+extern void LPF1(float Ts,float pole,float in,float *out);
 extern float linear_eq(float x1, float x2, float y1, float y2, float x );
 extern int periodic_check(unsigned long  msec);
 extern  void    PI_Damp_Controller(float limit,float Ts,float damp_factor,float Kp,float Ki,float ref,float feedback,float *integral,float *output);
 extern void get_command(int * command, float * ref );
+
 // digital_inout.c
 extern void digital_out_proc();
 extern void digital_input_proc( int * cmd, float * ref);
@@ -87,6 +89,9 @@ extern int CheckOverHeat( );
 extern int trip_check();
 extern void tripProc( );
 // vf_control.c
+extern void vf_simple_control();
+extern void slip_comp_scalar_ctrl();
+
 extern int vf_loop_control(float);
 extern int SaveDataProc(int addr, float data);
 interrupt void cpu_timer0_isr(void);

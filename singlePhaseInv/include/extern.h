@@ -16,8 +16,14 @@ extern float sensIa;
 extern float lpfVdc;
 extern float lpfIm;
 extern float lpfIa;
+
+extern float Is_abc[3];
+extern float Is_dq[2];
+
 extern float rmsIm;
 extern float rmsIa;
+extern float Is_mag;
+extern float Is_mag_rms;
 
 //-- low pass filter
 extern float lpfVdcCutoffFreq;
