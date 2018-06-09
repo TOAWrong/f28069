@@ -68,7 +68,7 @@ void InitGpio(void)
     GpioCtrlRegs.GPAMUX1.bit.GPIO6 = 1;  //--- GPIO6 = PWM4A
 
     GpioCtrlRegs.GPAPUD.bit.GPIO7 = 0;   // Enable pullup
-    GpioDataRegs.GPASET.bit.GPIO7 = 1;   // Load output latch
+    GpioDataRegs.GPACLEAR.bit.GPIO7 = 1;   // Load output latch
     GpioCtrlRegs.GPAMUX1.bit.GPIO7 = 0;  // gateEnable
     GpioCtrlRegs.GPADIR.bit.GPIO7 = 1;   //--- GPIO7 = output
 

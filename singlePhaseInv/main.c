@@ -30,18 +30,12 @@ void main( void )
 	InitSysCtrl();
 	InitGpio();
 
-	GATE_DRIVER_ENABLE;
-
 	GATE_DRIVER_CLEAR;
+    MAIN_CHARGE_OFF;
 
 	gfRunTime = 0.0; 
 	protect_reg.all = gDeChargeFlag = 0;
-	MAIN_CHARGE_OFF;
-
-	INIT_CHARGE_CLEAR;
-
 	init_charge_flag = 0;
-//	RESET_DRIVER_CLEAR;
 
 	gMachineState = STATE_POWER_ON; 
 	DINT;
@@ -100,12 +94,7 @@ void main( void )
     ADC_SOC_CNF();
     strncpy(MonitorMsg,"POWER_ON",20);
     gPWMTripCode = 0;		//
-	//init_eprom_data();
-/*
-    for( ; ; ){
-        Nop();
-    }
-*/
+
     if( load_code2ram() != 0 ) tripProc();
 	if(HardwareParameterVerification() !=0 ) tripProc();
 
