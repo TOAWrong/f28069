@@ -10,8 +10,9 @@
 //*******************************************
 // Program Control 
 //*******************************************
+#define GATE_ACTIVE_LOW         1       // IRS2336D
 #define TEST_ADC_CENTER			1
-#define GRAPH_NUMBER			100
+#define GRAPH_NUMBER			200
 
 //*******************************************
 

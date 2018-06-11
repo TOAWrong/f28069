@@ -16,6 +16,7 @@
 #define CODE_speed2						6
 #define CODE_set_vdc                    7
 #define CODE_protect_off                8
+#define CODE_MotorCtrMode               9
 
 #define CODE_rate_power			        10
 #define CODE_rate_volt			        11
@@ -44,10 +45,10 @@
 struct CODE_INFO_DEFINE {
 	int		type;	
 	int	  	open_level	;
-	float	code_min ;
-	float   code_max ;
-	float   code_default;
-	float   code_value;
+	double	code_min ;
+	double   code_max ;
+	double   code_default;
+	double   code_value;
 	char   disp[40];
 };
 typedef struct CODE_INFO_DEFINE CODE_INFO;

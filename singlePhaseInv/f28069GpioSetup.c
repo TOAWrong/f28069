@@ -24,6 +24,15 @@ void ePwmPortOff()
     GpioCtrlRegs.GPADIR.bit.GPIO5   = 1;  // GPIO5 = Output
     GpioCtrlRegs.GPADIR.bit.GPIO6   = 1;  // GPIO5 = Output
 
+#if GATE_ACTIVE_LOW
+    GpioDataRegs.GPASET.bit.GPIO0 = 1;  // Set Output
+    GpioDataRegs.GPASET.bit.GPIO1 = 1;  // Set Output
+    GpioDataRegs.GPASET.bit.GPIO2 = 1;  // Set Output
+    GpioDataRegs.GPASET.bit.GPIO3 = 1;  // Set Output
+    GpioDataRegs.GPASET.bit.GPIO4 = 1;  // Set Output
+    GpioDataRegs.GPASET.bit.GPIO5 = 1;  // Set Output
+    GpioDataRegs.GPASET.bit.GPIO6 = 1;  // Set Output
+#else
     GpioDataRegs.GPACLEAR.bit.GPIO0 = 1;  // Set Output
     GpioDataRegs.GPACLEAR.bit.GPIO1 = 1;  // Set Output
     GpioDataRegs.GPACLEAR.bit.GPIO2 = 1;  // Set Output
@@ -31,7 +40,7 @@ void ePwmPortOff()
     GpioDataRegs.GPACLEAR.bit.GPIO4 = 1;  // Set Output
     GpioDataRegs.GPACLEAR.bit.GPIO5 = 1;  // Set Output
     GpioDataRegs.GPACLEAR.bit.GPIO6 = 1;  // Set Output
-
+#endif
     EDIS;
 }
 

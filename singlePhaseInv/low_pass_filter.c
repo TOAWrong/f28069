@@ -7,8 +7,8 @@
 #include	<extern.h>
 #define LPF_ZETA     0.707
 //--- DC link Voltage Low Pass
-//float lpfIrmsK[4];
-void lpf2ndCoeffInit( float cutoff_freq, float T_sample, float *x, float *y, float *k)
+//double lpfIrmsK[4];
+void lpf2ndCoeffInit( double cutoff_freq, double T_sample, double *x, double *y, double *k)
 {	
 	double omega_n;
 	omega_n = 2.0 * PI * cutoff_freq ;
@@ -19,10 +19,10 @@ void lpf2ndCoeffInit( float cutoff_freq, float T_sample, float *x, float *y, flo
 	*(k+2) = 4.0 * LPF_ZETA * omega_n * T_sample - omega_n * omega_n * T_sample * T_sample -4.0;
 	*(k+3) = omega_n * omega_n * T_sample * T_sample;
 }
-void lpf2nd(float * x,float * y, float * K)
+void lpf2nd(double * x,double * y, double * K)
 {
 	int i;
-	float k[4];
+	double k[4];
 	for ( i = 0 ; i< 4; i++)	k[i] = *(K + i);
     *y = k[0]*( k[1]*( *(y+1)) + k[2]*( *(y+2)) + k[3]*( (*x) + 2.*(*(x+1)) + (*(x+2))) );
 	*(y+2) = *(y+1);	*(y+1) = * y;

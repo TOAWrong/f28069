@@ -3,12 +3,12 @@
 
 #define min_vf_ref  0.05
 
-int vf_loop_control(float cmd_ref)
+int vf_loop_control(double cmd_ref)
 {
 	int LoopCtrl;
 	int trip_code=0;
 	int command;
-	float ref_in0;
+	double ref_in0;
 
 //	simple_scalar_control_variable_init();
 
@@ -100,8 +100,7 @@ int vf_loop_control(float cmd_ref)
 
 void vf_simple_control()
 {
-    static float theta = 0;
-    float Vs_ref;
+    double Vs_ref;
 
     Freq_out = codeRateHz * reference_out;
 
@@ -111,7 +110,7 @@ void vf_simple_control()
 
     rpm = rpm_Coeff * we;   //  rpm = rpm_Coeff * wr
 
-    theta+=we*Ts;
+    theta += we * Ts;
 
     if (theta>PI)       theta-=PI_2;
     else if (theta<-PI) theta+=PI_2;
@@ -134,11 +133,11 @@ void vf_simple_control()
 
 void slip_comp_scalar_ctrl()
 {
-   float   Es_m;
-   float   Slip;
-   float   sgn_freq;
-   float   Det_slip;            // sqrt()안의 부호검사
-   float   Det_emf;
+   double   Es_m;
+   double   Slip;
+   double   sgn_freq;
+   double   Det_slip;            // sqrt()안의 부호검사
+   double   Det_emf;
 
    // 전압 추정시 시간지연(Ts)을 보상
    CosDeltaTheta=cos(we*Ts);

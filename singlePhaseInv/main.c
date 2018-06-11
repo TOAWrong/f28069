@@ -19,13 +19,13 @@ extern interrupt void adcIsr(void);
 extern interrupt void sciaRxFifoIsr(void);
 extern interrupt void sciaTxFifoIsr(void);
 
-float Vdc_fnd_data;
+double Vdc_fnd_data;
 
 void main( void )
 {
     int trip_code,loop_ctrl,temp;
 	int cmd;
-	float ref_in0;
+	double ref_in0;
 
 	InitSysCtrl();
 	InitGpio();
@@ -207,8 +207,8 @@ void InitEPwm_ACIM_Inverter()
 	EPwm1Regs.CMPCTL.bit.SHDWBMODE  = CC_SHADOW;
 	EPwm1Regs.CMPCTL.bit.LOADAMODE  = CC_CTR_ZERO;
 	EPwm1Regs.CMPCTL.bit.LOADBMODE  = CC_CTR_ZERO;
-	EPwm1Regs.AQCTLA.bit.CAU        = AQ_CLEAR;
-	EPwm1Regs.AQCTLA.bit.CAD        = AQ_SET;
+	EPwm1Regs.AQCTLA.bit.CAU        = AQ_SET;
+	EPwm1Regs.AQCTLA.bit.CAD        = AQ_CLEAR;
 	EPwm1Regs.DBCTL.bit.OUT_MODE 	= DB_FULL_ENABLE;
 	EPwm1Regs.DBCTL.bit.POLSEL 	    = DB_ACTV_LOC;
 	EPwm1Regs.DBRED                 = DEAD_TIME_COUNT; // debug set to 4usec
@@ -218,7 +218,7 @@ void InitEPwm_ACIM_Inverter()
 	EPwm2Regs.TBPRD                 =  MAX_PWM_CNT;				// Set timer period
     EPwm2Regs.TBPHS.half.TBPHS      = 0x0000;            // Phase is 0
 	EPwm2Regs.TBCTL.bit.CTRMODE     = TB_COUNT_UPDOWN; 		// Count up
-    EPwm2Regs.TBCTL.bit.PHSEN       = TB_ENABLE;
+    EPwm2Regs.TBCTL.bit.PHSEN       = TB_DISABLE;
     EPwm2Regs.TBCTL.bit.PRDLD       = TB_SHADOW;          // 2017.09.05
     EPwm2Regs.TBCTL.bit.SYNCOSEL    = TB_SYNC_IN;
     EPwm2Regs.CMPCTL.bit.SHDWAMODE  = CC_SHADOW;
@@ -238,7 +238,7 @@ void InitEPwm_ACIM_Inverter()
 	EPwm3Regs.TBPRD =  MAX_PWM_CNT;			// Set timer period
     EPwm3Regs.TBPHS.half.TBPHS      = 0x0000;               // Phase is 0
 	EPwm3Regs.TBCTL.bit.CTRMODE 	= TB_COUNT_UPDOWN; 	// Count up
-	EPwm3Regs.TBCTL.bit.PHSEN 		= TB_ENABLE; 
+	EPwm3Regs.TBCTL.bit.PHSEN 		= TB_DISABLE;
     EPwm3Regs.TBCTL.bit.PRDLD       = TB_SHADOW;          // 2017.09.05
 	EPwm3Regs.TBCTL.bit.SYNCOSEL 	= TB_SYNC_IN;        	
     EPwm3Regs.CMPCTL.bit.SHDWAMODE  = CC_SHADOW;
@@ -252,7 +252,6 @@ void InitEPwm_ACIM_Inverter()
 	EPwm3Regs.CMPA.half.CMPA 		= MAX_PWM_CNT;
 	EPwm3Regs.DBRED 				= DEAD_TIME_COUNT;
 	EPwm3Regs.DBFED 				= DEAD_TIME_COUNT;
-//	EPwm3Regs.ETSEL.bit.INTEN 		= 0;
 
 //Set PWM4 
 	EPwm4Regs.TBPRD =  MAX_PWM_CNT;			// Set timer period

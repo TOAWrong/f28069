@@ -55,7 +55,7 @@ void ADC_SOC_CNF( )
 __interrupt void adcIsr(void)
 {
     int temp;
-    float sensIa,sensIb;
+    double sensIa,sensIb;
 
     adc_result[0] = adcIm   = AdcResult.ADCRESULT0;
     adc_result[1] = adcIa   = AdcResult.ADCRESULT1;
@@ -101,7 +101,7 @@ __interrupt void adcIsr(void)
     return;
 }
 
-void analog_input_proc( float * referenc)
+void analog_input_proc( double * referenc)
 {
 	* referenc = analog_ref_a * analog_cmd_in_span1 - analog_cmd_in_zero1;
 }

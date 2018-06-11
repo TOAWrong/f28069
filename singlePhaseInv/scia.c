@@ -60,7 +60,7 @@ void scia_fifo_init()
 void sciaMonitor()     // need_edit
 {
     int temp;
-    float fTemp;
+    double fTemp;
     char str[21] ={0};
 
     switch(gMachineState){
@@ -207,6 +207,19 @@ void loadSciaTxBufAdc(int channel )
 //        SciaRegs.SCIFFTX.bit.TXFFIENA = 1;  // Clear SCI Interrupt flag
         delay_msecs(15);
     }
+
+    delay_msecs(100);
+    for(j = 0; j < 4 ; j++ ){
+//        SciaRegs.SCIFFTX.bit.TXFFIENA = 0;  // Clear SCI Interrupt flag
+        for( i = 100 ; i < 200 ; i++){
+            snprintf( str,6,"%04d,",adcData[j][i].INTEGER); load_scia_tx_mail_box(str);
+        }
+        strncpy(str,"ch0\r\n",5);
+        str[2] += j;
+        load_scia_tx_mail_box(str);
+//        SciaRegs.SCIFFTX.bit.TXFFIENA = 1;  // Clear SCI Interrupt flag
+        delay_msecs(15);
+    }
     // SciaRegs.SCIFFTX.bit.TXFIFOXRESET=1;
     sendAdcDataFlag = 0;
 }
@@ -269,9 +282,9 @@ interrupt void sciaRxFifoIsr(void)
 
 // read data format   "9:4:123:x.xxxe-x"
 // write data format  "9:6:123:1.234e-3"
-void scia_cmd_proc( int * sci_cmd, float * sci_ref)
+void scia_cmd_proc( int * sci_cmd, double * sci_ref)
 {
-	float data,dbtemp;
+	double data,dbtemp;
     int addr,check,temp;
     char str[30]={0};
 
@@ -483,7 +496,8 @@ void scia_cmd_proc( int * sci_cmd, float * sci_ref)
              return;
          }
          snprintf( str,10,"CODE=%4d:",addr); load_scia_tx_mail_box(str);
-         snprintf( str,20,"Data=%.3e:",code_inform.code_value);load_scia_tx_mail_box(str);
+         snprintf( str,20,"Data=%.3e:",code_inform.code_value);
+         load_scia_tx_mail_box(str);
          load_scia_tx_mail_box(code_inform.disp);
          load_scia_tx_mail_box("\r\n");delay_msecs(10);
          return;

@@ -10,13 +10,16 @@
 int dacCount = 0;
 void MotorControlProc( )
 {
-    if      (codeMotorCtrlMode < 1.0 ) vf_simple_control();
-    else if (codeMotorCtrlMode < 2.0 ) slip_comp_scalar_ctrl();
-    else                                vf_simple_control();
+ //   if      (codeMotorCtrlMode < 1.0 ) vf_simple_control();
+ //   else if (codeMotorCtrlMode < 2.0 ) slip_comp_scalar_ctrl();
+ //   else
+    vf_simple_control();
 }
 
 interrupt void MainPWM(void)
 {
+    static int monitorCount = 0;
+
     if( gMachineState == STATE_RUN )
     {
         if( Vdc > ( over_volt_set - 30.0 ))
@@ -60,7 +63,7 @@ interrupt void MainPWM(void)
             EPwm3Regs.CMPA.half.CMPA = 0;
         }
         else{
-            VoltageEstimation();
+            // VoltageEstimation();
             MotorControlProc( );
             SpaceVectorModulation(Vs_dq_ref);
             EPwm1Regs.CMPA.half.CMPA = DutyCount[u];
@@ -82,99 +85,29 @@ _PWM_TRIP:
     digital_out_proc();
 //---
     if( !sendAdcDataFlag ){
-        if(graphCount<GRAPH_NUMBER){
-            adcData[0][graphCount].INTEGER = adc_result[0];
-            adcData[1][graphCount].INTEGER = adc_result[1];
-            adcData[2][graphCount].INTEGER = adc_result[2];
-            adcData[3][graphCount].INTEGER = adc_result[3];
-            graphCount ++;
+        if( monitorCount < 4 ) monitorCount ++ ;
+        else {
+            monitorCount = 0;
+            if(graphCount< GRAPH_NUMBER ){
+    //            adcData[0][graphCount].INTEGER = adc_result[0];
+    //            adcData[1][graphCount].INTEGER = adc_result[1];
+    //            adcData[2][graphCount].INTEGER = adc_result[2];
+    //            adcData[3][graphCount].INTEGER = adc_result[3];
+
+                adcData[0][graphCount].INTEGER = adc_result[0];
+                adcData[1][graphCount].INTEGER = (int)(4095 * DutyRatio[0]);
+                adcData[2][graphCount].INTEGER = (int)(4095 * DutyRatio[1]);
+                adcData[3][graphCount].INTEGER = (int)(4095 * DutyRatio[2]);
+                graphCount ++;
+            }
+            else graphCount = 0;
         }
-        else graphCount = 0;
     }
     EPwm1Regs.ETCLR.bit.INT = 1;
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;
 
 #if TEST_ADC_CENTER
     J8_2_CLEAR; // debug
-#endif
-}
-
-interrupt void MainPWM_bk(void)
-{
-	static int invt_PWM_Port_Set_flag = 0;
-	float modulationRatio;
-
-#if TEST_ADC_CENTER
-	J8_2_SET;
-#endif
-
-	switch(gMachineState)
-	{
-    case STATE_TRIP:
-        invt_PWM_Port_Set_flag = 0;
-//      ePwmPortOff(); // converter PWM gate OFF
-        break;
-
-    case STATE_READY:
-	case STATE_POWER_ON:
-        EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
-        EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
-        EPwm3Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
-		break;
-
-	case STATE_INIT_RUN:
-		if( invt_PWM_Port_Set_flag == 0 ){
-			ePwmEnable();
-			invt_PWM_Port_Set_flag = 1;
-		}
-		else{
-			EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
-			EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
-			EPwm3Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
-		}
-		break;
-
-	case STATE_RUN:
-	case STATE_GO_STOP:
-	case STATE_WAIT_BREAK_OFF:		
-
-	    we = codeRateHz * reference_out;
-	    theta += we * Ts;
-        while (theta >= PI_2 ){ theta -= PI_2;}
-        if (theta < 0.0 ) theta = 0.0;
-
-        modulationRatio = reference_out;
-        singlePhaseModulation(modulationRatio, theta, DutyRatio);
-
-        DutyCount[0] = MAX_PWM_CNT * DutyRatio[0];
-        DutyCount[1] = MAX_PWM_CNT * DutyRatio[1];
-        DutyCount[2] = MAX_PWM_CNT * DutyRatio[2];
-        EPwm1Regs.CMPA.half.CMPA = DutyCount[0];
-        EPwm2Regs.CMPA.half.CMPA = DutyCount[1];
-        EPwm3Regs.CMPA.half.CMPA = DutyCount[2];
-        break;
-	default: 
-		invt_PWM_Port_Set_flag = 0;
-		ePwmPortOff(); // converter PWM gate OFF
-		break;
-	}
-
-	digital_out_proc();
-//---
-    if( !sendAdcDataFlag ){
-        if(graphCount<GRAPH_NUMBER){
-            adcData[0][graphCount].INTEGER = adc_result[0];
-            adcData[1][graphCount].INTEGER = adc_result[1];
-            adcData[2][graphCount].INTEGER = adc_result[2];
-            adcData[3][graphCount].INTEGER = adc_result[3];
-            graphCount ++;
-        }
-        else graphCount = 0;
-    }
-    EPwm1Regs.ETCLR.bit.INT = 1;
-	PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;
-#if TEST_ADC_CENTER
-	J8_2_CLEAR;	// debug
 #endif
 }
 

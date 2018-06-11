@@ -1,57 +1,58 @@
 #ifndef		__GLOBAL_VARIABLES_
 #define		__GLOBAL_VARIABLES_
 
-float rpmOut;
+//double theta;
+double rpmOut;
 
 int sendAdcDataFlag;
 int graphCount=0;
 UNION16 adcData[4][GRAPH_NUMBER+1];
 
-float Vdc;
-float Is_max;
+double Vdc;
+double Is_max;
 
-float sensVdc;
-float sensIm;
-float sensIa;
+double sensVdc;
+double sensIm;
+double sensIa;
 
-float lpfVdc;
-float lpfIm;
+double lpfVdc;
+double lpfIm;
 
-float Is_abc[3];
-float Is_dq[2];
+double Is_abc[3];
+double Is_dq[2];
 
-float lpfIa;
-float rmsIm;
-float rmsIa;
-float Is_mag;
-float Is_mag_rms;
+double lpfIa;
+double rmsIm;
+double rmsIa;
+double Is_mag;
+double Is_mag_rms;
 
 
-float lpfVdcCutoffFreq = 1000.0;
-float lpfVdcIn[3];
-float lpfVdcOut[3];
-float lpfVdcK[4];
+double lpfVdcCutoffFreq = 1000.0;
+double lpfVdcIn[3];
+double lpfVdcOut[3];
+double lpfVdcK[4];
 
-float lpfIrmsCutOffRreq = 1.0;
-float lpfImIn[3];
-float lpfImOut[3];
-float lpfIrmsK[4];
-//float lpfIrmsCutOffRreq = 1.0;
-float lpfIaIn[3];
-float lpfIaOut[3];
+double lpfIrmsCutOffRreq = 1.0;
+double lpfImIn[3];
+double lpfImOut[3];
+double lpfIrmsK[4];
+//double lpfIrmsCutOffRreq = 1.0;
+double lpfIaIn[3];
+double lpfIaOut[3];
 
 int init_charge_flag = 0;
 
 int scib_rx_msg_flag = 0;
 int scic_rx_msg_flag = 0;
 
-float analog_ref_a;
-float analog_ref_b;
+double analog_ref_a;
+double analog_ref_b;
 
-float Vdc_factor;			// 2010 01 13
-float Vdc_calc_offset;		// 2010 01 13 for Vdc calc
+double Vdc_factor;			// 2010 01 13
+double Vdc_calc_offset;		// 2010 01 13 for Vdc calc
 
-float ref_time;
+double ref_time;
 
 CODE_INFO code_inform = {0,0,0,0,0,0,{0}};
 
@@ -60,81 +61,81 @@ union PROTECT_FLAG protect_reg;
 int terminal_input_state;
 
 // PWM
-float	DutyRatio[3];
+double	DutyRatio[3];
 Uint16 DutyCount[3];
 
 // �ð� �� �ε���
-float	Ts;
-float	inv_Ts;
-float 	gfRunTime=0;
+double	Ts;
+double	inv_Ts;
+double 	gfRunTime=0;
 int timer0_count;
-float inv_MAX_PWM_CNT;
+double inv_MAX_PWM_CNT;
 
 
 //=============================================
 
-float	Freq_set=0.0;
-float	Re_Power=0.0;
-float	Im_Power=0.0;
+double	Freq_set=0.0;
+double	Re_Power=0.0;
+double	Im_Power=0.0;
 
-float	Vs_rat;
-float	Is_rat;
-float	inv_Is_rat;
-float	we_rat;
-float inv_motor_rate_hz;
+double	Vs_rat;
+double	Is_rat;
+double	inv_Is_rat;
+double	we_rat;
+double inv_motor_rate_hz;
 
-float	Vs_max=0.0;
+double	Vs_max=0.0;
 
-float	Freq_out=0.0;
-float	rpm=0.0;
+double	Freq_out=0.0;
+double	rpm=0.0;
 
-float	reference_in=0.0;
-float	reference_out=0.0;
+double	reference_in=0.0;
+double	reference_out=0.0;
 
 // ���� �� ���ļ�
 
-float	we_in=0.0;
-float	we=0.0;
-float	we0=0.0;
+double	we_in=0.0;
+double	we=0.0;
+double	we0=0.0;
 
-float	frequency=0.0;
-float	theta=0.0;
-float	SinTheta=0.0;
-float	CosTheta=1.0;
-float  CosDeltaTheta;
-float  SinDeltaTheta;
+double	frequency=0.0;
+double	theta=0.0;
+double	SinTheta=0.0;
+double	CosTheta=1.0;
+double  CosDeltaTheta;
+double  SinDeltaTheta;
 
-float	Vs_dq_ref[2]={0.0,0.0};
+double	Vs_dq_ref[2]={0.0,0.0};
 
 
 // ��ũ
-float	Te_max=0.0;
-float	Te_ref=0.0;
-float	Te=0.0;
-float	LPF_Te=0.0;
-float	Max_Trq_Coeff=0.0;
+double	Te_max=0.0;
+double	Te_ref=0.0;
+double	Te=0.0;
+double	LPF_Te=0.0;
+double	Max_Trq_Coeff=0.0;
 
 
 // VVVF-Control
-float	Vs_ref=0.0;
-float	Freq_ref=0.0;
-float	Freq_slip=0.0;
-float	Slip=0.0;
-float	Power_core=0.0;
-float	Power_core_rat=0.0;
-float	Power_gap=0.0;
-float	Vs_IR_comp=0.0;
-float	del_Vs_comp=0.0;
+double	Vs_ref=0.0;
+double	Freq_ref=0.0;
+double	Freq_slip=0.0;
+double	Slip=0.0;
+double	Power_core=0.0;
+double	Power_core_rat=0.0;
+double	Power_gap=0.0;
+double	Vs_IR_comp=0.0;
+double	del_Vs_comp=0.0;
 
 
 // �ʱ�����	
 
 // Dead Time ���� 
-float 	C_ce_nF;
-float 	C_ce;
-float 	inv_C_ce;
+double 	C_ce_nF;
+double 	C_ce;
+double 	inv_C_ce;
 
-float	Freq_slip_rat;
+double	Freq_slip_rat;
 	
 //====================================
 // F28335 
@@ -165,7 +166,7 @@ int	gSciaTxEndFlag;
 
 int giSciCmdFunction;
 int giSciCmdAddr;
-float gdouSciCmdData;
+double gdouSciCmdData;
 
 int gMachineState=0;
 
@@ -199,7 +200,7 @@ TRIP_INFO TripInfo = {0,0,0,0,0," No Trip Data       "};
 TRIP_INFO TripInfoNow = {0,0,0,0,0," No Trip Data       "};
 
 int gTripFlag = 0;
-float AnaCmdReference=0;
+double AnaCmdReference=0;
 
 Uint16	MAX_PWM_CNT;
 
@@ -210,32 +211,32 @@ int gTripSaveFlag=0;
 int EepromSaveFlag = 0;
 int Flag_TripDataBackup = 0;
 
-float OverCurLimit;
+double OverCurLimit;
 
 
 //============================================
 //   CODE variable 
 //============================================
-float   codeMotorDirection;     //
-float   codeAccelTime1;         //
-float   codeDecelTime1;         //
-float   codeMotorCtrlMode;      //
-float   codeSpeed1;             // 5
-float   codeSpeed2;             // 6
-float   codeSetVdc;             // 7
-float   codeProtectOff;         // 8
+double   codeMotorDirection;     //
+double   codeAccelTime1;         //
+double   codeDecelTime1;         //
+double   codeMotorCtrlMode;      //
+double   codeSpeed1;             // 5
+double   codeSpeed2;             // 6
+double   codeSetVdc;             // 7
+double   codeProtectOff;         // 8
 
-float   codeRatePower;          // 10
-float   codeRateVolt;           // 11
-float   codeRateCurrent;        // 12
-float   codeRateHz;             // 13
-float   codeRateRpm;            // 14
-float   codeMotorPole;          // 15
-float   codeRateEffiency;       // 16
-float   codePwmFreq;            // 17
+double   codeRatePower;          // 10
+double   codeRateVolt;           // 11
+double   codeRateCurrent;        // 12
+double   codeRateHz;             // 13
+double   codeRateRpm;            // 14
+double   codeMotorPole;          // 15
+double   codeRateEffiency;       // 16
+double   codePwmFreq;            // 17
 
-float   codeIaOffset;           // 20
-float   codeIbOffset;           // 21
+double   codeIaOffset;           // 20
+double   codeIbOffset;           // 21
 
 // #define CODE_END                22
 
@@ -250,60 +251,60 @@ int code_protect_ex_trip_off;	// 36
 int code_protect_IGBT2_off;		// 37
 int code_protect_CONV_adc_off;	// 38
 ///////////////////////////
-float analog_cmd_in_zero1;		// 200
-float analog_cmd_in_span1;		// 201
-float analog_cmd_in_zero2;		// 202
-float analog_cmd_in_span2;		// 203
+double analog_cmd_in_zero1;		// 200
+double analog_cmd_in_span1;		// 201
+double analog_cmd_in_zero2;		// 202
+double analog_cmd_in_span2;		// 203
 
 int code_dac_select_ch1;		// 213	
-float code_dac_scale_ch1;		//214
-float code_dac_offset_ch1;		// 215
+double code_dac_scale_ch1;		//214
+double code_dac_offset_ch1;		// 215
 
 int code_dac_select_ch2;		// 216
-float code_dac_scale_ch2;		//217
-float code_dac_offset_ch2;		//218
+double code_dac_scale_ch2;		//217
+double code_dac_offset_ch2;		//218
 
 int code_dac_select_ch3;		// 219
-float code_dac_scale_ch3;		// 220
-float code_dac_offset_ch3;		// 221
+double code_dac_scale_ch3;		// 220
+double code_dac_offset_ch3;		// 221
 
 int code_dac_select_ch4;		// 222
-float code_dac_scale_ch4;		// 223
-float code_dac_offset_ch4;		// 224
+double code_dac_scale_ch4;		// 223
+double code_dac_offset_ch4;		// 224
 
 // group3
-float over_current_level;		// 300
-float over_volt_set;			// 301
-float under_volt_set;			// 302
-float over_speed_level;		// 303
-float e_thermal_level;			// 304
-float pre_charge_time;			// 305
-float Is_Max_Coeff;			// 306
-float over_I_time;				// 307
+double over_current_level;		// 300
+double over_volt_set;			// 301
+double under_volt_set;			// 302
+double over_speed_level;		// 303
+double e_thermal_level;			// 304
+double pre_charge_time;			// 305
+double Is_Max_Coeff;			// 306
+double over_I_time;				// 307
 
-float code_Vdc_scaler;			// 308  2011.0613
-float code_Vdc_offseter;		// 309
-float code_adc_vdc_low;		// 310
-float code_adc_vdc_high;		// 311
-float code_Vdc_calc_low;		// 312
-float code_Vdc_calc_high;		// 313
+double code_Vdc_scaler;			// 308  2011.0613
+double code_Vdc_offseter;		// 309
+double code_adc_vdc_low;		// 310
+double code_adc_vdc_high;		// 311
+double code_Vdc_calc_low;		// 312
+double code_Vdc_calc_high;		// 313
 
 
 //group 4
-float motor_rate_power;		// 400
-float motor_rate_volt;			// 401
-float motor_rate_current;		// 402
-float motor_rate_hz;			// 403
-float motor_rate_rpm;			// 404
-float motor_pole;				// 405
-float motor_rate_effiency;		// 406
+double motor_rate_power;		// 400
+double motor_rate_volt;			// 401
+double motor_rate_current;		// 402
+double motor_rate_hz;			// 403
+double motor_rate_rpm;			// 404
+double motor_pole;				// 405
+double motor_rate_effiency;		// 406
 
 // group5
-float I_sense_value;			// 500
-float u_phase_I_sense_span;	// 502
-float v_phase_I_sense_span;	// 504
-float vdc_sense_zero;			// 505
-float vdc_sense_span;			// 506
+double I_sense_value;			// 500
+double u_phase_I_sense_span;	// 502
+double v_phase_I_sense_span;	// 504
+double vdc_sense_zero;			// 505
+double vdc_sense_span;			// 506
 
 int adc_u_offset;				// 510
 int adc_v_offset;				// 511
@@ -311,61 +312,61 @@ int adc_v_offset;				// 511
 int adc_R_offset;				// 512
 int adc_S_offset;				// 513
 
-float R_phase_I_sense_span;	// 515
-float S_phase_I_sense_span;	// 517
+double R_phase_I_sense_span;	// 515
+double S_phase_I_sense_span;	// 517
 
 // group6
 
-float VF_DeadTimeGain;
-float VF_ExcitationTime;
-float VF_Fs_Coeff;
-float VF_Freq_TrqBoost;
-float VF_Vs_Coeff_TrqBoost;
-float VF_Rs_ThermalCoeff;
-float VF_IR_Comp_FilterPole;
-float VF_Slip_Comp_FilterPole;
-float VF_Rs;
+double VF_DeadTimeGain;
+double VF_ExcitationTime;
+double VF_Fs_Coeff;
+double VF_Freq_TrqBoost;
+double VF_Vs_Coeff_TrqBoost;
+double VF_Rs_ThermalCoeff;
+double VF_IR_Comp_FilterPole;
+double VF_Slip_Comp_FilterPole;
+double VF_Rs;
 
 
-float Data_Check;				// 800
-float Data_Backup;				// 801
-float Data_Load;				// 802
-float Data_Init;				// 803
+double Data_Check;				// 800
+double Data_Backup;				// 801
+double Data_Load;				// 802
+double Data_Init;				// 803
 
 //=====================================================
 
-float	GainUpdateTimer;
-float	Vs_Coeff_Leq_Req;
+double	GainUpdateTimer;
+double	Vs_Coeff_Leq_Req;
 
-float	Is_Leq_Req;
+double	Is_Leq_Req;
 
 int wr_ctrl_index			= 1;
 
-float Freq_rat;
-float inv_Freq_rat;
+double Freq_rat;
+double inv_Freq_rat;
 
-float Vs_abc_ref[3];
-float Vs_abc[3];
-float Us_dq[2];
-float Vs_dq[2];
-float Vs_DQ[2];
+double Vs_abc_ref[3];
+double Vs_abc[3];
+double Us_dq[2];
+double Vs_dq[2];
+double Vs_DQ[2];
 
-float Is_DQ[2];
-float P_pair;
-float inv_P_pair;
-float Kt;
-float inv_Kt;
-float Te_rat;
-float inv_Te_rat;
-float S_lin;
-float S_rat;
-float Fs_rat;
+double Is_DQ[2];
+double P_pair;
+double inv_P_pair;
+double Kt;
+double inv_Kt;
+double Te_rat;
+double inv_Te_rat;
+double S_lin;
+double S_rat;
+double Fs_rat;
 
-float rpm_ref;
-float wr_rat;
-float rpm_Coeff;
-float wm_rat;
-float sgn_Is[3];
+double rpm_ref;
+double wr_rat;
+double rpm_Coeff;
+double wm_rat;
+double sgn_Is[3];
 #endif
 
 

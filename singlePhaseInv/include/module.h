@@ -3,32 +3,32 @@
 
 // analog.c
 extern void ADC_SOC_CNF( );
-extern void analog_input_proc( float * analog_referenc);
+extern void analog_input_proc( double * analog_referenc);
 extern void analog_out_proc( );
 extern int check_sensor_trip();
 __interrupt void adcIsr(void);
 // code_proc.c
 extern void loadSciaTxMailBox( char * st);
 extern int get_code_information(int address,int cmd , CODE_INFO *  codes);
-extern void set_code_default(float min, float max, float defaults, float value,int open_level, CODE_INFO * codes );
+extern void set_code_default(double min, double max, double defaults, double value,int open_level, CODE_INFO * codes );
 extern int check_backup_data();
 extern void save_backup_data();
 extern void backup_data_load();
 extern int init_eprom_data();
-extern float CheckSum();
+extern double CheckSum();
 extern void readAllCodes();
 // common_module.c
-extern void LPF1(float Ts,float pole,float in,float *out);
-extern float linear_eq(float x1, float x2, float y1, float y2, float x );
+extern void LPF1(double Ts,double pole,double in,double *out);
+extern double linear_eq(double x1, double x2, double y1, double y2, double x );
 extern int periodic_check(unsigned long  msec);
-extern  void    PI_Damp_Controller(float limit,float Ts,float damp_factor,float Kp,float Ki,float ref,float feedback,float *integral,float *output);
-extern void get_command(int * command, float * ref );
+extern  void    PI_Damp_Controller(double limit,double Ts,double damp_factor,double Kp,double Ki,double ref,double feedback,double *integral,double *output);
+extern void get_command(int * command, double * ref );
 
 // digital_inout.c
 extern void digital_out_proc();
-extern void digital_input_proc( int * cmd, float * ref);
+extern void digital_input_proc( int * cmd, double * ref);
 extern void input_ext_fault_a_proc();
-extern void serial_com_proc( int * sci_cmd, float * sci_reference );
+extern void serial_com_proc( int * sci_cmd, double * sci_reference );
 extern void load_sci_tx_mail_box(char *st);
 // EwInv.C
 extern void Nop();
@@ -50,8 +50,8 @@ extern Uint16 I2CA_ReadData(int iSlaveAddr, int iMemAddr, int * data);
 extern Uint16 I2CA_WriteData(int iSlaveAddr,int iMemAddr,int iData);
 extern int load_code2ram();
 // low_pass_filter.c
-extern void lpf2nd(float * x,float * y, float * K);
-extern void lpf2ndCoeffInit( float cutoff_freq, float T_sample, float *x, float *y, float *k);
+extern void lpf2nd(double * x,double * y, double * K);
+extern void lpf2ndCoeffInit( double cutoff_freq, double T_sample, double *x, double *y, double *k);
 // main.c
 extern void InitEPwm_ACIM_Inverter();
 // MonitorProc.c
@@ -60,22 +60,22 @@ extern void monitor_proc();     // need_edit
 extern void VariInit();
 extern int HardwareParameterVerification();
 // RefFunc.c
-extern void ramp_proc(  float set_ref, float * out_ref);
+extern void ramp_proc(  double set_ref, double * out_ref);
 // SCI.C
 extern void GetInputMark(char * str);
 // scia.c
-extern void scia_cmd_proc(int * scic_cmd, float * scic_ref);
+extern void scia_cmd_proc(int * scic_cmd, double * scic_ref);
 extern interrupt void sciaTxFifoIsr(void);
 extern interrupt void sciaRxFifoIsr(void);
 extern void scia_fifo_init(void);
 extern void load_scia_tx_mail_box(char *st);
 // svm.c
-extern  void SpaceVectorModulation(float *Vs_dq );
+extern  void SpaceVectorModulation(double *Vs_dq );
 extern  void VoltageEstimation();
-extern void singlePhaseModulation( float m, float theta, float dutyRatio[3]);
+extern void singlePhaseModulation( double m, double theta, double dutyRatio[3]);
 // switching_irq.c
 //TripProc.c
-extern void trip_recording(int trip_code,float trip_data,char * st);
+extern void trip_recording(int trip_code,double trip_data,char * st);
 extern void GetTripInfo(int Point, TRIP_INFO * TripData );
 extern void WriteTripString(int StartAddr, char * str);
 extern void ReadTripString(int StartAddr, char * str);
@@ -92,8 +92,8 @@ extern void tripProc( );
 extern void vf_simple_control();
 extern void slip_comp_scalar_ctrl();
 
-extern int vf_loop_control(float);
-extern int SaveDataProc(int addr, float data);
+extern int vf_loop_control(double);
+extern int SaveDataProc(int addr, double data);
 interrupt void cpu_timer0_isr(void);
 interrupt void MainPWM(void);
 interrupt void wakeint_isr(void);

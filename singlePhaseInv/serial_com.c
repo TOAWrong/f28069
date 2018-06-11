@@ -64,7 +64,7 @@ void load_sci_tx_mail_box( char * str)
 	load_scia_tx_mail_box( str);
 }
 
-void serial_com_proc( int * sci_cmd, float * sci_ref)
+void serial_com_proc( int * sci_cmd, double * sci_ref)
 {
 
 	if (scia_rx_msg_flag == 1 ){

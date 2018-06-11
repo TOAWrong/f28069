@@ -8,12 +8,12 @@
 #define Vdc_MIN                     10.0
 #define inv_Vdc_MIN                 0.1
 
-void SpaceVectorModulation( float *Vs_dq)
+void SpaceVectorModulation( double *Vs_dq)
 {
     unsigned sector;
-    float  Vx,Vy;
-    float  Dx,Dy,Dxy,Dz;
-    float  inv_Vdc;
+    double  Vx,Vy;
+    double  Dx,Dy,Dxy,Dz;
+    double  inv_Vdc;
 
     if (Vs_dq[qs]>=0) {
         if (fabs(0.57735*Vs_dq[qs])<fabs(Vs_dq[ds])){
@@ -67,7 +67,6 @@ void SpaceVectorModulation( float *Vs_dq)
     }
     else    Dz=0.5*(1.0-Dxy);
 
-    // \BC\BD\C5ͺ\B0\B7\CE \B5\E0Ƽ\B0\AA\C0\BB \B0\E8\BB\EA\C7Ѵ\D9.
     switch (sector)
     {
         case 1 :    DutyRatio[u]=Dxy+Dz;    DutyRatio[v]=Dy+Dz;     DutyRatio[w]=Dz;        break;
@@ -84,7 +83,7 @@ void SpaceVectorModulation( float *Vs_dq)
 
 #define inv_Min_Isw     20
 #define Dt_us           4
-float  Dd, T_d,delta_Tc;
+double  Dd, T_d,delta_Tc;
 
 void VoltageEstimation()
 {
@@ -122,17 +121,17 @@ void VoltageEstimation()
 }
 
 
-const float pwmCoeff[6][4] = {{1.0   ,ROOT2  ,0.0            ,PI_DIV4    },
+const double pwmCoeff[6][4] = {{1.0   ,ROOT2  ,0.0            ,PI_DIV4    },
                              {1.0   ,ROOT2  ,PI_DIV2        ,PI_DIV4    },
                              {1.0   ,1.0    ,PI_DIV2        ,PI         },
                              {ROOT2 ,1.0    ,PI + PI_DIV4   ,PI         },
                              {ROOT2 ,1.0    ,PI + PI_DIV4   ,PI + PI_DIV2},
                              {1.0   ,1.0    ,0.0            ,PI + PI_DIV2}};
 
-void singlePhaseModulation( float m, float theta, float dutyRatio[3])
+void singlePhaseModulation( double m, double theta, double dutyRatio[3])
 {
     int sector;
-    float vectorDuty[3];
+    double vectorDuty[3];
 
     if     ( theta < PI_DIV4    )   sector = 0;
     else if( theta < PI_DIV2    )   sector = 1;
