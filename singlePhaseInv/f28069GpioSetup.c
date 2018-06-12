@@ -66,6 +66,15 @@ void InitGpio(void)
     GpioCtrlRegs.GPAPUD.bit.GPIO3 = 0;   // Enable pullup on GPIO3
     GpioCtrlRegs.GPAPUD.bit.GPIO4 = 0;   // Enable pullup on GPIO4
     GpioCtrlRegs.GPAPUD.bit.GPIO5 = 0;   // Enable pullup on GPIO5
+
+    GpioCtrlRegs.GPADIR.bit.GPIO0   = 1;  // GPIO0 = Output
+    GpioCtrlRegs.GPADIR.bit.GPIO1   = 1;  // GPIO1 = Output
+    GpioCtrlRegs.GPADIR.bit.GPIO2   = 1;  // GPIO2 = Output
+    GpioCtrlRegs.GPADIR.bit.GPIO3   = 1;  // GPIO3 = Output
+    GpioCtrlRegs.GPADIR.bit.GPIO4   = 1;  // GPIO4 = Output
+    GpioCtrlRegs.GPADIR.bit.GPIO5   = 1;  // GPIO5 = Output
+    GpioCtrlRegs.GPADIR.bit.GPIO6   = 1;  // GPIO5 = Output
+
     GpioCtrlRegs.GPAMUX1.bit.GPIO0 = 1;  // GPIO0 = PWM1A
     GpioCtrlRegs.GPAMUX1.bit.GPIO1 = 1;  // GPIO1 = PWM1B
     GpioCtrlRegs.GPAMUX1.bit.GPIO2 = 1;  // GPIO2 = PWM2A

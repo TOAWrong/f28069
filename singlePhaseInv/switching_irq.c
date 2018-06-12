@@ -31,9 +31,9 @@ interrupt void MainPWM(void)
         EPwm4Regs.CMPA.half.CMPA = MAX_PWM_CNT;
 
     if(gPWMTripCode){
-        EPwm1Regs.CMPA.half.CMPA = 0;
-        EPwm2Regs.CMPA.half.CMPA = 0;
-        EPwm3Regs.CMPA.half.CMPA = 0;
+        EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+        EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+        EPwm3Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
         goto _PWM_TRIP;
     }
 
@@ -42,9 +42,9 @@ interrupt void MainPWM(void)
     case STATE_READY:
     case STATE_POWER_ON:
     case STATE_TRIP:
-        EPwm1Regs.CMPA.half.CMPA = 0;
-        EPwm2Regs.CMPA.half.CMPA = 0;
-        EPwm3Regs.CMPA.half.CMPA = 0;
+        EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+        EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+        EPwm3Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
         break;
 
     case STATE_INIT_RUN:
@@ -58,9 +58,9 @@ interrupt void MainPWM(void)
     case STATE_WAIT_BREAK_OFF:
         if(gPWMTripCode !=0){
             gTripSaveFlag = 1; // for Trip History Save to EEPROM in Out irq
-            EPwm1Regs.CMPA.half.CMPA = 0;
-            EPwm2Regs.CMPA.half.CMPA = 0;
-            EPwm3Regs.CMPA.half.CMPA = 0;
+            EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+            EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+            EPwm3Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
         }
         else{
             // VoltageEstimation();
@@ -73,9 +73,9 @@ interrupt void MainPWM(void)
         break;
 
     default:
-        EPwm1Regs.CMPA.half.CMPA = 0;
-        EPwm2Regs.CMPA.half.CMPA = 0;
-        EPwm3Regs.CMPA.half.CMPA = 0;
+        EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+        EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+        EPwm3Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
         break;
     }
 
