@@ -48,25 +48,26 @@ void ADC_SOC_CNF( )
 //    AdcRegs.ADCSAMPLEMODE.all = 0;      // Simultaneous sample mode
     EDIS;
 }
-#define adcIuOffset     2585
-#define adcIvOffset     2578
+#define adcIaOffset     2585
+#define adcIbOffset     2578
 //--- 전류의 계산 : 66mV / A  :  3.3V -> 50A, 1 count = 50 / 4096 = 0.012207
 #define I_RATIO         0.012207
 __interrupt void adcIsr(void)
 {
     int temp;
-    double sensIa,sensIb;
 
-    adc_result[0] = adcIm   = AdcResult.ADCRESULT0;
-    adc_result[1] = adcIa   = AdcResult.ADCRESULT1;
+    DIGIT1_SET;
+
+    adc_result[0] = adcIa   = AdcResult.ADCRESULT0;
+    adc_result[1] = adcIb   = AdcResult.ADCRESULT1;
     adc_result[2] = adcVdc  = AdcResult.ADCRESULT2;
     adc_result[3] = adcIgbtTemperature = AdcResult.ADCRESULT3;
     adc_result[4] = adcExSensor = AdcResult.ADCRESULT4;
     adc_result[5] = adcCmdAnalog = AdcResult.ADCRESULT5;
 // 전류의 계산 : 66mV / A  :  3.3V -> 50A, 1 count = 50 / 4096 = 0.012207
 
-    sensIa = ( adcIm - codeIaOffset ) * I_RATIO;
-    sensIb = ( adcIa - codeIbOffset ) * I_RATIO;
+    sensIa = ( adc_result[0] - codeIaOffset ) * I_RATIO;
+    sensIb = ( adc_result[1] - codeIbOffset ) * I_RATIO;
 
     sensVdc = Vdc_factor * (double) adcVdc + Vdc_calc_offset ;
 
@@ -74,13 +75,13 @@ __interrupt void adcIsr(void)
     lpf2nd( lpfVdcIn, lpfVdcOut, lpfVdcK);
     Vdc = lpfVdc = lpfVdcOut[0];
 
-    lpfImIn[0] = sensIm * sensIm;
-    lpf2nd( lpfImIn, lpfImOut, lpfIrmsK);
-    rmsIm = lpfImOut[0] * INV_ROOT2;
-
-    lpfIaIn[0] = sensIa * sensIa;
+    lpfIaIn[0] = sensIa;
     lpf2nd( lpfIaIn, lpfIaOut, lpfIrmsK);
     rmsIa = lpfIaOut[0] * INV_ROOT2;
+
+    lpfIaIn[0] = sensIb;
+    lpf2nd( lpfIbIn, lpfIbOut, lpfIrmsK);
+    rmsIb = lpfIbOut[0] * INV_ROOT2;
 
     Is_abc[as] = sensIa;
     Is_abc[bs] = sensIb;
@@ -91,13 +92,12 @@ __interrupt void adcIsr(void)
     Is_mag = sqrt( Is_abc[as] *Is_abc[as] + Is_abc[bs] *Is_abc[bs]);           // 전류크기
     Is_mag_rms = 0.707106*Is_mag;
 
-    temp = (int)(floor(codeSetVdc+0.5));
-    if(temp != 0 ) Vdc =300.0;
-
-    rpmOut = 60 * 60 * MOTOR_POLE * 0.5 * reference_out ;
+    if(codeSetVdc > 0.5 ) Vdc =300.0;
 
     AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;   // Acknowledge interrupt to PIE
+
+    DIGIT1_CLEAR;
     return;
 }
 

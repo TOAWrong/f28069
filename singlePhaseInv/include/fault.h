@@ -1,55 +1,37 @@
-/* ==============================================================================
-System Name:  EwInv 
+// fault.h 2018.0613
+// powerPack Eunwho Power Electornics by soonkil jung
 
-File Name:	fault.h
-
-Description:
-
-Originator:	Induction Motor Sensorless Vector Control systems Group
-            - Eunwho Power Electronics-
-
-Hardware System : In this software, suported PCB is EwInv-55k-v1 2008.04.05
-=====================================================================================
- History:
--------------------------------------------------------------------------------------
- 05-19-2008	Version 0.01: Setup Outline  
-=================================================================================
-*/
 #ifndef		_ERROR_CODE_DEFINITION_
 #define		_ERROR_CODE_DEFINITION_
 
-// �Ķ���� ���� �ڵ� 	: 1 ~ 799
 #define CODE_under_volt_set             100
 
+#define ERR_PWM_IGBT                        600
+#define ERR_IGBT_UH							601
+#define ERR_IGBT_UL							602
+#define ERR_IGBT_VH							603
+#define ERR_IGBT_VL							604
+#define ERR_IGBT_WH							605
+#define ERR_IGBT_WL							606
+#define ERR_IGBT_DB                         608
+#define ERR_IGBT_RESET                      609
 
+#define ERR_IGBT_RH							610
+#define ERR_IGBT_RL							611
+#define ERR_IGBT_SH							612
+#define ERR_IGBT_SL							613
+#define ERR_IGBT_TH							614
+#define ERR_IGBT_TL							615
 
-#define ERR_DB_IGBT							1000
+#define ERR_OVER_CURRENT_U_PHASE			620
+#define ERR_OVER_CURRENT_V_PHASE			621
 
-#define ERR_IGBT_UH							1001
-#define ERR_IGBT_UL							1002
-#define ERR_IGBT_VH							1003
-#define ERR_IGBT_VL							1004
-#define ERR_IGBT_WH							1005
-#define ERR_IGBT_WL							1006
+#define ERR_OVER_CURRENT_R_PHASE			623
+#define ERR_OVER_CURRENT_S_PHASE			624
+#define ERR_OVER_CURRENT_T_PHASE			625
 
-#define ERR_IGBT_RH							1011
-#define ERR_IGBT_RL							1012
-#define ERR_IGBT_SH							1013
-#define ERR_IGBT_SL							1014
-#define ERR_IGBT_TH							1015
-#define ERR_IGBT_TL							1016
+#define ERR_UNKNOWN_ERR						999
 
-#define ERR_PWM_IGBT						1017
-#define ERR_IGBT_RESET						1018
-
-#define ERR_OVER_CURRENT_U_PHASE			834 
-#define ERR_OVER_CURRENT_V_PHASE			835 
-
-#define ERR_OVER_CURRENT_R_PHASE			836 
-#define ERR_OVER_CURRENT_S_PHASE			837 
-//#define ERR_OVER_CURRENT_T_PHASE			838 
-#define ERR_UNKNOWN_ERR						900
-#define ERR_INVALID_CTRL_MODE				901
 #define	ERR_NAME_PLATE_PAR_MISMATCH			910
 #define	ERR_PM_Is							844
 #define	ERR_GM_Is							845
@@ -61,7 +43,6 @@ Hardware System : In this software, suported PCB is EwInv-55k-v1 2008.04.05
 #define	ERR_Ki_Is_Under						856
 #define	ERR_Kp_Is_Over						857
 #define	ERR_Kp_Is_Under						858
-
 #define	ERR_EXCITATION_TIME					859
 
 // SCI 
@@ -72,7 +53,7 @@ Hardware System : In this software, suported PCB is EwInv-55k-v1 2008.04.05
 #define ERR_SCI_CMD_ADDR_2ND_UNDER			865
 #define ERR_SCI_CMD_ADDR_2ND_OVER			867
 
-// ����Ʃ�� ����
+//
 #define	ERR_Req_Under						920
 #define	ERR_Req_Over						921
 #define	ERR_Leq_Under0						923
@@ -90,7 +71,6 @@ Hardware System : In this software, suported PCB is EwInv-55k-v1 2008.04.05
 #define	ERR_Jm_Over							945
 #define	ERR_WRONG_INTERRUPT_CMD				950
 
-// �ϵ���� �����ؼ� (TMS320F240)
 #define	ERR_PRECHARGING_FAIL				960		// �ʱ� ���� ���� 
 #define	ERR_PWM								961
 #define	ERR_HOC								962

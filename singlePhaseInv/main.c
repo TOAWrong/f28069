@@ -1,5 +1,5 @@
-/*
-*/
+// main.c 2018.0613
+// powerPack
 
 #define DELAY   50000L
 #include	"header.h"
@@ -78,7 +78,6 @@ void main( void )
 	PieCtrlRegs.PIEIER1.bit.INTx7 = 1;	// Timer0 irq
     PieCtrlRegs.PIEIER1.bit.INTx1 = 1; // Enable INT 1.1 in the PIE ADCINT1
     PieCtrlRegs.PIEIER3.bit.INTx1 = 1;   //
-
     PieCtrlRegs.PIECTRL.bit.ENPIE = 1;   // Enable the PIE block
 
     IER |= M_INT1;		// Enable CPU INT1 which is connected to CPU-Timer 0:
@@ -99,10 +98,9 @@ void main( void )
 	if(HardwareParameterVerification() !=0 ) tripProc();
 
     VariInit();
-    //lpf2ndCoeffInit( LPF_VDC_CUTOFF_FREQ,Ts, lpfVdcIn, lpfVdcOut, lpfVdcK);
     lpf2ndCoeffInit( 1000.0, Ts, lpfVdcIn, lpfVdcOut, lpfVdcK);
-    lpf2ndCoeffInit( 1.0, Ts, lpfImIn, lpfImOut, lpfIrmsK);
     lpf2ndCoeffInit( 1.0, Ts, lpfIaIn, lpfIaOut, lpfIrmsK);
+    lpf2ndCoeffInit( 1.0, Ts, lpfIbIn, lpfIbOut, lpfIrmsK);
 
 	IER &= ~M_INT3;      // debug for PWM
 	InitEPwm_ACIM_Inverter(); 	// debug
@@ -110,15 +108,13 @@ void main( void )
 	IER |= M_INT3;      // debug for PWM
 
 	gfRunTime = 0.0; 
-
     delay_msecs(500);
-
-    temp = (int)(floor(codeProtectOff+0.5));
+    temp = (int)(codeProtectOff);
 
     code_protect_uv_off = 1;
     code_protect_ov_off = 1;
 
-    if( temp != 0 )
+    if( temp < 1 )
 	{
 		protect_reg.bit.UNVER_VOLT = 0;			// udd �߰� 
 		protect_reg.bit.EX_TRIP = 0;
@@ -192,7 +188,7 @@ void main( void )
 void InitEPwm_ACIM_Inverter()
 {  
 	EPwm1Regs.ETSEL.bit.INTEN = 0;    		        // Enable INT
-	MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / codePwmFreq ) * 0.5 * 0.5 * 0.5);
+	MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / codePwmFreq ) * 0.5 * 0.5 * 0.5 * 0.5);
 	inv_MAX_PWM_CNT = 1.0 / MAX_PWM_CNT;
 //--- PWM Module1
     EPwm1Regs.TBCTR = 0x0000;

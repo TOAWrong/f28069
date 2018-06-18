@@ -60,26 +60,40 @@ int digital_port_check( int out_function )
 
 void digital_out_proc()		// debug
 {
-	if( gMachineState == STATE_TRIP ){
+    switch(gMachineState)
+    {
+    case STATE_TRIP:
 		MAIN_CHARGE_OFF;		// ���� ���� on 
 		RUN_OUT_OFF;
 		TRIP_OUT_ON;
-	}
-	else if( gMachineState == STATE_RUN ){
-		MAIN_CHARGE_ON;		// ���� ���� on 
+		break;
+
+    case STATE_POWER_ON:
+        MAIN_CHARGE_OFF;        // ���� ���� on
+        RUN_OUT_OFF;
+        TRIP_OUT_OFF;
+        break;
+
+    case STATE_READY:
+        MAIN_CHARGE_ON;     //
+        RUN_OUT_OFF;
+        TRIP_OUT_OFF;
+        break;
+
+    case STATE_INIT_RUN:
+    case STATE_RUN:
+    case STATE_GO_STOP:
+    case STATE_WAIT_BREAK_OFF:
+		MAIN_CHARGE_ON;		//
 		RUN_OUT_ON;
 		TRIP_OUT_OFF;
-	}
-	else if(gMachineState == STATE_READY){
-		MAIN_CHARGE_ON;		// ���� ���� on 
-		RUN_OUT_OFF;
-		TRIP_OUT_OFF;
-	}
-	else{
-//		MAIN_CHARGE_ON;		// ���� ���� on 
-		RUN_OUT_OFF;
-		TRIP_OUT_OFF;
-	}
+        break;
+    default:
+        MAIN_CHARGE_OFF;     //
+        RUN_OUT_OFF;
+        TRIP_OUT_OFF;
+        break;
+    }
 }
 //---------------------------------
 // end of file

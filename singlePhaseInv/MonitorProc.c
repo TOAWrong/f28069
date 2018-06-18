@@ -37,11 +37,9 @@ void monitor_proc()		// need_edit
         load_scia_tx_mail_box("\n");
         load_scia_tx_mail_box(MonitorMsg);
         load_scia_tx_mail_box(" : ");
-        sprintf( gStr1,"Out =%.1f",codeRateHz * reference_out); load_scia_tx_mail_box(gStr1);
+        sprintf( gStr1,"Out =%.1f",rpm ); load_scia_tx_mail_box(gStr1);
         load_scia_tx_mail_box(" : ");
-        sprintf( gStr1,"Im  =%.1f",rmsIm); load_scia_tx_mail_box(gStr1);
-        load_scia_tx_mail_box(" : ");
-        sprintf( gStr1,"Ia  =%.1f",rmsIa); load_scia_tx_mail_box(gStr1);
+        sprintf( gStr1,"Iout  =%.1f",Is_mag_rms); load_scia_tx_mail_box(gStr1);
         load_scia_tx_mail_box(" : ");
         sprintf( gStr1,"Vdc =%.f",lpfVdc); load_scia_tx_mail_box(gStr1);
         //load_scia_tx_mail_box("Rod Mckuen Welcome to winter!\n");

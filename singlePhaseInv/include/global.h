@@ -12,18 +12,19 @@ double Vdc;
 double Is_max;
 
 double sensVdc;
-double sensIm;
 double sensIa;
+double sensIb;
 
 double lpfVdc;
-double lpfIm;
+double lpfIa;
+double lpfIb;
 
 double Is_abc[3];
 double Is_dq[2];
 
 double lpfIa;
-double rmsIm;
 double rmsIa;
+double rmsIb;
 double Is_mag;
 double Is_mag_rms;
 
@@ -34,12 +35,12 @@ double lpfVdcOut[3];
 double lpfVdcK[4];
 
 double lpfIrmsCutOffRreq = 1.0;
-double lpfImIn[3];
-double lpfImOut[3];
-double lpfIrmsK[4];
-//double lpfIrmsCutOffRreq = 1.0;
 double lpfIaIn[3];
 double lpfIaOut[3];
+double lpfIrmsK[4];
+//double lpfIrmsCutOffRreq = 1.0;
+double lpfIbIn[3];
+double lpfIbOut[3];
 
 int init_charge_flag = 0;
 
@@ -183,8 +184,8 @@ int gTripSavePoint;     //
 // analog to digital converter
 int adc_result[6]={0};
 
-int adcIm;
 int adcIa;
+int adcIb;
 int adcVdc;
 int adcIgbtTemperature;
 int adcExSensor;

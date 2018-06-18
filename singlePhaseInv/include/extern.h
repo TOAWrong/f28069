@@ -10,18 +10,18 @@ extern UNION16 adcData[4][GRAPH_NUMBER+1];
 extern double    Is_max;                 // �ִ� �������
 
 extern double sensVdc;
-extern double sensIm;
 extern double sensIa;
+extern double sensIb;
 
 extern double lpfVdc;
-extern double lpfIm;
 extern double lpfIa;
+extern double lpfIb;
 
 extern double Is_abc[3];
 extern double Is_dq[2];
 
-extern double rmsIm;
 extern double rmsIa;
+extern double rmsIb;
 extern double Is_mag;
 extern double Is_mag_rms;
 
@@ -32,12 +32,12 @@ extern double lpfVdcOut[3];
 extern double lpfVdcK[4];
 
 extern double lpfIrmsCutOffRreq;
-extern double lpfImIn[3];
-extern double lpfImOut[3];
-extern double lpfIrmsK[4];
-//double lpfIrmsCutOffRreq = 1.0;
 extern double lpfIaIn[3];
 extern double lpfIaOut[3];
+extern double lpfIrmsK[4];
+//double lpfIrmsCutOffRreq = 1.0;
+extern double lpfIbIn[3];
+extern double lpfIbOut[3];
 
 extern double Pole_pair;
 extern double Wrm_det;
@@ -49,29 +49,6 @@ extern double Wrpm_max;
 
 //--- low_pass_filter.c 
 extern double LPF_zeta;
-//--- DC link Voltage Low Pass
-extern double LPF_Vdc_cutoff_freq;
-extern double LPF_Vdc_in[3];
-extern double LPF_Vdc_out[3];
-extern double LPF_Vdc_K[4];
-
-//--- AC Current Low Pass
-extern double LPF_I_u_in[3], LPF_I_v_in[3], LPF_I_w_in[3];
-extern double LPF_I_u_out[3], LPF_I_v_out[3], LPF_I_w_out[3];
-extern double LPF_I_u_K[4], LPF_I_v_K[4],LPF_I_w_K[4];
-
-extern double  ADC_Vdc;
-
-extern double  ADC_V_rs;
-extern double  ADC_V_st;
-extern double  ADC_V_tr;
-
-extern double  ADC_I_r;
-extern double  ADC_I_s;
-
-extern double  ADC_I_u;
-extern double  ADC_I_v;
-
 extern unsigned int Fault_Code;
 
 extern int init_charge_flag;
@@ -319,8 +296,9 @@ extern int	gPWMTripCode;
 
 extern int gTripSavePoint;		// Ʈ���� ������ ������
 extern int adc_result[6];
-extern int adcIm;
+
 extern int adcIa;
+extern int adcIb;
 extern int adcVdc;
 extern int adcIgbtTemperature;
 extern int adcExSensor;

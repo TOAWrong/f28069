@@ -80,35 +80,25 @@ interrupt void MainPWM(void)
     }
 
 _PWM_TRIP:
-    EPwm1Regs.ETCLR.bit.INT = 1;
-    PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;
     digital_out_proc();
 //---
     if( !sendAdcDataFlag ){
-        if( monitorCount < 4 ) monitorCount ++ ;
-        else {
-            monitorCount = 0;
-            if(graphCount< GRAPH_NUMBER ){
-    //            adcData[0][graphCount].INTEGER = adc_result[0];
-    //            adcData[1][graphCount].INTEGER = adc_result[1];
-    //            adcData[2][graphCount].INTEGER = adc_result[2];
-    //            adcData[3][graphCount].INTEGER = adc_result[3];
+        if(graphCount< GRAPH_NUMBER ){
+            adcData[0][graphCount].INTEGER = adc_result[0];
+            adcData[1][graphCount].INTEGER = adc_result[1];
+            adcData[2][graphCount].INTEGER = adc_result[2];
+            adcData[3][graphCount].INTEGER = adc_result[3];
 
-                adcData[0][graphCount].INTEGER = adc_result[0];
-                adcData[1][graphCount].INTEGER = (int)(4095 * DutyRatio[0]);
-                adcData[2][graphCount].INTEGER = (int)(4095 * DutyRatio[1]);
-                adcData[3][graphCount].INTEGER = (int)(4095 * DutyRatio[2]);
-                graphCount ++;
-            }
-            else graphCount = 0;
+//                adcData[0][graphCount].INTEGER = adc_result[0];
+//                adcData[1][graphCount].INTEGER = (int)(4095 * DutyRatio[0]);
+//                adcData[2][graphCount].INTEGER = (int)(4095 * DutyRatio[1]);
+//                adcData[3][graphCount].INTEGER = (int)(4095 * DutyRatio[2]);
+            graphCount ++;
         }
+        else graphCount = 0;
     }
     EPwm1Regs.ETCLR.bit.INT = 1;
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;
-
-#if TEST_ADC_CENTER
-    J8_2_CLEAR; // debug
-#endif
 }
 
  // end of switching_irq.c 

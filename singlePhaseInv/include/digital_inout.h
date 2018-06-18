@@ -11,6 +11,9 @@
 #define		__DIGITAL_INOUT_H_
      // Set Output High
 
+#define DIGIT1_CLEAR        (GpioDataRegs.GPBCLEAR.bit.GPIO40= 1)
+#define DIGIT1_SET          (GpioDataRegs.GPBSET.bit.GPIO40= 1)
+
 #define SIGNAL2_SET			(GpioDataRegs.GPASET.bit.GPIO8 = 1)
 #define SIGNAL2_CLEAR		(GpioDataRegs.GPACLEAR.bit.GPIO8 = 1)
 

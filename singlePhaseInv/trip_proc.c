@@ -10,13 +10,12 @@
 
 void trip_recording(int trip_code,double trip_data,char * st)
 {
-
     TripInfoNow.CODE    = trip_code;
     TripInfoNow.DATA    = trip_data;
     strncpy( TripInfoNow.MSG,st,30) ;
 
     gMachineState       = STATE_TRIP;
-    TripInfoNow.CURRENT = rmsIm;
+    TripInfoNow.CURRENT = Is_mag_rms;
     TripInfoNow.VDC     = lpfVdc;
     TripInfoNow.RPM     = codeRateRpm * reference_out;
 
@@ -26,41 +25,42 @@ void trip_recording(int trip_code,double trip_data,char * st)
 
 int CheckOverCurrent( )
 {
-	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIm) > 3500)){
-        trip_recording( ERR_OVER_CURRENT_U_PHASE, (double)(adcIm),"I adc over U ph");
-		return ERR_OVER_CURRENT_U_PHASE;
-	}
-	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIm) < 500)){
-        trip_recording( ERR_OVER_CURRENT_U_PHASE, (double)(adcIm),"I adc under U ph");
-		return ERR_OVER_CURRENT_U_PHASE;
-	}
 	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIa) > 3500)){
-        trip_recording( ERR_OVER_CURRENT_V_PHASE, (double)(adcIa),"I adc over V ph");
-		return ERR_OVER_CURRENT_V_PHASE;
+        trip_recording( ERR_OVER_CURRENT_U_PHASE, (double)(adcIa),"I adc over U ph");
+		return ERR_OVER_CURRENT_U_PHASE;
 	}
 	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIa) < 500)){
-        trip_recording( ERR_OVER_CURRENT_V_PHASE, (double)(adcIa),"I adc under V ph");
+        trip_recording( ERR_OVER_CURRENT_U_PHASE, (double)(adcIa),"I adc under U ph");
+		return ERR_OVER_CURRENT_U_PHASE;
+	}
+	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIb) > 3500)){
+        trip_recording( ERR_OVER_CURRENT_V_PHASE, (double)(adcIb),"I adc over V ph");
+		return ERR_OVER_CURRENT_V_PHASE;
+	}
+	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIb) < 500)){
+        trip_recording( ERR_OVER_CURRENT_V_PHASE, (double)(adcIb),"I adc under V ph");
 		return ERR_OVER_CURRENT_V_PHASE;
 	}
 	return 	0; 
 }
-#define CODE_OC_level 		301
+
 #define OVER_V_LEVEL        380.0
+
 int CheckOverVolt( )
 {
 	static int OverVoltCount = 0;
 
 	if( protect_reg.bit.OVER_VOLT == 0 ) return 0;
 
-	if (lpfVdc > OVER_V_LEVEL ) OverVoltCount++;
+	if (Vdc > OVER_V_LEVEL ) OverVoltCount++;
 	else if( OverVoltCount > 0) OverVoltCount --;
 	else    OverVoltCount = 0;
 
 	if (OverVoltCount > 5 )
 	{
 		OverVoltCount = 6;
-        trip_recording( CODE_OC_level, lpfVdc,"Over Voltage");
-		return CODE_OC_level;
+        trip_recording( ERR_HOV, Vdc,"Trip Over Volt");
+		return ERR_HOV;
 	}
 	return 0;
 }
@@ -72,15 +72,15 @@ int CheckUndeVolt( )
 
 	if( protect_reg.bit.UNVER_VOLT == 0 ) return 0;
 
-	if (lpfVdc < UNDER_VOLT_LEVEL) 	UnderVoltCount++;
+	if (Vdc < UNDER_VOLT_LEVEL) 	UnderVoltCount++;
 	else if( UnderVoltCount > 0) 	UnderVoltCount--;
 	else                            UnderVoltCount = 0;
 
 	if (UnderVoltCount > 5 )
 	{
 		UnderVoltCount = 6;
-        trip_recording( CODE_OC_level, lpfVdc,"Under Voltage");
-		return CODE_under_volt_set;
+        trip_recording( ERR_HUV, Vdc,"Trip Under Volt");
+		return ERR_HUV;
 	}
 	return 0;
 }

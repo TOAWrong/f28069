@@ -76,7 +76,6 @@ void sciaMonitor()     // need_edit
     }
 
     if(gMachineState == STATE_TRIP){
-        // TripData = (TRIP_INFO*)malloc(sizeof(TRIP_INFO));
         snprintf( str,20,"TripCode=%03d : ",TripInfoNow.CODE);
         load_scia_tx_mail_box(str);
         load_scia_tx_mail_box(TripInfoNow.MSG);
@@ -105,17 +104,12 @@ void sciaMonitor()     // need_edit
     snprintf( str,20,"%s : ",MonitorMsg);
     load_scia_tx_mail_box(str);
 
-    fTemp = rmsIm;
+    fTemp = Is_mag_rms;
     temp = (int)(floor(fTemp*10 +0.5));
-    snprintf( str,20,"I_m = %3d.%1dA : ",(temp/10),temp%10);
+    snprintf( str,20,"Irms = %3d.%1dA : ",(temp/10),temp%10);
     load_scia_tx_mail_box(str);
 
-    fTemp = rmsIa;
-    temp = (int)(floor(fTemp*10 +0.5));
-    snprintf( str,20,"I_a = %3d.%1dA : ",(temp/10),temp%10);
-    load_scia_tx_mail_box(str);
-
-    fTemp = rpmOut;
+    fTemp = rpm;
     temp = (int)(floor(fTemp+0.5));
     snprintf( str,20,"RPM = %4d : ", temp);
     load_scia_tx_mail_box(str);
@@ -197,30 +191,34 @@ void loadSciaTxBufAdc(int channel )
 
     sendAdcDataFlag = 1;    // data update blocking
     for(j = 0; j < 4 ; j++ ){
-//        SciaRegs.SCIFFTX.bit.TXFFIENA = 0;  // Clear SCI Interrupt flag
         for( i = 0 ; i < 100 ; i++){
             snprintf( str,6,"%04d,",adcData[j][i].INTEGER); load_scia_tx_mail_box(str);
         }
         strncpy(str,"ch0\r\n",5);
         str[2] += j;
         load_scia_tx_mail_box(str);
-//        SciaRegs.SCIFFTX.bit.TXFFIENA = 1;  // Clear SCI Interrupt flag
         delay_msecs(15);
     }
-
     delay_msecs(100);
     for(j = 0; j < 4 ; j++ ){
-//        SciaRegs.SCIFFTX.bit.TXFFIENA = 0;  // Clear SCI Interrupt flag
         for( i = 100 ; i < 200 ; i++){
             snprintf( str,6,"%04d,",adcData[j][i].INTEGER); load_scia_tx_mail_box(str);
         }
         strncpy(str,"ch0\r\n",5);
         str[2] += j;
         load_scia_tx_mail_box(str);
-//        SciaRegs.SCIFFTX.bit.TXFFIENA = 1;  // Clear SCI Interrupt flag
         delay_msecs(15);
     }
-    // SciaRegs.SCIFFTX.bit.TXFIFOXRESET=1;
+    delay_msecs(100);
+    for(j = 0; j < 4 ; j++ ){
+        for( i = 200 ; i < 300 ; i++){
+            snprintf( str,6,"%04d,",adcData[j][i].INTEGER); load_scia_tx_mail_box(str);
+        }
+        strncpy(str,"ch0\r\n",5);
+        str[2] += j;
+        load_scia_tx_mail_box(str);
+        delay_msecs(15);
+    }
     sendAdcDataFlag = 0;
 }
 
