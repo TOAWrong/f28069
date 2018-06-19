@@ -18,8 +18,6 @@ void MotorControlProc( )
 
 interrupt void MainPWM(void)
 {
-    static int monitorCount = 0;
-
     if( gMachineState == STATE_RUN )
     {
         if( Vdc > ( over_volt_set - 30.0 ))

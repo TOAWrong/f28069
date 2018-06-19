@@ -23,7 +23,7 @@ double Vdc_fnd_data;
 
 void main( void )
 {
-    int trip_code,loop_ctrl,temp;
+    int trip_code;
 	int cmd;
 	double ref_in0;
 
@@ -109,28 +109,6 @@ void main( void )
 
 	gfRunTime = 0.0; 
     delay_msecs(500);
-    temp = (int)(codeProtectOff);
-
-    code_protect_uv_off = 1;
-    code_protect_ov_off = 1;
-
-    if( temp < 1 )
-	{
-		protect_reg.bit.UNVER_VOLT = 0;			// udd �߰� 
-		protect_reg.bit.EX_TRIP = 0;
-		protect_reg.bit.OVER_VOLT = 0;
-		protect_reg.bit.OVER_I_ADC = 0;
-		protect_reg.bit.IGBT_FAULT = 0;		
-		protect_reg.bit.OVER_I = 0;
-	}
-	else {
-		if(code_protect_uv_off == 0 ) 		protect_reg.bit.UNVER_VOLT = 1;			// udd �߰� 
-		if(code_protect_ov_off == 0 ) 		protect_reg.bit.OVER_VOLT = 1;
-		if(code_protect_Iadc_off == 0 ) 	protect_reg.bit.OVER_I_ADC = 1;
-		if(code_protect_over_I_off == 0) 	protect_reg.bit.OVER_I = 1;
-		if(code_protect_IGBT_off == 0 ) 	protect_reg.bit.IGBT_FAULT = 1;		
-		if(code_protect_ex_trip_off == 0 ) 	protect_reg.bit.EX_TRIP = 1;
-	}
 
 	init_charge_flag = 1;	
 	while( gfRunTime < 5.0){
@@ -140,26 +118,12 @@ void main( void )
 	}
 
 	gPWMTripCode = 0;
-	loop_ctrl = 1;
 	gfRunTime = 0.0;
 
-	if((codeProtectOff == 0 ) & (code_protect_uv_off == 0 )){
-		while( loop_ctrl == 1){
-			if( Vdc > under_volt_set ) loop_ctrl = 0;
-			if( gfRunTime > 5.0) loop_ctrl = 0;
-		}
-		if( Vdc < under_volt_set ){
-			trip_recording( CODE_under_volt_set,Vdc,"Trip Under Volt");
-			tripProc();
-		}
-	}
-	else{
-		MAIN_CHARGE_ON;		//
-		TRIP_OUT_OFF;
-	}
-
 	MAIN_CHARGE_ON;		    //
-	init_charge_flag=0;
+    TRIP_OUT_OFF;
+
+    init_charge_flag=0;
 	gMachineState = STATE_READY; 
 	INIT_CHARGE_CLEAR;
 
@@ -168,6 +132,7 @@ void main( void )
 	strncpy(gStr1,"READY",20);
 	load_sci_tx_mail_box(gStr1); delay_msecs(20);
 	GATE_DRIVER_ENABLE;
+
 	for( ; ; )
 	{
 		if( gPWMTripCode !=0 )	tripProc();

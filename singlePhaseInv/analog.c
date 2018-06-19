@@ -54,8 +54,6 @@ void ADC_SOC_CNF( )
 #define I_RATIO         0.012207
 __interrupt void adcIsr(void)
 {
-    int temp;
-
     DIGIT1_SET;
 
     adc_result[0] = adcIa   = AdcResult.ADCRESULT0;
@@ -66,27 +64,28 @@ __interrupt void adcIsr(void)
     adc_result[5] = adcCmdAnalog = AdcResult.ADCRESULT5;
 // 전류의 계산 : 66mV / A  :  3.3V -> 50A, 1 count = 50 / 4096 = 0.012207
 
-    sensIa = ( adc_result[0] - codeIaOffset ) * I_RATIO;
-    sensIb = ( adc_result[1] - codeIbOffset ) * I_RATIO;
+    Is_abc[as] = ( adc_result[0] - codeIaOffset ) * I_RATIO;
+    Is_abc[bs] = ( adc_result[1] - codeIbOffset ) * I_RATIO;
 
-    sensVdc = Vdc_factor * (double) adcVdc + Vdc_calc_offset ;
+    // sensVdc = Vdc_factor * (double) adcVdc + Vdc_calc_offset ;
 
+    Vdc = Vdc_factor * adcVdc + Vdc_calc_offset;
+/*
     lpfVdcIn[0] = sensVdc;
     lpf2nd( lpfVdcIn, lpfVdcOut, lpfVdcK);
     Vdc = lpfVdc = lpfVdcOut[0];
-
-    lpfIaIn[0] = sensIa;
+*/
+/*
+    lpfIaIn[0] = Is_abc[as];
     lpf2nd( lpfIaIn, lpfIaOut, lpfIrmsK);
     rmsIa = lpfIaOut[0] * INV_ROOT2;
 
-    lpfIaIn[0] = sensIb;
+    lpfIaIn[0] = Is_abc[bs];
     lpf2nd( lpfIbIn, lpfIbOut, lpfIrmsK);
     rmsIb = lpfIbOut[0] * INV_ROOT2;
+*/
 
-    Is_abc[as] = sensIa;
-    Is_abc[bs] = sensIb;
     Is_abc[cs]= -(Is_abc[as]+Is_abc[bs]);
-
     Is_dq[ds] = Is_abc[as];
     Is_dq[qs] = 0.577350 * Is_abc[as] + 1.15470 * Is_abc[bs];
     Is_mag = sqrt( Is_abc[as] *Is_abc[as] + Is_abc[bs] *Is_abc[bs]);           // 전류크기
@@ -101,10 +100,6 @@ __interrupt void adcIsr(void)
     return;
 }
 
-void analog_input_proc( double * referenc)
-{
-	* referenc = analog_ref_a * analog_cmd_in_span1 - analog_cmd_in_zero1;
-}
 
 void analog_out_proc( )
 {

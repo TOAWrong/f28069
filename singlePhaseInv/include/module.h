@@ -7,6 +7,19 @@ extern void analog_input_proc( double * analog_referenc);
 extern void analog_out_proc( );
 extern int check_sensor_trip();
 __interrupt void adcIsr(void);
+
+// auto_tuning.c
+void estim_ReqLeq_pwm();
+void estim_Rs_pwm();
+void estim_Ls_pwm();
+void estim_Jm_pwm();
+
+int estim_req_leq_loop( );
+int estim_Rs_loop();
+int estim_Ls_loop();
+int estim_Jm_loop();
+int parameter_estimation( );
+
 // code_proc.c
 extern void loadSciaTxMailBox( char * st);
 extern int get_code_information(int address,int cmd , CODE_INFO *  codes);
@@ -57,6 +70,7 @@ extern void InitEPwm_ACIM_Inverter();
 // MonitorProc.c
 extern void monitor_proc();     // need_edit
 // ParameterSet.c
+extern void VariableInitialization();
 extern void VariInit();
 extern int HardwareParameterVerification();
 // RefFunc.c
@@ -69,6 +83,12 @@ extern interrupt void sciaTxFifoIsr(void);
 extern interrupt void sciaRxFifoIsr(void);
 extern void scia_fifo_init(void);
 extern void load_scia_tx_mail_box(char *st);
+
+//SL_Vect.c
+void SL_SpeedCntl_SFRF();
+void SL_TorqueCntl_SFRF();
+void SL_VectCntl_SFRF();
+
 // svm.c
 extern  void SpaceVectorModulation(double *Vs_dq );
 extern  void VoltageEstimation();

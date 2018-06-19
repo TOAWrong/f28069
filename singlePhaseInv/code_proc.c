@@ -119,6 +119,376 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
         set_code_default(2000.0,2600.0,2400.0,codeIbOffset,0,codes);
         break;
 
+    case CODE_I_sense_value:
+        strncpy(codes->disp, "I_sense_value (A)",20);
+        if( cmd == CMD_WRITE_RAM ) I_sense_value = codes->code_value;
+        set_code_default(5.0,2000.0,15.0,I_sense_value ,0,codes);
+        break;
+
+    case CODE_u_phase_I_sense_span:
+        strncpy(codes->disp, "u I_sense_span ",20);
+        if( cmd == CMD_WRITE_RAM ) u_phase_I_sense_span = codes->code_value;
+        set_code_default(0.5,1.5,1.0,u_phase_I_sense_span,0,codes);
+        break;
+
+    case CODE_v_phase_I_sense_span:
+        strncpy(codes->disp, "v_I_sense_span ",20);
+        if( cmd == CMD_WRITE_RAM ) v_phase_I_sense_span = codes->code_value;
+        set_code_default(0.5,1.5,1.0,v_phase_I_sense_span,0,codes);
+        break;
+
+    case CODE_Rs:
+        strncpy(codes->disp, "Motor State Rs",20);
+        if( cmd == CMD_WRITE_RAM ) Rs = codes->code_value;
+        set_code_default(0.002,20.0,5.5453,Rs,0,codes);
+        break;
+
+    case CODE_Rr:
+        strncpy(codes->disp, "Motor Rotor Rr",20);
+        if( cmd == CMD_WRITE_RAM ) Rr = codes->code_value;
+        set_code_default(0.002,20.0,5.5453,Rr,0,codes);
+        break;
+
+    case CODE_Ls:
+        strncpy(codes->disp, "Motor State Ls",20);
+        if( cmd == CMD_WRITE_RAM ) Ls = codes->code_value;
+        set_code_default(0.002,1.0,0.252,Ls,0,codes);
+        break;
+
+    case CODE_Lr:
+        strncpy(codes->disp, "Motor State Lr",20);
+        if( cmd == CMD_WRITE_RAM ) Lr = codes->code_value;
+        set_code_default(0.002,1.0,0.252,Lr,0,codes);
+        break;
+
+    case CODE_Lm:
+        strncpy(codes->disp, "Motor Mutual Lm",20);
+        if( cmd == CMD_WRITE_RAM ) Lm = codes->code_value;
+        set_code_default(0.002,1.0,0.232,Lm,0,codes);
+        break;
+
+    case CODE_Jm:
+        strncpy(codes->disp, "Motor Intertia Jm",20);
+        if( cmd == CMD_WRITE_RAM ) Jm = codes->code_value;
+        set_code_default(1.0e-4,100.0,5.0,Jm,0,codes);
+        break;
+
+    case CODE_VF_DeadTimeGain:
+        strncpy(codes->disp, "VF_DeadTimeGain",20);
+        if( cmd == CMD_WRITE_RAM ) VF_DeadTimeGain = codes->code_value;
+        set_code_default(0.0,2.0,1.0,VF_DeadTimeGain,0,codes);
+        break;
+
+    case CODE_VF_ExcitationTime:
+        strncpy(codes->disp, "VF_ExcitationTime",20);
+        if( cmd == CMD_WRITE_RAM ) VF_ExcitationTime = codes->code_value;
+        set_code_default(0.0,3.5,1.0,VF_ExcitationTime,0,codes);
+        break;
+
+    case CODE_VF_Fs_Coeff:
+        strncpy(codes->disp, "VF_Fs_Coeff (p.u)",20);
+        if( cmd == CMD_WRITE_RAM ) VF_Fs_Coeff = codes->code_value;
+        set_code_default(0.3,3.0,1.0,VF_Fs_Coeff,0,codes);
+        break;
+
+    case CODE_VF_Freq_TrqBoost:
+        strncpy(codes->disp, "VF_Freq_TrqBoost",20);
+        if( cmd == CMD_WRITE_RAM ) VF_Freq_TrqBoost = codes->code_value;
+        set_code_default(0.0,10.0,1.5, VF_Freq_TrqBoost ,0,codes);
+        break;
+
+    case CODE_VF_Vs_Coeff_TrqBoost:
+        strncpy(codes->disp, "VF_VsCoefTqBoost",20);
+        if( cmd == CMD_WRITE_RAM ) VF_Vs_Coeff_TrqBoost = codes->code_value;
+        set_code_default(0.0,0.2,0.1, VF_Vs_Coeff_TrqBoost ,0,codes);
+        break;
+
+    case CODE_VF_Rs_ThermalCoeff:
+        strncpy(codes->disp, "VF_Rs_ThermalCoeff",20);
+        if( cmd == CMD_WRITE_RAM ) VF_Rs_ThermalCoeff = codes->code_value;
+        set_code_default(0.8,3.0,1.05, VF_Rs_ThermalCoeff ,0,codes);
+        break;
+
+    case CODE_VF_IR_Comp_FilterPole:
+        strncpy(codes->disp, "VF_IR_Comp_FilterPole",20);
+        if( cmd == CMD_WRITE_RAM ) VF_IR_Comp_FilterPole = codes->code_value;
+        set_code_default(5.0,1000.0,100.0, VF_IR_Comp_FilterPole ,0,codes);
+        break;
+
+    case CODE_VF_Slip_Comp_FilterPole:
+        strncpy(codes->disp, "VF_Slip_Comp_FilterPole",20);
+        if( cmd == CMD_WRITE_RAM ) VF_Slip_Comp_FilterPole = codes->code_value;
+        set_code_default(5.0,1000.0,20.0, VF_Slip_Comp_FilterPole ,0,codes);
+        break;
+
+    case CODE_VF_Rs:
+        strncpy(codes->disp, "VF_Rs",20);
+        if( cmd == CMD_WRITE_RAM ) VF_Rs = codes->code_value;
+        set_code_default(0.0,50.0,0.0, VF_Rs ,0,codes);
+        break;
+
+// auto tuning
+    case CODE_AT_Freq_Leq_Req:
+        strncpy(codes->disp, "Freq for LeqReq(Hz)",20);
+        if( cmd == CMD_WRITE_RAM ) AT_Freq_Leq_Req = codes->code_value;
+        set_code_default(5.0,30.0,15.0,AT_Freq_Leq_Req,0,codes);
+        break;
+
+    case CODE_AT_Time_Leq_Req:
+        strncpy(codes->disp, "AT_Time_Leq_Req",20);
+        if( cmd == CMD_WRITE_RAM ) AT_Time_Leq_Req = codes->code_value;
+        set_code_default(3.0,30.0,6.0,AT_Time_Leq_Req,0,codes);
+        break;
+
+    case CODE_AT_Is_Coeff_Leq_Req:
+        strncpy(codes->disp, "AT_Is_Coeff_LeqReq",20);
+        if( cmd == CMD_WRITE_RAM ) AT_Is_Coeff_Leq_Req = codes->code_value;
+        set_code_default(0.4,1.5,1.0,AT_Is_Coeff_Leq_Req,0,codes);
+        break;
+
+    case CODE_AT_Is_Coeff_Rs:
+        strncpy(codes->disp, "AT_Is_Coeff_Rs",20);
+        if( cmd == CMD_WRITE_RAM ) AT_Is_Coeff_Rs = codes->code_value;
+        set_code_default(0.4,1.5,1.0,AT_Is_Coeff_Rs,0,codes);
+        break;
+
+    case CODE_AT_Time_Rs:
+        strncpy(codes->disp, "AT_Time_Rs",20);
+        if( cmd == CMD_WRITE_RAM ) AT_Time_Rs = codes->code_value;
+        set_code_default(3.0,30.0,6.0,AT_Time_Rs,0,codes);
+        break;
+
+    case CODE_AT_DeadTimeGain:
+        strncpy(codes->disp, "AT_DeadTimeGain",20);
+        if( cmd == CMD_WRITE_RAM ) AT_DeadTimeGain = codes->code_value;
+        set_code_default(0.0,1.2,1.0,AT_DeadTimeGain,0,codes);
+        break;
+
+    case CODE_AT_Ls_Vs_RAMP:
+        strncpy(codes->disp, "AT_Ls_Vs_RAMP",20);
+        if( cmd == CMD_WRITE_RAM ) AT_Ls_Vs_RAMP = codes->code_value;
+        set_code_default(0.5,5.0,0.5,AT_Ls_Vs_RAMP,0,codes);
+        break;
+
+    case CODE_AT_Freq_Ls:
+        strncpy(codes->disp, "AT_Freq_Ls(Hz)",20);
+        if( cmd == CMD_WRITE_RAM ) AT_Freq_Ls = codes->code_value;
+        set_code_default(1.5,10.0,4.0,AT_Freq_Ls,0,codes);
+        break;
+
+    case CODE_AT_Time_Ls:
+        strncpy(codes->disp, "AT_Time_Ls(sec)",20);
+        if( cmd == CMD_WRITE_RAM ) AT_Time_Ls = codes->code_value;
+        set_code_default(4.0,30.0,7.0,AT_Time_Ls,0,codes);
+        break;
+
+    case CODE_AT_Ls_DMB_OpenTime:
+        strncpy(codes->disp, "AT_Ls_DMB_OpenTime",20);
+        if( cmd == CMD_WRITE_RAM ) AT_Ls_DMB_OpenTime = codes->code_value;
+        set_code_default(0.0,2.0,0.6,AT_Ls_DMB_OpenTime,0,codes);
+        break;
+
+    case CODE_AT_Te_Coeff_Jm:
+        strncpy(codes->disp, "AT_Te_Coeff_Jm",20);
+        if( cmd == CMD_WRITE_RAM ) AT_Te_Coeff_Jm = codes->code_value;
+        set_code_default(0.2,1.0,0.5,AT_Te_Coeff_Jm,0,codes);
+        break;
+
+    case CODE_AT_Time_Jm:
+        strncpy(codes->disp, "AT_Time_Jm(sec)",20);
+        if( cmd == CMD_WRITE_RAM ) AT_Time_Jm = codes->code_value;
+        set_code_default(0.3,2.0,0.4,AT_Time_Jm,0,codes);
+        break;
+
+    case CODE_Jm_ID_ENABLE:
+        strncpy(codes->disp, "Estim Jm Enable",20);
+        if( cmd == CMD_WRITE_RAM )Jm_ID_ENABLE = codes->code_value;
+        set_code_default(0,1,1,Jm_ID_ENABLE,0,codes);
+        break;
+//--- codes for test
+    case CODE_posi_duration_time:
+        strncpy(codes->disp, "posi_duration_time",20);
+        if( cmd == CMD_WRITE_RAM ) posi_duration_time = codes->code_value;
+        set_code_default(0.0,30.0,3.0,posi_duration_time,0,codes);
+        break;
+
+    case CODE_zero_duration_time:
+        strncpy(codes->disp, "zero_duration_time",20);
+        if( cmd == CMD_WRITE_RAM ) zero_duration_time = codes->code_value;
+        set_code_default(0.0,30.0,3.0,zero_duration_time,0,codes);
+        break;
+
+    case CODE_nega_duration_time:
+        strncpy(codes->disp, "nega_duration_time",20);
+        if( cmd == CMD_WRITE_RAM ) nega_duration_time = codes->code_value;
+        set_code_default(0.0,30.0,3.0,nega_duration_time,0,codes);
+        break;
+
+    case CODE_test_accel_time:
+        strncpy(codes->disp, "test_accel_time",20);
+        if( cmd == CMD_WRITE_RAM ) test_accel_time = codes->code_value;
+        set_code_default(0.0,30.0,3.0,test_accel_time,0,codes);
+        break;
+
+    case CODE_test_decel_time:
+        strncpy(codes->disp, "test_decel_time",20);
+        if( cmd == CMD_WRITE_RAM ) test_decel_time = codes->code_value;
+        set_code_default(0.0,30.0,3.0,test_decel_time,0,codes);
+        break;
+
+//--- vector control
+    case CODE_wr_FilterPoleCoeff:
+        strncpy(codes->disp, "wr_FilterPoleCoeff",20);
+        if( cmd == CMD_WRITE_RAM ) wr_FilterPoleCoeff = codes->code_value;
+        set_code_default(5.0,30.0,15.0,wr_FilterPoleCoeff,0,codes);
+        break;
+
+    case CODE_wn_wr_Coeff:
+        strncpy(codes->disp, "wn_wr_Coeff",20);
+        if( cmd == CMD_WRITE_RAM ) wn_wr_Coeff = codes->code_value;
+        set_code_default(2.0,30.0,5.0,wn_wr_Coeff,0,codes);
+        break;
+
+    case CODE_Max_wn_wr:
+        strncpy(codes->disp, "Max_wn_wr",20);
+        if( cmd == CMD_WRITE_RAM ) Max_wn_wr = codes->code_value;
+        set_code_default(0.3,60,24.0,Max_wn_wr,0,codes);
+        break;
+
+    case CODE_K_Damp_wr:
+        strncpy(codes->disp, "K_Damp_wr",20);
+        if( cmd == CMD_WRITE_RAM ) K_Damp_wr = codes->code_value;
+        set_code_default(0.05,1.0,0.45,K_Damp_wr,0,codes);
+        break;
+
+    case CODE_wr_DampingRatio:
+        strncpy(codes->disp, "wr_DampingRatio",20);
+        if( cmd == CMD_WRITE_RAM ) wr_DampingRatio = codes->code_value;
+        set_code_default(0.6,1.5,0.8,wr_DampingRatio,0,codes);
+        break;
+
+    case CODE_wr_CntlPeriodIndex:
+        strncpy(codes->disp, "wr_CntlPeriodIndex",20);
+        if( cmd == CMD_WRITE_RAM ) wr_CntlPeriodIndex = codes->code_value;
+        set_code_default(1,30,1,wr_CntlPeriodIndex,0,codes);
+        break;
+
+    case CODE_FW_VoltageCoeff:
+        strncpy(codes->disp, "FW_VoltageCoeff",20);
+        if( cmd == CMD_WRITE_RAM ) FW_VoltageCoeff = codes->code_value;
+        set_code_default(0.2,1.2,1.0,FW_VoltageCoeff,0,codes);
+        break;
+
+    case CODE_Base_Flux_Coeff:
+        strncpy(codes->disp, "Base_Flux_Coeff",20);
+        if( cmd == CMD_WRITE_RAM ) Base_Flux_Coeff =codes->code_value;
+        set_code_default(0.1,2.5,0.92,Base_Flux_Coeff,0,codes);
+        break;
+
+    case CODE_ExcitationTime:
+        strncpy(codes->disp, "ExcitationTime",20);
+        if( cmd == CMD_WRITE_RAM ) ExcitationTime = codes->code_value;
+        set_code_default(0.1,3.0,0.25,ExcitationTime,0,codes);
+        break;
+
+    case CODE_K_Damp_Fr:
+        strncpy(codes->disp, "K_Damp_Fr",20);
+        if( cmd == CMD_WRITE_RAM ) K_Damp_Fr = codes->code_value;
+        set_code_default(0.0,1.0,0.45,K_Damp_Fr,0,codes);
+        break;
+
+    case CODE_GM_Fr:
+        strncpy(codes->disp, "GM_Fr",20);
+        if( cmd == CMD_WRITE_RAM ) GM_Fr = codes->code_value;
+        set_code_default(2.5,25.0,7.0,GM_Fr,0,codes);
+        break;
+
+    case CODE_PM_Fr:
+        strncpy(codes->disp, "PM_Fr",20);
+        if( cmd == CMD_WRITE_RAM ) PM_Fr = codes->code_value;
+        set_code_default(0.15,1.3,0.785,PM_Fr,0,codes);
+        break;
+
+    case CODE_K_Damp_Is:
+        strncpy(codes->disp, "K_Damp_Is",20);
+        if( cmd == CMD_WRITE_RAM ) K_Damp_Is = codes->code_value;
+        set_code_default(0.1,1.0,0.45,K_Damp_Is,0,codes);
+        break;
+
+    case CODE_GM_Is:
+        strncpy(codes->disp, "GM_Is",20);
+        if( cmd == CMD_WRITE_RAM ) GM_Is = codes->code_value;
+        set_code_default(2.5,10.0,7.0,GM_Is,0,codes);
+        break;
+
+    case CODE_PM_Is:
+        strncpy(codes->disp, "PM_Is",20);
+        if( cmd == CMD_WRITE_RAM ) PM_Is = codes->code_value;
+        set_code_default(0.15,1.3,0.785,PM_Is,0,codes);
+        break;
+
+//--- vector control
+
+    case CODE_Default_wr_FilterPole:
+        strncpy(codes->disp, "Default_wr_FilterPole",20);
+        if( cmd == CMD_WRITE_RAM ) Default_wr_FilterPole = codes->code_value;
+        set_code_default(20.0,500.0,200.0,Default_wr_FilterPole,0,codes);
+        break;
+
+    case CODE_SlipCompCoeff:
+        strncpy(codes->disp, "SlipCompCoeff",20);
+        if( cmd == CMD_WRITE_RAM ) SlipCompCoeff = codes->code_value;
+        set_code_default(0.0,1.0,0.2,SlipCompCoeff,0,codes);
+        break;
+
+    case CODE_GammaLambda:
+        strncpy(codes->disp, "GammaLambda",20);
+        if( cmd == CMD_WRITE_RAM ) GammaLambda = codes->code_value;
+        set_code_default(0.0,2.0,1.0,GammaLambda,0,codes);
+        break;
+
+    case CODE_GammaLambda_R_Constant:
+        strncpy(codes->disp, "GammaLambda_R_Constant",20);
+        if( cmd == CMD_WRITE_RAM ) GammaLambda_R_Constant = codes->code_value;
+        set_code_default(3.0,100.0,20.0,GammaLambda_R_Constant,0,codes);
+        break;
+
+    case CODE_Max_DeltaLambda:
+        strncpy(codes->disp, "Max_DeltaLambda",20);
+        if( cmd == CMD_WRITE_RAM ) Max_DeltaLambda = codes->code_value;
+        set_code_default(0.0,0.2,0.05,Max_DeltaLambda,0,codes);
+        break;
+
+    case CODE_GammaTheta_M:
+        strncpy(codes->disp, "GammaTheta_M",20);
+        if( cmd == CMD_WRITE_RAM ) GammaTheta_M = codes->code_value;
+        set_code_default(0.0,1.0,0.2,GammaTheta_M,0,codes);
+        break;
+
+    case CODE_GammaTheta_R:
+        strncpy(codes->disp, "GammaTheta_R",20);
+        if( cmd == CMD_WRITE_RAM ) GammaTheta_R = codes->code_value;
+        set_code_default(0.0,3.0,1.0,GammaTheta_R,0,codes);
+        break;
+
+    case CODE_Max_DeltaTheta:
+        strncpy(codes->disp, "Max_DeltaTheta",20);
+        if( cmd == CMD_WRITE_RAM ) Max_DeltaTheta = codes->code_value;
+        set_code_default(0.0,0.05,0.015,Max_DeltaTheta,0,codes);
+        break;
+
+    case CODE_Delta_wr_FilterPoleCoeff_L:
+        strncpy(codes->disp, "Delta_wr_FilterPoleCoeff_L",20);
+        if( cmd == CMD_WRITE_RAM ) Delta_wr_FilterPoleCoeff_L = codes->code_value;
+        set_code_default(0.1,20.0,0.5,Delta_wr_FilterPoleCoeff_L,0,codes);
+        break;
+
+    case CODE_Delta_wr_FilterPoleCoeff_U:
+        strncpy(codes->disp, "Delta_wr_fltPoleCoefU",20);
+        if( cmd == CMD_WRITE_RAM ) Delta_wr_FilterPoleCoeff_U = codes->code_value;
+        set_code_default(0.1,20.0,3.0,Delta_wr_FilterPoleCoeff_U,0,codes);
+        break;
+
 	case CODE_END:
 		return -2;
 			

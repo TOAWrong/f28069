@@ -88,28 +88,30 @@ int iGetAinCmd(int * piCommand, double * pfReference)
 	return iTemp;
 }
 
+
+#define analog_cmd_in_span1     1.0
+#define analog_cmd_in_zero1     0.0
+
 void analog_cmd_proc(double * ana_ref)
 {
-    analog_cmd_in_span1 = 1.0;
-
-    * ana_ref = adcCmdAnalog * ADC_CONST * 0.5 * analog_cmd_in_span1;		// debug
+    double temp = ((double) (adcCmdAnalog)) * 0.0002441406250;
+    * ana_ref = temp * analog_cmd_in_span1 - analog_cmd_in_zero1;
 }
-
 
 void get_command( int * command, double * ref )
 {
 	int digital_cmd,sci_cmd;
-	double digital_reference,sci_ref,ana_ref;
+	double digital_reference,sci_ref;
 
 	digital_input_proc( & digital_cmd, & digital_reference);
 	serial_com_proc( & sci_cmd, & sci_ref );
-	analog_cmd_proc( & ana_ref);
+	analog_cmd_proc( & analog_ref);
 
 	* command = digital_cmd;
 
     if( digital_cmd == CMD_START ){
-        if( ana_ref < 0.01 )   * command = CMD_STOP;
-        else                   * ref = ana_ref;
+        if( analog_ref < 0.01 )   * command = CMD_STOP;
+        else                   * ref = analog_ref;
     }
     if( sci_cmd != CMD_NULL ) * command = sci_cmd;
 }

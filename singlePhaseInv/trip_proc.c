@@ -25,19 +25,19 @@ void trip_recording(int trip_code,double trip_data,char * st)
 
 int CheckOverCurrent( )
 {
-	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIa) > 3500)){
+	if( adcIa > 3500){
         trip_recording( ERR_OVER_CURRENT_U_PHASE, (double)(adcIa),"I adc over U ph");
 		return ERR_OVER_CURRENT_U_PHASE;
 	}
-	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIa) < 500)){
+	if( adcIa < 500){
         trip_recording( ERR_OVER_CURRENT_U_PHASE, (double)(adcIa),"I adc under U ph");
 		return ERR_OVER_CURRENT_U_PHASE;
 	}
-	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIb) > 3500)){
+	if( adcIb > 3500){
         trip_recording( ERR_OVER_CURRENT_V_PHASE, (double)(adcIb),"I adc over V ph");
 		return ERR_OVER_CURRENT_V_PHASE;
 	}
-	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIb) < 500)){
+	if( adcIb < 500 ){
         trip_recording( ERR_OVER_CURRENT_V_PHASE, (double)(adcIb),"I adc under V ph");
 		return ERR_OVER_CURRENT_V_PHASE;
 	}
@@ -45,12 +45,9 @@ int CheckOverCurrent( )
 }
 
 #define OVER_V_LEVEL        380.0
-
 int CheckOverVolt( )
 {
 	static int OverVoltCount = 0;
-
-	if( protect_reg.bit.OVER_VOLT == 0 ) return 0;
 
 	if (Vdc > OVER_V_LEVEL ) OverVoltCount++;
 	else if( OverVoltCount > 0) OverVoltCount --;
@@ -69,8 +66,6 @@ int CheckOverVolt( )
 int CheckUndeVolt( )
 {
 	static int UnderVoltCount = 0;
-
-	if( protect_reg.bit.UNVER_VOLT == 0 ) return 0;
 
 	if (Vdc < UNDER_VOLT_LEVEL) 	UnderVoltCount++;
 	else if( UnderVoltCount > 0) 	UnderVoltCount--;
@@ -98,7 +93,6 @@ int CheckOverHeat( )
 {
 	static int OverHeatCount = 0;
 
-	if( protect_reg.bit.OVER_HEAT == 0 ) return 0;
 	if( adcIgbtTemperature < 1000 )		OverHeatCount++;
 	else if( OverHeatCount > 0) 	    OverHeatCount--;
 
@@ -133,7 +127,6 @@ void GetTripInfo(int Point,TRIP_INFO * TripData )
 	strncpy(TripData->MSG ,NULL,41);
 
 	if( Point == 0){
-//		* TripData = &TripInfoNow;
 		TripData->CURRENT 	= TripInfoNow.CURRENT;
 		TripData->DATA 		= TripInfoNow.DATA;
 		TripData->RPM 		= TripInfoNow.RPM;
