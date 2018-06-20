@@ -334,24 +334,6 @@ void common_variable_init()
     gfRunTime = 0.0;
 }
 */
-int HardwareParameterVerification()
-{
-    if ( codeRatePower >(0.99*sqrt(3.0) * codeRateVolt * codeRateCurrent)){
-        trip_recording( CODE_rate_power, codeRatePower,"PW FACTOR OVER"); // POWER FACTOR OVER
-        return  CODE_rate_power;
-    }
-    //
-    if (codeRatePower<(0.2*sqrt(3.0)*codeRateVolt * codeRateCurrent)){
-        trip_recording( CODE_rate_power, codeRatePower,"PW FACTOR UNDER"); // POWER FACTOR UNDER
-        return  CODE_rate_power;
-    }
-    //
-    if ( codeRateRpm < (0.85*120.0 * codeRateHz / codeMotorPole)){
-        trip_recording( CODE_rate_rpm, codeRateRpm,"RATE RPM UNDER");
-        return  CODE_rate_rpm;
-    }
-    return  0;
-}
 
 //-----------------------------------
 //  End of ParameterSect.c

@@ -340,7 +340,7 @@ void scia_cmd_proc( int * sci_cmd, double * sci_ref)
                    load_scia_tx_mail_box("EEPROM init Start");
                    check = init_eprom_data();      // 0이 아니면 address value
                    if( check != 0) load_scia_tx_mail_box("EEPROM init Fail");
-                   else        load_scia_tx_mail_box("EEPROM init OK");
+                   else        load_scia_tx_mail_box("EEPROM init OK \r\n");
             }
             else{
                  load_scia_tx_mail_box("Illegal CMD data");

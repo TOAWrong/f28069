@@ -6,7 +6,7 @@ extern void ADC_SOC_CNF( );
 extern void analog_input_proc( double * analog_referenc);
 extern void analog_out_proc( );
 extern int check_sensor_trip();
-__interrupt void adcIsr(void);
+extern interrupt void adcIsr(void);
 
 // auto_tuning.c
 void estim_ReqLeq_pwm();
@@ -72,7 +72,6 @@ extern void monitor_proc();     // need_edit
 // ParameterSet.c
 extern void VariableInitialization();
 extern void VariInit();
-extern int HardwareParameterVerification();
 // RefFunc.c
 extern void ramp_proc(  double set_ref, double * out_ref);
 // SCI.C
@@ -84,6 +83,15 @@ extern interrupt void sciaRxFifoIsr(void);
 extern void scia_fifo_init(void);
 extern void load_scia_tx_mail_box(char *st);
 
+//set_Par.c
+extern int HardwareParameterVerification();
+extern int VF_Cntl_Parameter();
+extern int COMMON_VECT_CNTL_ParameterVerification();
+extern int COMMON_SL_VECT_CNTL_ParameterVerification();
+extern int SL_TORQUE_CNTL_Parameter();
+extern int SL_SPEED_CNTL_Parameter();
+extern int AUTO_TUNING_Parameter();
+
 //SL_Vect.c
 void SL_SpeedCntl_SFRF();
 void SL_TorqueCntl_SFRF();
@@ -94,6 +102,8 @@ extern  void SpaceVectorModulation(double *Vs_dq );
 extern  void VoltageEstimation();
 extern void singlePhaseModulation( double m, double theta, double dutyRatio[3]);
 // switching_irq.c
+extern void MotorControlProc( );
+extern interrupt void MainPWM(void);
 //TripProc.c
 extern void trip_recording(int trip_code,double trip_data,char * st);
 extern void GetTripInfo(int Point, TRIP_INFO * TripData );
@@ -108,6 +118,11 @@ extern int CheckIGBTFault( );
 extern int CheckOverHeat( );
 extern int trip_check();
 extern void tripProc( );
+
+//vectorCtrl.c
+int vectorCtrlLoop();
+
+
 // vf_control.c
 extern void vf_simple_control();
 extern void slip_comp_scalar_ctrl();

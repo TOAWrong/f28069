@@ -361,15 +361,15 @@ double   codeSpeed1;             // 5
 double   codeSpeed2;             // 6
 double   codeSetVdc;             // 7
 double   codeProtectOff;         // 8
+double   codePwmFreq;            // 9
 
 double   codeRatePower;          // 10
-double   codeRateVolt;           // 11
-double   codeRateCurrent;        // 12
-double   codeRateHz;             // 13
-double   codeRateRpm;            // 14
-double   codeMotorPole;          // 15
-double   codeRateEffiency;       // 16
-double   codePwmFreq;            // 17
+double   codeRateCurrent;        // 11
+double   codeRateRpm;            // 12
+double   codeRateEffiency;       // 13
+double   codeRateHz;             // 14
+double   codeRateVolt;           // 15
+double   codeMotorPole;          // 16
 
 double   codeIaOffset;           // 20
 double   codeIbOffset;           // 21
@@ -428,7 +428,6 @@ double K_Damp_wr;               // 73
 double wr_DampingRatio;         // 74
 double wr_CntlPeriodIndex;      // 75
 
-// �ڼ� ����
 double FW_VoltageCoeff;         // 76
 double Base_Flux_Coeff;         // 77
 double ExcitationTime;          // 78
@@ -439,7 +438,6 @@ double K_Damp_Is;               // 82
 double GM_Is;                   // 83
 double PM_Is;                   // 84
 
-// �������� ���� ����
 double Default_wr_FilterPole;   // 85
 double SlipCompCoeff;           // 86
 double GammaLambda;             // 87
@@ -453,14 +451,9 @@ double Delta_wr_FilterPoleCoeff_U; //94
 
 // end of code
 
-//
-double over_current_level;		// 300
-double over_volt_set;			// 301
-double under_volt_set;			// 302
 double over_speed_level;		// 303
 double e_thermal_level;			// 304
 double pre_charge_time;			// 305
-double Is_Max_Coeff;			// 306
 double over_I_time;				// 307
 
 double code_Vdc_scaler;			// 308  2011.0613

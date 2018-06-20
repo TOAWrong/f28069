@@ -48,11 +48,10 @@ void ADC_SOC_CNF( )
 //    AdcRegs.ADCSAMPLEMODE.all = 0;      // Simultaneous sample mode
     EDIS;
 }
-#define adcIaOffset     2585
-#define adcIbOffset     2578
-//--- 전류의 계산 : 66mV / A  :  3.3V -> 50A, 1 count = 50 / 4096 = 0.012207
-#define I_RATIO         0.012207
-__interrupt void adcIsr(void)
+
+// 3.3Volt --> 4096 1 Volt --> 1/3.3 * 4096 = 1241.2
+#define I_RATIO   0.0008056641          // 3.3 / 4096
+interrupt void adcIsr(void)
 {
     DIGIT1_SET;
 
@@ -62,27 +61,23 @@ __interrupt void adcIsr(void)
     adc_result[3] = adcIgbtTemperature = AdcResult.ADCRESULT3;
     adc_result[4] = adcExSensor = AdcResult.ADCRESULT4;
     adc_result[5] = adcCmdAnalog = AdcResult.ADCRESULT5;
-// 전류의 계산 : 66mV / A  :  3.3V -> 50A, 1 count = 50 / 4096 = 0.012207
 
-    Is_abc[as] = ( adc_result[0] - codeIaOffset ) * I_RATIO;
-    Is_abc[bs] = ( adc_result[1] - codeIbOffset ) * I_RATIO;
-
-    // sensVdc = Vdc_factor * (double) adcVdc + Vdc_calc_offset ;
+    Is_abc[as] = I_sense_value * ( adc_result[0] - codeIaOffset ) * I_RATIO;
+    Is_abc[bs] = I_sense_value * ( adc_result[1] - codeIbOffset ) * I_RATIO;
 
     Vdc = Vdc_factor * adcVdc + Vdc_calc_offset;
-/*
-    lpfVdcIn[0] = sensVdc;
-    lpf2nd( lpfVdcIn, lpfVdcOut, lpfVdcK);
-    Vdc = lpfVdc = lpfVdcOut[0];
-*/
 /*
     lpfIaIn[0] = Is_abc[as];
     lpf2nd( lpfIaIn, lpfIaOut, lpfIrmsK);
     rmsIa = lpfIaOut[0] * INV_ROOT2;
 
-    lpfIaIn[0] = Is_abc[bs];
+    lpfIbIn[0] = Is_abc[bs];
     lpf2nd( lpfIbIn, lpfIbOut, lpfIrmsK);
     rmsIb = lpfIbOut[0] * INV_ROOT2;
+
+    lpfVdcIn[0] = sensVdc;
+    lpf2nd( lpfVdcIn, lpfVdcOut, lpfVdcK);
+    Vdc = lpfVdc = lpfVdcOut[0];
 */
 
     Is_abc[cs]= -(Is_abc[as]+Is_abc[bs]);
@@ -99,7 +94,6 @@ __interrupt void adcIsr(void)
     DIGIT1_CLEAR;
     return;
 }
-
 
 void analog_out_proc( )
 {

@@ -73,6 +73,13 @@
 
 #define F_OSC					20000000
 
+//
+#define Is_Max_Coeff            2.0
+#define over_volt_set           380
+#define UNDER_VOLT_LEVEL        180.0
+
+
+
 // Control Constant
 #define AT_SUCCESS	10
 

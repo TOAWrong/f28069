@@ -44,31 +44,24 @@ void SpaceVectorModulation( double *Vs_dq)
         }
     }
 
-    if (Vdc>Vdc_MIN)
-    {
+    if (Vdc>Vdc_MIN){
         inv_Vdc = 1.0 / Vdc;
         Dx = 1.5* Vx * inv_Vdc;     // Maximum available voltage = 2.0*Vdc/3.0
         Dy = 1.5 *Vy * inv_Vdc;
         Dxy= Dx+Dy;
-    }
-    else
-    {
+    }else {
         Dx=1.5*Vx*inv_Vdc_MIN;      // Maximum available voltage = 2.0*Vdc/3.0
         Dy=1.5*Vy*inv_Vdc_MIN;
         Dxy=Dx+Dy;
     }
 
-    if (Dxy>=1.0)
-    {
+    if (Dxy>=1.0) {
         if (Dx>Dy)  { Dx=Dx/Dxy; Dy=1.0-Dx; }
         else        { Dy=Dy/Dxy; Dx=1.0-Dy; }
-
         Dxy=1.0;    Dz=0;
-    }
-    else    Dz=0.5*(1.0-Dxy);
+    } else    Dz=0.5*(1.0-Dxy);
 
-    switch (sector)
-    {
+    switch (sector) {
         case 1 :    DutyRatio[u]=Dxy+Dz;    DutyRatio[v]=Dy+Dz;     DutyRatio[w]=Dz;        break;
         case 2 :    DutyRatio[u]=Dx+Dz;     DutyRatio[v]=Dxy+Dz;    DutyRatio[w]=Dz;        break;
         case 3 :    DutyRatio[u]=Dz;        DutyRatio[v]=Dxy+Dz;    DutyRatio[w]=Dy+Dz;     break;
@@ -91,26 +84,18 @@ void VoltageEstimation()
     Dd=T_d*inv_Ts;
 
 //--- U phase
-    sgn_Is[as]=Is_abc[as]*inv_Min_Isw;                          //\C0\FC\B7\F9\C0\C7 ũ\B1⿡ \B5\FB\B8\A5 \B5\A5\B5\E5 Ÿ\C0Ӱ\E8\BC\F6
-    if (sgn_Is[as]>1.0)         sgn_Is[as]=1.0;
-    else if (sgn_Is[as]<-1.0)   sgn_Is[as]=-1.0;
-
+    sgn_Is[as]=Is_abc[as]*inv_Min_Isw;
+    sgn_Is[as] = ( sgn_Is[as] > 1.0) ? 1.0 : -1.0;
     Vs_abc_ref[as] = ( DutyRatio[u] - 0.5)*Vdc;
     Vs_abc[as]=Vs_abc_ref[as] - sgn_Is[as]*Dd*Vdc;
-
 //--- V phase
-    sgn_Is[bs]=Is_abc[bs]*inv_Min_Isw;                          //\C0\FC\B7\F9\C0\C7 ũ\B1⿡ \B5\FB\B8\A5 \B5\A5\B5\E5 Ÿ\C0Ӱ\E8\BC\F6
-    if (sgn_Is[bs]>1.0)         sgn_Is[bs]=1.0;
-    else if (sgn_Is[bs]<-1.0)   sgn_Is[bs]=-1.0;
-
+    sgn_Is[bs]=Is_abc[bs]*inv_Min_Isw;
+    sgn_Is[bs] = ( sgn_Is[bs] > 1.0) ? 1.0 : -1.0;
     Vs_abc_ref[bs] = ( DutyRatio[v] - 0.5)*Vdc;
     Vs_abc[bs]=Vs_abc_ref[bs] - sgn_Is[bs]*Dd*Vdc;
-
 //--- W phase
     sgn_Is[cs]=Is_abc[cs]*inv_Min_Isw;
-    if (sgn_Is[cs]>1.0)         sgn_Is[cs]=1.0;
-    else if (sgn_Is[cs]<-1.0)   sgn_Is[cs]=-1.0;
-
+    sgn_Is[cs] = ( sgn_Is[cs] > 1.0) ? 1.0 : -1.0;
     Vs_abc_ref[cs] = ( DutyRatio[w] - 0.5)*Vdc;
     Vs_abc[cs]=Vs_abc_ref[cs] - sgn_Is[cs]*Dd*Vdc;
 
@@ -120,63 +105,10 @@ void VoltageEstimation()
     Vs_dq[qs]=0.57735027*(Vs_abc[bs] - Vs_abc[cs]);                                         // 1.0/sqrt(3.0)=0.57735027
 }
 
-
 const double pwmCoeff[6][4] = {{1.0   ,ROOT2  ,0.0            ,PI_DIV4    },
                              {1.0   ,ROOT2  ,PI_DIV2        ,PI_DIV4    },
                              {1.0   ,1.0    ,PI_DIV2        ,PI         },
                              {ROOT2 ,1.0    ,PI + PI_DIV4   ,PI         },
                              {ROOT2 ,1.0    ,PI + PI_DIV4   ,PI + PI_DIV2},
                              {1.0   ,1.0    ,0.0            ,PI + PI_DIV2}};
-
-void singlePhaseModulation( double m, double theta, double dutyRatio[3])
-{
-    int sector;
-    double vectorDuty[3];
-
-    if     ( theta < PI_DIV4    )   sector = 0;
-    else if( theta < PI_DIV2    )   sector = 1;
-    else if( theta < PI         )   sector = 2;
-    else if( theta < PI+PI_DIV4 )   sector = 3;
-    else if( theta < PI+PI_DIV2 )   sector = 4;
-    else                            sector = 5;
-
-    vectorDuty[1] = m * sin(pwmCoeff[sector][3] - theta) / ( pwmCoeff[sector][0] * sin(pwmCoeff[sector][3] - pwmCoeff[sector][2]));
-    vectorDuty[2] = m * sin(theta - pwmCoeff[sector][2] ) / ( pwmCoeff[sector][1] * sin(pwmCoeff[sector][3] - pwmCoeff[sector][2]));
-    vectorDuty[0] = 1.0 - (vectorDuty[1] + vectorDuty[2]);
-
-    switch(sector){
-    case 0:
-        dutyRatio[0] = vectorDuty[0]*0.5 + vectorDuty[1] + vectorDuty[2];
-        dutyRatio[1] = vectorDuty[0]*0.5;
-        dutyRatio[2] = vectorDuty[0]*0.5 + vectorDuty[2];
-        break;
-    case 1:
-        dutyRatio[0] = vectorDuty[0]*0.5 + vectorDuty[2];
-        dutyRatio[1] = vectorDuty[0]*0.5;
-        dutyRatio[2] = vectorDuty[0]*0.5 + vectorDuty[1]+ vectorDuty[2];
-        break;
-    case 2:
-        dutyRatio[0] = vectorDuty[0]*0.5;
-        dutyRatio[1] = vectorDuty[0]*0.5 + vectorDuty[2];
-        dutyRatio[2] = vectorDuty[0]*0.5 + vectorDuty[1] + vectorDuty[2];
-        break;
-    case 3:
-        dutyRatio[0] = vectorDuty[0]*0.5;
-        dutyRatio[1] = vectorDuty[0]*0.5 + vectorDuty[1] + vectorDuty[2];
-        dutyRatio[2] = vectorDuty[0]*0.5 + vectorDuty[2];
-        break;
-    case 4:
-        dutyRatio[0] = vectorDuty[0]*0.5 + vectorDuty[2];
-        dutyRatio[1] = vectorDuty[0]*0.5 + vectorDuty[1] + vectorDuty[2];
-        dutyRatio[2] = vectorDuty[0]*0.5;
-        break;
-    case 5:
-        dutyRatio[0] = vectorDuty[0]*0.5 + vectorDuty[1] + vectorDuty[2];
-        dutyRatio[1] = vectorDuty[0]*0.5 + vectorDuty[2];
-        dutyRatio[2] = vectorDuty[0]*0.5;
-        break;
-    }
-}
-//========================
 // end of file
-//========================

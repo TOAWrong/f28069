@@ -358,15 +358,15 @@ extern double   codeSpeed1;             // 5
 extern double   codeSpeed2;             // 6
 extern double   codeSetVdc;             // 7
 extern double   codeProtectOff;         // 8
+extern double   codePwmFreq;            // 9
 
 extern double   codeRatePower;          // 10
-extern double   codeRateVolt;           // 11
-extern double   codeRateCurrent;        // 12
-extern double   codeRateHz;             // 13
-extern double   codeRateRpm;            // 14
-extern double   codeMotorPole;          // 15
-extern double   codeRateEffiency;       // 16
-extern double   codePwmFreq;            // 17
+extern double   codeRateCurrent;        // 11
+extern double   codeRateRpm;            // 12
+extern double   codeRateVolt;           // 13
+extern double   codeRateEffiency;       // 14
+extern double   codeRateHz;             // 15
+extern double   codeMotorPole;          // 16
 
 extern double   codeIaOffset;           // 20
 extern double   codeIbOffset;           // 21
@@ -446,13 +446,10 @@ extern double Delta_wr_FilterPoleCoeff_L; // 93
 extern double Delta_wr_FilterPoleCoeff_U; //94
 
 // end of code
-extern double over_current_level;      // 300
-extern double over_volt_set;           // 301
 extern double under_volt_set;          // 302
 extern double over_speed_level;        // 303
 extern double e_thermal_level;         // 304
 extern double pre_charge_time;         // 305
-extern double Is_Max_Coeff;            // 306
 extern double over_I_time;             // 307
 
 extern double code_Vdc_scaler;         // 308  2011.0613

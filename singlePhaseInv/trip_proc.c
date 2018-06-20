@@ -62,7 +62,6 @@ int CheckOverVolt( )
 	return 0;
 }
 
-#define UNDER_VOLT_LEVEL     180.0
 int CheckUndeVolt( )
 {
 	static int UnderVoltCount = 0;

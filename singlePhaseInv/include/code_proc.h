@@ -11,21 +11,20 @@
 #define CODE_motor_direction_change		1
 #define CODE_accel_time1				2
 #define CODE_decel_time1				3
-#define CODE_motor_ctrl_mode            4
+#define CODE_MotorCtrMode               4
 #define CODE_speed1						5
 #define CODE_speed2						6
 #define CODE_set_vdc                    7
 #define CODE_protect_off                8
-#define CODE_MotorCtrMode               9
+#define CODE_pwm_freq                   9
 
 #define CODE_rate_power			        10
-#define CODE_rate_volt			        11
-#define CODE_rate_current			    12
-#define CODE_rate_hz				    13
-#define CODE_rate_rpm				    14
-#define CODE_motor_pole					15
-#define CODE_rate_effiency              16
-#define CODE_pwm_freq                   17
+#define CODE_rate_current               11
+#define CODE_rate_rpm                   12
+#define CODE_rate_effiency              13
+#define CODE_rate_hz				    14
+#define CODE_rate_volt                  15
+#define CODE_motor_pole					16
 
 #define CODE_IaOffset                   20
 #define CODE_IbOffset                   21

@@ -23,10 +23,10 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
         set_code_default(0.0,3000.0,5.0,codeDecelTime1,0,codes);
         break;
 
-    case CODE_motor_ctrl_mode:  //
-        strncpy(codes->disp, "motor_ctrl_mode",20);
+    case CODE_MotorCtrMode:
+        strncpy(codes->disp, "select Ctrl Mode",20);
         if( cmd == CMD_WRITE_RAM ) codeMotorCtrlMode = codes->code_value;
-        set_code_default(0,7,0,codeMotorCtrlMode,0,codes);
+        set_code_default(0,9,0,codeMotorCtrlMode,0,codes);
         break;
 
     case CODE_speed1:
@@ -53,10 +53,10 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
         set_code_default(0,1,1,codeProtectOff,0,codes);
         break;
 
-    case CODE_MotorCtrMode:
-        strncpy(codes->disp, "select Ctrl Mode",20);
-        if( cmd == CMD_WRITE_RAM ) codeMotorCtrlMode = codes->code_value;
-        set_code_default(0,9,0,codeMotorCtrlMode,0,codes);
+    case CODE_pwm_freq:
+        strncpy(codes->disp, "PWM Freq",20);
+        if( cmd == CMD_WRITE_RAM ) codePwmFreq = codes->code_value;
+        set_code_default(500.0,10000.0,8000.0,codePwmFreq,0,codes);
         break;
 
     case CODE_rate_power:
@@ -65,34 +65,16 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
         set_code_default(100,2.0e+6,400,codeRatePower,0,codes);
         break;
 
-    case CODE_rate_volt:
-        strncpy(codes->disp, "Rate Volt (Vrms)",20);
-        if( cmd == CMD_WRITE_RAM ) codeRateVolt = codes->code_value;
-        set_code_default(100.0,500.0,220.0,codeRateVolt,0,codes);
-        break;
-
     case CODE_rate_current:
         strncpy(codes->disp, "Rate Current(A)",20);
         if( cmd == CMD_WRITE_RAM ) codeRateCurrent = codes->code_value;
         set_code_default(1.0,2000.0,2.3,codeRateCurrent,0,codes);
         break;
 
-    case CODE_rate_hz:
-        strncpy(codes->disp, "Rate hz",20);
-        if( cmd == CMD_WRITE_RAM ) codeRateHz = codes->code_value;
-        set_code_default(30.0,120.0,60.0,codeRateHz,0,codes);
-        break;
-
     case CODE_rate_rpm:
         strncpy(codes->disp, "Rate RPM",20);
         if( cmd == CMD_WRITE_RAM ) codeRateRpm = codes->code_value;
-        set_code_default(500,8000.0,1680.0,codeRateRpm,0,codes);
-        break;
-
-    case CODE_motor_pole:
-        strncpy(codes->disp, "Motor Pole ",20);
-        if( cmd == CMD_WRITE_RAM ) codeMotorPole = codes->code_value;
-        set_code_default(2,20,4,codeMotorPole,0,codes);
+        set_code_default(500,8000.0,1690.0,codeRateRpm,0,codes);
         break;
 
     case CODE_rate_effiency:
@@ -101,10 +83,22 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
         set_code_default(0.2,0.99,0.65,codeRateEffiency,0,codes);
         break;
 
-    case CODE_pwm_freq:
-        strncpy(codes->disp, "PWM Freq",20);
-        if( cmd == CMD_WRITE_RAM ) codePwmFreq = codes->code_value;
-        set_code_default(500.0,10000.0,8000.0,codePwmFreq,0,codes);
+    case CODE_rate_hz:
+        strncpy(codes->disp, "Rate hz",20);
+        if( cmd == CMD_WRITE_RAM ) codeRateHz = codes->code_value;
+        set_code_default(30.0,120.0,60.0,codeRateHz,0,codes);
+        break;
+
+    case CODE_rate_volt:
+        strncpy(codes->disp, "Rate Volt (Vrms)",20);
+        if( cmd == CMD_WRITE_RAM ) codeRateVolt = codes->code_value;
+        set_code_default(100.0,500.0,220.0,codeRateVolt,0,codes);
+        break;
+
+    case CODE_motor_pole:
+        strncpy(codes->disp, "Motor Pole ",20);
+        if( cmd == CMD_WRITE_RAM ) codeMotorPole = codes->code_value;
+        set_code_default(2,20,4,codeMotorPole,0,codes);
         break;
 
     case CODE_IaOffset:
@@ -122,7 +116,7 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
     case CODE_I_sense_value:
         strncpy(codes->disp, "I_sense_value (A)",20);
         if( cmd == CMD_WRITE_RAM ) I_sense_value = codes->code_value;
-        set_code_default(5.0,2000.0,15.0,I_sense_value ,0,codes);
+        set_code_default(5.0,2000.0, 5.0,I_sense_value ,0,codes);
         break;
 
     case CODE_u_phase_I_sense_span:
@@ -210,13 +204,13 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
         break;
 
     case CODE_VF_IR_Comp_FilterPole:
-        strncpy(codes->disp, "VF_IR_Comp_FilterPole",20);
+        strncpy(codes->disp, "vfIRCompFiltPole",20);
         if( cmd == CMD_WRITE_RAM ) VF_IR_Comp_FilterPole = codes->code_value;
         set_code_default(5.0,1000.0,100.0, VF_IR_Comp_FilterPole ,0,codes);
         break;
 
     case CODE_VF_Slip_Comp_FilterPole:
-        strncpy(codes->disp, "VF_Slip_Comp_FilterPole",20);
+        strncpy(codes->disp, "vfSlipCompFiltPole",20);
         if( cmd == CMD_WRITE_RAM ) VF_Slip_Comp_FilterPole = codes->code_value;
         set_code_default(5.0,1000.0,20.0, VF_Slip_Comp_FilterPole ,0,codes);
         break;
@@ -229,7 +223,7 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
 
 // auto tuning
     case CODE_AT_Freq_Leq_Req:
-        strncpy(codes->disp, "Freq for LeqReq(Hz)",20);
+        strncpy(codes->disp, "Freq LeqReq",20);
         if( cmd == CMD_WRITE_RAM ) AT_Freq_Leq_Req = codes->code_value;
         set_code_default(5.0,30.0,15.0,AT_Freq_Leq_Req,0,codes);
         break;
@@ -430,13 +424,13 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
 //--- vector control
 
     case CODE_Default_wr_FilterPole:
-        strncpy(codes->disp, "Default_wr_FilterPole",20);
+        strncpy(codes->disp, "def_wrFiltPole",20);
         if( cmd == CMD_WRITE_RAM ) Default_wr_FilterPole = codes->code_value;
         set_code_default(20.0,500.0,200.0,Default_wr_FilterPole,0,codes);
         break;
 
     case CODE_SlipCompCoeff:
-        strncpy(codes->disp, "SlipCompCoeff",20);
+        strncpy(codes->disp, "slipCompCoeff",20);
         if( cmd == CMD_WRITE_RAM ) SlipCompCoeff = codes->code_value;
         set_code_default(0.0,1.0,0.2,SlipCompCoeff,0,codes);
         break;
@@ -448,7 +442,7 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
         break;
 
     case CODE_GammaLambda_R_Constant:
-        strncpy(codes->disp, "GammaLambda_R_Constant",20);
+        strncpy(codes->disp, "gammaLambdaRConst",20);
         if( cmd == CMD_WRITE_RAM ) GammaLambda_R_Constant = codes->code_value;
         set_code_default(3.0,100.0,20.0,GammaLambda_R_Constant,0,codes);
         break;
@@ -478,13 +472,13 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
         break;
 
     case CODE_Delta_wr_FilterPoleCoeff_L:
-        strncpy(codes->disp, "Delta_wr_FilterPoleCoeff_L",20);
+        strncpy(codes->disp, "d_wr_fltPoleCoefL",20);
         if( cmd == CMD_WRITE_RAM ) Delta_wr_FilterPoleCoeff_L = codes->code_value;
         set_code_default(0.1,20.0,0.5,Delta_wr_FilterPoleCoeff_L,0,codes);
         break;
 
     case CODE_Delta_wr_FilterPoleCoeff_U:
-        strncpy(codes->disp, "Delta_wr_fltPoleCoefU",20);
+        strncpy(codes->disp, "d_wr_fltPoleCoefU",20);
         if( cmd == CMD_WRITE_RAM ) Delta_wr_FilterPoleCoeff_U = codes->code_value;
         set_code_default(0.1,20.0,3.0,Delta_wr_FilterPoleCoeff_U,0,codes);
         break;
@@ -734,6 +728,7 @@ void readAllCodes()
             snprintf( str,20,"%.3e,",code_inform.code_value);load_scia_tx_mail_box(str);
             load_scia_tx_mail_box(code_inform.disp);
             load_scia_tx_mail_box(" : ");
+            delay_msecs(10);
         }
     }
     load_scia_tx_mail_box("endOfReadall.\r\n");

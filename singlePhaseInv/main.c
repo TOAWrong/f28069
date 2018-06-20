@@ -8,19 +8,24 @@
 
 #pragma CODE_SECTION(MainPWM, "ramfuncs");
 #pragma CODE_SECTION(adcIsr, "ramfuncs");
+#pragma CODE_SECTION(SL_SpeedCntl_SFRF, "ramfuncs");
+#pragma CODE_SECTION(SL_VectCntl_SFRF, "ramfuncs");
+#pragma CODE_SECTION(SpaceVectorModulation, "ramfuncs");
+#pragma CODE_SECTION(VoltageEstimation, "ramfuncs");
+#pragma CODE_SECTION(MotorControlProc, "ramfuncs");
+//#pragma CODE_SECTION(CheckIGBTFault, "ramfuncs");
+//#pragma CODE_SECTION(Adc_Isr, "ramfuncs");
+//#pragma CODE_SECTION(AD2LPF, "ramfuncs");
+#pragma CODE_SECTION(LPF1, "ramfuncs");
+
 extern Uint16 RamfuncsLoadStart;
 extern Uint16 RamfuncsLoadEnd;
 extern Uint16 RamfuncsRunStart;
 Uint16 RamfuncsLoadSize;
 
 void InitWatchDog();
-extern interrupt void MainPWM(void);
-extern interrupt void adcIsr(void);
-extern interrupt void sciaRxFifoIsr(void);
-extern interrupt void sciaTxFifoIsr(void);
 
-double Vdc_fnd_data;
-
+// double Vdc_fnd_data;
 void main( void )
 {
     int trip_code;
@@ -134,20 +139,33 @@ void main( void )
 	GATE_DRIVER_ENABLE;
 
 	for( ; ; )
-	{
-		if( gPWMTripCode !=0 )	tripProc();
-		gPWMTripCode = trip_check();
-		if( gPWMTripCode !=0 )	tripProc();
-		get_command( & cmd, & ref_in0);
-//		analog_out_proc( );
-		if(cmd == CMD_READ_ALL ){
-		    readAllCodes();
-		}
-		if(cmd == CMD_START){	// if( cmd == CMD_START )
-			trip_code = vf_loop_control(ref_in0);		//
-			if( trip_code !=0 )	tripProc();
-		}
-	}
+    {
+        if( gPWMTripCode !=0 )  tripProc();
+        gPWMTripCode = trip_check();
+        if( gPWMTripCode !=0 )  tripProc();
+        get_command( & cmd, & ref_in0);
+//      analog_out_proc( );
+        if(cmd == CMD_READ_ALL ){
+            readAllCodes();
+        }
+        // monitor_proc();
+        if(cmd == CMD_START)    // if( cmd == CMD_START )
+        {
+            trip_code = 0;
+
+            switch( (int)(floor(codeMotorCtrlMode+0.5)) ) // Control Method
+            {
+            case 0: trip_code = vf_loop_control(ref_in0)        ; break;
+            case 1: trip_code = vf_loop_control(ref_in0)        ; break;        //
+            case 3: trip_code = vectorCtrlLoop()                ; break;
+            case 4: trip_code = vectorCtrlLoop()                ; break;    // TORQUE Ctrl
+            case 5: trip_code = parameter_estimation(); break;    // mode 5
+ //           case 8 : pwm_pulse_test( ); break;
+ //           case 9 : vf_conv_test(ref_in0); break;
+            }
+            if( trip_code !=0 ) tripProc();
+        }
+    }
 }
 
 void InitEPwm_ACIM_Inverter()

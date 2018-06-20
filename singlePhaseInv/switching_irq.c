@@ -8,13 +8,32 @@
 #include        <extern.h>
 
 int dacCount = 0;
+
 void MotorControlProc( )
 {
- //   if      (codeMotorCtrlMode < 1.0 ) vf_simple_control();
- //   else if (codeMotorCtrlMode < 2.0 ) slip_comp_scalar_ctrl();
- //   else
-    vf_simple_control();
+    int temp;
+
+    temp = (int)(floor(codeMotorCtrlMode+0.5));
+    switch( temp )
+    {
+    case 0: vf_simple_control(); break;
+    case 1: slip_comp_scalar_ctrl();break;
+    case 3: SL_SpeedCntl_SFRF( );   break;
+    case 4: SL_TorqueCntl_SFRF( );  break;
+    case 5:
+        switch(AutoTuningFlag)
+        {
+        case 0: Vs_dq_ref[ds] = 0.0; Vs_dq_ref[qs] = 0.0; break;
+        case ID_AT_LEQ_REQ: estim_ReqLeq_pwm ( );   break;
+        case ID_AT_RS:  estim_Rs_pwm( );            break;
+        case ID_AT_LS:  estim_Ls_pwm( );            break;
+        case ID_AT_JM:  estim_Jm_pwm( );            break;
+        default:    Vs_dq_ref[ds] = 0.0; Vs_dq_ref[qs] = 0.0; break;
+        }
+        break;
+    }
 }
+
 
 interrupt void MainPWM(void)
 {
@@ -29,9 +48,9 @@ interrupt void MainPWM(void)
         EPwm4Regs.CMPA.half.CMPA = MAX_PWM_CNT;
 
     if(gPWMTripCode){
-        EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
-        EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
         EPwm3Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+        EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+        EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
         goto _PWM_TRIP;
     }
 
@@ -40,15 +59,15 @@ interrupt void MainPWM(void)
     case STATE_READY:
     case STATE_POWER_ON:
     case STATE_TRIP:
-        EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
-        EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
         EPwm3Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+        EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+        EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
         break;
 
     case STATE_INIT_RUN:
-        EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
-        EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
         EPwm3Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+        EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+        EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
         break;
 
     case STATE_RUN:
@@ -56,24 +75,23 @@ interrupt void MainPWM(void)
     case STATE_WAIT_BREAK_OFF:
         if(gPWMTripCode !=0){
             gTripSaveFlag = 1; // for Trip History Save to EEPROM in Out irq
-            EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
-            EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
             EPwm3Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
-        }
-        else{
-            // VoltageEstimation();
+            EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+            EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+        } else{
+            VoltageEstimation();
             MotorControlProc( );
             SpaceVectorModulation(Vs_dq_ref);
-            EPwm1Regs.CMPA.half.CMPA = DutyCount[u];
+            EPwm3Regs.CMPA.half.CMPA = DutyCount[u];
             EPwm2Regs.CMPA.half.CMPA = DutyCount[v];
-            EPwm3Regs.CMPA.half.CMPA = DutyCount[w];
+            EPwm1Regs.CMPA.half.CMPA = DutyCount[w];
         }
         break;
 
     default:
-        EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
-        EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
         EPwm3Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+        EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+        EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
         break;
     }
 
@@ -86,11 +104,10 @@ _PWM_TRIP:
             adcData[1][graphCount].INTEGER = adc_result[1];
             adcData[2][graphCount].INTEGER = adc_result[2];
             adcData[3][graphCount].INTEGER = adc_result[3];
-
-//                adcData[0][graphCount].INTEGER = adc_result[0];
-//                adcData[1][graphCount].INTEGER = (int)(4095 * DutyRatio[0]);
-//                adcData[2][graphCount].INTEGER = (int)(4095 * DutyRatio[1]);
-//                adcData[3][graphCount].INTEGER = (int)(4095 * DutyRatio[2]);
+//          adcData[0][graphCount].INTEGER = adc_result[0];
+//          adcData[1][graphCount].INTEGER = (int)(4095 * DutyRatio[0]);
+//          adcData[2][graphCount].INTEGER = (int)(4095 * DutyRatio[1]);
+//          adcData[3][graphCount].INTEGER = (int)(4095 * DutyRatio[2]);
             graphCount ++;
         }
         else graphCount = 0;
