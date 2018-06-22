@@ -1,6 +1,10 @@
 #ifndef		__GLOBAL_VARIABLES_
 #define		__GLOBAL_VARIABLES_
 
+// testing
+int lpfadcIa;
+int lpfadcIb;
+
 // control and flag
 CODE_INFO code_inform = {0,0,0,0,0,0,{0}};
 union PROTECT_FLAG protect_reg;
@@ -122,6 +126,7 @@ double  Is_rat;
 double  inv_Is_rat;
 double  Is_max;
 double  Is_mag;
+double  LPF_Ia;
 double  Is_mag_rms;
 double  sgn_Is[3]={0.0,0.0,0.0};
 double  sgn_I_QS=0.0;
@@ -221,7 +226,6 @@ double 	inv_C_ce;
 
 // Motor Name Plate Parameter
 
-
 double  inv_motor_rat_hz;
 double  wr_rat;
 double  wm_rat;
@@ -266,14 +270,6 @@ double  Ki_wr;
 
 double  Fs_B;
 double  inv_Fs_B;
-
-double  inv_GM_Is_square_minus_1;
-double  inv_GM_Is;
-double  wp_Is_Coeff;
-double  Kp_Is_Coeff;
-double  wp_Is;
-double  Ki_Is;
-double  Kp_Is;
 
 double  wr_FilterPole;
 
@@ -418,6 +414,7 @@ double zero_duration_time;      // 64
 double nega_duration_time;      // 65
 double test_accel_time;         // 66
 double test_decel_time;         // 67
+double codeRampTest;            // 68
 
 // group 7 advance control vaiable
 
@@ -435,8 +432,8 @@ double K_Damp_Fr;               // 79
 double GM_Fr;                   // 80
 double PM_Fr;                   // 81
 double K_Damp_Is;               // 82
-double GM_Is;                   // 83
-double PM_Is;                   // 84
+double codeKpIs;                   // 83
+double codeKiIs;                   // 84
 
 double Default_wr_FilterPole;   // 85
 double SlipCompCoeff;           // 86

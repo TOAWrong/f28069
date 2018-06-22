@@ -1,6 +1,10 @@
 #ifndef     __VARIABLES_
 #define     __VARIABLES_
 
+// testing
+extern int lpfadcIa;
+extern int lpfadcIb;
+
 // control and flag
 extern CODE_INFO code_inform;
 extern union PROTECT_FLAG protect_reg;
@@ -123,6 +127,7 @@ extern double  inv_Is_rat;
 extern double  Is_max;
 extern double  Is_mag;
 extern double  Is_mag_rms;
+extern double  LPF_Ia;
 extern double  sgn_Is[3];
 extern double  sgn_I_QS;
 
@@ -266,14 +271,6 @@ extern double  Ki_wr;
 extern double  Fs_B;
 extern double  inv_Fs_B;
 
-extern double  inv_GM_Is_square_minus_1;
-extern double  inv_GM_Is;
-extern double  wp_Is_Coeff;
-extern double  Kp_Is_Coeff;
-extern double  wp_Is;
-extern double  Ki_Is;
-extern double  Kp_Is;
-
 extern double  wr_FilterPole;
 extern unsigned AutoTuningFlag;
 extern double  Jm_SampleData[2];
@@ -414,6 +411,7 @@ extern double zero_duration_time;      // 64
 extern double nega_duration_time;      // 65
 extern double test_accel_time;         // 66
 extern double test_decel_time;         // 67
+extern double codeRampTest;            // 68
 
 // group 7 advance control vaiable
 
@@ -431,8 +429,8 @@ extern double K_Damp_Fr;               // 79
 extern double GM_Fr;                   // 80
 extern double PM_Fr;                   // 81
 extern double K_Damp_Is;               // 82
-extern double GM_Is;                   // 83
-extern double PM_Is;                   // 84
+extern double codeKpIs;                   // 83
+extern double codeKiIs;                   // 84
 
 extern double Default_wr_FilterPole;   // 85
 extern double SlipCompCoeff;           // 86

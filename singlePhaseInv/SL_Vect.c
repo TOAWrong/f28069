@@ -145,11 +145,11 @@ void SL_VectCntl_SFRF()
 	else if (Is_DQ_ref[DS]<(0.5*inv_Ls*Fs_ref))	Is_DQ_ref[DS]=0.5*inv_Ls*Fs_ref;
 
 	Vs_DQ_max[DS] = Vs_max;		// 0.8165=sqrt(2/3) => Vs_rat=0.8165*Vs_LL_rms= phase peak voltage		
-	Is_DQ_ErrInt[DS] += Ki_Is*(Is_DQ_ref[DS] - Is_DQ[DS])*Ts;
+	Is_DQ_ErrInt[DS] += codeKiIs*(Is_DQ_ref[DS] - Is_DQ[DS])*Ts;
 	if (Is_DQ_ErrInt[DS]>Vs_DQ_max[DS])	        Is_DQ_ErrInt[DS] =  Vs_DQ_max[DS];
 	else if (Is_DQ_ErrInt[DS]<-Vs_DQ_max[DS])   Is_DQ_ErrInt[DS] = -Vs_DQ_max[DS];
 
-	Vs_DQ_ref_PI[DS]=Kp_Is*(K_Damp_Is*Is_DQ_ref[DS] - Is_DQ[DS]) + Is_DQ_ErrInt[DS];
+	Vs_DQ_ref_PI[DS]=codeKpIs*(K_Damp_Is*Is_DQ_ref[DS] - Is_DQ[DS]) + Is_DQ_ErrInt[DS];
 	
 	Is_DQ_max[QS]=sqrt( fabs(Is_max*Is_max - Is_DQ_ref[DS]*Is_DQ_ref[DS]) );	// Q-�� ���� ���� ��
 	if (Is_DQ_ref[QS]>Is_DQ_max[QS])		
@@ -158,12 +158,12 @@ void SL_VectCntl_SFRF()
 		Is_DQ_ref[QS]=-Is_DQ_max[QS];	
 	
 	Vs_DQ_max[QS]=2.0*Vs_max;					// 2.0/3.0=0.666667, 1.0/sqrt(3.0)=0.57735, (0.57735+0.666667)/2.0=0.6220 
-	Is_DQ_ErrInt[QS] += Ki_Is*(Is_DQ_ref[QS] - Is_DQ[QS])*Ts;
+	Is_DQ_ErrInt[QS] += codeKiIs*(Is_DQ_ref[QS] - Is_DQ[QS])*Ts;
 	if (Is_DQ_ErrInt[QS]>Vs_DQ_max[QS])			
 		Is_DQ_ErrInt[QS] = Vs_DQ_max[QS];
 	else if (Is_DQ_ErrInt[QS]<-Vs_DQ_max[QS])		
 		Is_DQ_ErrInt[QS] = -Vs_DQ_max[QS];
-	Vs_DQ_ref_PI[QS] = Kp_Is*(K_Damp_Is*Is_DQ_ref[QS] - Is_DQ[QS]) + Is_DQ_ErrInt[QS];
+	Vs_DQ_ref_PI[QS] = codeKpIs*(K_Damp_Is*Is_DQ_ref[QS] - Is_DQ[QS]) + Is_DQ_ErrInt[QS];
 	
 	Vs_DQ_comp[DS]+=100.0*(Fs_ref*inv_Tr - Vs_DQ_comp[DS])*Ts;
 	Vs_DQ_comp[QS]+=100.0*(wr*Fs_ref - Vs_DQ_comp[QS])*Ts;

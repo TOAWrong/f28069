@@ -104,9 +104,10 @@ void sciaMonitor()     // need_edit
     snprintf( str,20,"%s : ",MonitorMsg);
     load_scia_tx_mail_box(str);
 
-    fTemp = Is_mag_rms;
+    //    fTemp = Is_mag_rms;
+    fTemp = LPF_Ia;
     temp = (int)(floor(fTemp*10 +0.5));
-    snprintf( str,20,"Irms = %3d.%1dA : ",(temp/10),temp%10);
+    snprintf( str,20,"lpfI = %3d.%1dA : ",(temp/10),temp%10);
     load_scia_tx_mail_box(str);
 
     fTemp = rpm;
@@ -479,10 +480,14 @@ void scia_cmd_proc( int * sci_cmd, double * sci_ref)
              }
              return;
          }
-         else if (( addr > 979) && ( addr < 996)){
-             check = addr - 980;
-             snprintf( str,19,"adc =%4d",adc_result[check]);
-             load_scia_tx_mail_box(str);
+         else if (addr == 910 ){
+             snprintf( str,20,"Ia = %4d : ",adc_result[0]); load_scia_tx_mail_box(str);
+             snprintf( str,20,"Ib = %4d : ",adc_result[1]); load_scia_tx_mail_box(str);
+             snprintf( str,20,"Vdc= %4d : ",adc_result[2]); load_scia_tx_mail_box(str);
+             snprintf( str,20,"Tmp= %4d : ",adc_result[3]); load_scia_tx_mail_box(str);
+             snprintf( str,20,"Sen= %4d : ",adc_result[4]); load_scia_tx_mail_box(str);
+             snprintf( str,20,"Cmd= %4d : ",adc_result[5]); load_scia_tx_mail_box(str);
+             load_scia_tx_mail_box(" \r\n");
              delay_msecs(10);
              return;
          }

@@ -1,6 +1,4 @@
 // FILE		: switching_irq.c
-// Project 	: KERI back2back inverter
-// PCB		: regen_dsp_110513 & regen_sen_110513
 // Company  : Eunwho Power Electonics
 // date		: 2018.0608	by soonkil jung
 
@@ -37,6 +35,7 @@ void MotorControlProc( )
 
 interrupt void MainPWM(void)
 {
+    DIGIT2_SET;
     if( gMachineState == STATE_RUN )
     {
         if( Vdc > ( over_volt_set - 30.0 ))
@@ -102,8 +101,8 @@ _PWM_TRIP:
         if(graphCount< GRAPH_NUMBER ){
             adcData[0][graphCount].INTEGER = adc_result[0];
             adcData[1][graphCount].INTEGER = adc_result[1];
-            adcData[2][graphCount].INTEGER = adc_result[2];
-            adcData[3][graphCount].INTEGER = adc_result[3];
+            adcData[2][graphCount].INTEGER = lpfadcIa;
+            adcData[3][graphCount].INTEGER = lpfadcIb;
 //          adcData[0][graphCount].INTEGER = adc_result[0];
 //          adcData[1][graphCount].INTEGER = (int)(4095 * DutyRatio[0]);
 //          adcData[2][graphCount].INTEGER = (int)(4095 * DutyRatio[1]);
@@ -114,6 +113,7 @@ _PWM_TRIP:
     }
     EPwm1Regs.ETCLR.bit.INT = 1;
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;
+    DIGIT2_CLEAR;
 }
 
  // end of switching_irq.c 

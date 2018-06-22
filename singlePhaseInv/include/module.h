@@ -72,6 +72,8 @@ extern void monitor_proc();     // need_edit
 // ParameterSet.c
 extern void VariableInitialization();
 extern void VariInit();
+extern void common_variable_init();
+
 // RefFunc.c
 extern void ramp_proc(  double set_ref, double * out_ref);
 // SCI.C

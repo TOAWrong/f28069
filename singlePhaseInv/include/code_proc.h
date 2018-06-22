@@ -73,8 +73,7 @@
 #define CODE_nega_duration_time         65
 #define CODE_test_accel_time            66
 #define CODE_test_decel_time            67
-
-// group 7 advance control vaiable
+#define CODE_RampTest                   68
 
 #define CODE_wr_FilterPoleCoeff         70
 #define CODE_wn_wr_Coeff                71
@@ -91,8 +90,10 @@
 #define CODE_PM_Fr                      81
 
 #define CODE_K_Damp_Is                  82
-#define CODE_GM_Is                      83
-#define CODE_PM_Is                      84
+//#define CODE_GM_Is                      83
+//#define CODE_PM_Is                      84
+#define CODE_KpIs                      83
+#define CODE_KiIs                      84
 
 #define CODE_Default_wr_FilterPole      85
 #define CODE_SlipCompCoeff              86

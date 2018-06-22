@@ -104,13 +104,13 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
     case CODE_IaOffset:
         strncpy(codes->disp, "Ia Offset",20);
         if( cmd == CMD_WRITE_RAM ) codeIaOffset = codes->code_value;
-        set_code_default(2000.0,2600.0,2400.0,codeIaOffset,0,codes);
+        set_code_default(1000.0,3000.0,1830.0,codeIaOffset,0,codes);
         break;
 
     case CODE_IbOffset:
         strncpy(codes->disp, "Ib Offset",20);
         if( cmd == CMD_WRITE_RAM ) codeIbOffset = codes->code_value;
-        set_code_default(2000.0,2600.0,2400.0,codeIbOffset,0,codes);
+        set_code_default(1000.0,3000.0,1830.0,codeIbOffset,0,codes);
         break;
 
     case CODE_I_sense_value:
@@ -330,6 +330,12 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
         set_code_default(0.0,30.0,3.0,test_decel_time,0,codes);
         break;
 
+    case CODE_RampTest:
+        strncpy(codes->disp, "turn Dir On/Off",20);
+        if( cmd == CMD_WRITE_RAM ) codeRampTest = codes->code_value;
+        set_code_default(0.0,1.0,0.0,codeRampTest,0,codes);
+        break;
+
 //--- vector control
     case CODE_wr_FilterPoleCoeff:
         strncpy(codes->disp, "wr_FilterPoleCoeff",20);
@@ -408,7 +414,7 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
         if( cmd == CMD_WRITE_RAM ) K_Damp_Is = codes->code_value;
         set_code_default(0.1,1.0,0.45,K_Damp_Is,0,codes);
         break;
-
+/*
     case CODE_GM_Is:
         strncpy(codes->disp, "GM_Is",20);
         if( cmd == CMD_WRITE_RAM ) GM_Is = codes->code_value;
@@ -419,6 +425,18 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
         strncpy(codes->disp, "PM_Is",20);
         if( cmd == CMD_WRITE_RAM ) PM_Is = codes->code_value;
         set_code_default(0.15,1.3,0.785,PM_Is,0,codes);
+        break;
+*/
+    case CODE_KpIs:
+        strncpy(codes->disp, "Kp Is",20);
+        if( cmd == CMD_WRITE_RAM ) codeKpIs = codes->code_value;
+        set_code_default(0.1,1000.0,5.0,codeKpIs,0,codes);
+        break;
+
+    case CODE_KiIs:
+        strncpy(codes->disp, "Ki Is",20);
+        if( cmd == CMD_WRITE_RAM ) codeKiIs = codes->code_value;
+        set_code_default(500.0,100000.0,1500.0,codeKiIs,0,codes);
         break;
 
 //--- vector control

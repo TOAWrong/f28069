@@ -14,6 +14,7 @@ void SpaceVectorModulation( double *Vs_dq)
     double  Vx,Vy;
     double  Dx,Dy,Dxy,Dz;
     double  inv_Vdc;
+    Uint16 temp;
 
     if (Vs_dq[qs]>=0) {
         if (fabs(0.57735*Vs_dq[qs])<fabs(Vs_dq[ds])){
@@ -69,9 +70,18 @@ void SpaceVectorModulation( double *Vs_dq)
         case 5 :    DutyRatio[u]=Dy+Dz;     DutyRatio[v]=Dz;        DutyRatio[w]=Dxy+Dz;    break;
         case 6 :    DutyRatio[u]=Dxy+Dz;    DutyRatio[v]=Dz;        DutyRatio[w]=Dx+Dz;     break;
     }
-    DutyCount[u] = (Uint16)(MAX_PWM_CNT * DutyRatio[u] );
-    DutyCount[v] = (Uint16)(MAX_PWM_CNT * DutyRatio[v] );
-    DutyCount[w] = (Uint16)(MAX_PWM_CNT * DutyRatio[w] );
+
+    temp = (Uint16)(MAX_PWM_CNT * DutyRatio[u] );
+    DutyCount[u] = ( temp < DEAD_TIME_COUNT) ? 0 : temp ;
+    DutyCount[u] = ( (MAX_PWM_CNT -temp ) < DEAD_TIME_COUNT) ? MAX_PWM_CNT : temp;
+
+    temp = (Uint16)(MAX_PWM_CNT * DutyRatio[v] );
+    DutyCount[v] = ( temp < DEAD_TIME_COUNT) ? 0 : temp ;
+    DutyCount[v] = ( (MAX_PWM_CNT -temp ) < DEAD_TIME_COUNT) ? MAX_PWM_CNT : temp;
+
+    temp = (Uint16)(MAX_PWM_CNT * DutyRatio[w] );
+    DutyCount[w] = ( temp < DEAD_TIME_COUNT) ? 0 : temp ;
+    DutyCount[w] = ( (MAX_PWM_CNT -temp ) < DEAD_TIME_COUNT) ? MAX_PWM_CNT : temp;
 }
 
 #define inv_Min_Isw     20

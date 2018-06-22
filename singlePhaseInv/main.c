@@ -102,10 +102,12 @@ void main( void )
     if( load_code2ram() != 0 ) tripProc();
 	if(HardwareParameterVerification() !=0 ) tripProc();
 
+	common_variable_init();
+
     VariInit();
     lpf2ndCoeffInit( 1000.0, Ts, lpfVdcIn, lpfVdcOut, lpfVdcK);
-    lpf2ndCoeffInit( 1.0, Ts, lpfIaIn, lpfIaOut, lpfIrmsK);
-    lpf2ndCoeffInit( 1.0, Ts, lpfIbIn, lpfIbOut, lpfIrmsK);
+    lpf2ndCoeffInit( 1000.0, Ts, lpfIaIn, lpfIaOut, lpfIrmsK);
+    lpf2ndCoeffInit( 1000.0, Ts, lpfIbIn, lpfIbOut, lpfIrmsK);
 
 	IER &= ~M_INT3;      // debug for PWM
 	InitEPwm_ACIM_Inverter(); 	// debug

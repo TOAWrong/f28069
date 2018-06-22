@@ -23,6 +23,7 @@ void trip_recording(int trip_code,double trip_data,char * st)
     else            gTripSaveFlag = 0;
 }
 
+#define OVER_I_LIMIT    20.0
 int CheckOverCurrent( )
 {
 	if( adcIa > 3500){
@@ -37,10 +38,21 @@ int CheckOverCurrent( )
         trip_recording( ERR_OVER_CURRENT_V_PHASE, (double)(adcIb),"I adc over V ph");
 		return ERR_OVER_CURRENT_V_PHASE;
 	}
-	if( adcIb < 500 ){
+    if( adcIb < 500 ){
         trip_recording( ERR_OVER_CURRENT_V_PHASE, (double)(adcIb),"I adc under V ph");
-		return ERR_OVER_CURRENT_V_PHASE;
-	}
+        return ERR_OVER_CURRENT_V_PHASE;
+    }
+
+    if( fabs(Is_abc[as]) > OVER_I_LIMIT ){
+        trip_recording( ERR_OVER_CURRENT_U_PHASE, fabs(Is_abc[as]) ,"I_a over 20.0A");
+        return ERR_OVER_CURRENT_U_PHASE;
+    }
+
+    if( fabs(Is_abc[bs]) > OVER_I_LIMIT ){
+        trip_recording( ERR_OVER_CURRENT_V_PHASE, fabs(Is_abc[bs]) ,"I_b over 20.0A");
+        return ERR_OVER_CURRENT_V_PHASE;
+    }
+
 	return 	0; 
 }
 

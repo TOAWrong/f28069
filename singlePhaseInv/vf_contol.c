@@ -12,7 +12,8 @@ int vf_loop_control(double cmd_ref)
 
 //	simple_scalar_control_variable_init();
 
-	VariInit();
+	common_variable_init();
+    VariInit();
 	trip_code = HardwareParameterVerification();
 	reference_in = cmd_ref;
 

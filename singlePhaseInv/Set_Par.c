@@ -124,24 +124,6 @@ int COMMON_VECT_CNTL_ParameterVerification()
 	sigma_Ls_div_1_plus_sigma=sigma_Ls/(1.0+sigma);		// ���� ���Ѱ� ���
 	Lm_div_Lr=Lm/Lr;
 	Lr_div_Lm=Lr/Lm;
-	
-	if ( (K_Damp_Is<0.1) || (K_Damp_Is>1.0) )				return	CODE_K_Damp_Is;
-	if ( (PM_Is<(PI/20.0)) || (PM_Is>(5.0*PI/12.0)) )		return	CODE_PM_Is;
-	if ( (GM_Is<2.5) || (GM_Is>10.0) )						return	CODE_GM_Is;	
-	
-	inv_GM_Is_square_minus_1=1.0/(GM_Is*GM_Is-1.0);			// 1.0/(GM*GM-1.0)						
-	inv_GM_Is=1.0/GM_Is;		
-	wp_Is_Coeff=(GM_Is*PM_Is+PI_1_2*GM_Is*(GM_Is-1.0))*inv_GM_Is_square_minus_1;
-	Kp_Is_Coeff=sigma_Ls*inv_GM_Is;
-
-	wp_Is=wp_Is_Coeff*inv_Ts;					// Td_Is=Ts
-	Kp_Is=Kp_Is_Coeff*wp_Is;
-	Ki_Is=Kp_Is*(2.0*wp_Is-inv_PI_1_4*wp_Is*wp_Is*Ts+(Rs+Rr)*inv_sigma_Ls);
-
-	if (Ki_Is<=10.0)					return	ERR_Ki_Is_Under;			// ��������� ���� ����
-	if (Kp_Is>Ki_Is)					return	ERR_Kp_Is_Over;
-	else if (Kp_Is<0.0)					return	ERR_Kp_Is_Under;
-
 	return	0;	
 }	
 
@@ -298,7 +280,7 @@ int AUTO_TUNING_Parameter()
 	if ( (AT_Time_Jm<0.249) || (AT_Time_Jm>2.0) )
 		return	CODE_AT_Time_Jm;	
 	
-	
+/*
 	// ���������
 	if ( (K_Damp_Is<0.1) || (K_Damp_Is>1.01) )
 		return	CODE_K_Damp_Is;
@@ -309,7 +291,7 @@ int AUTO_TUNING_Parameter()
 	
 	if ( (Jm_ID_ENABLE<0) || (Jm_ID_ENABLE>1) )
 		return	CODE_Jm_ID_ENABLE;
-	
+*/
 	return	0;	
 }		
 
