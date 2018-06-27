@@ -50,7 +50,8 @@ void ADC_SOC_CNF( )
 }
 
 // 3.3Volt --> 4096 1 Volt --> 1/3.3 * 4096 = 1241.2
-#define I_RATIO   0.004          //
+// #define I_RATIO   0.004          //
+#define I_RATIO   0.001487      //
 interrupt void adcIsr(void)
 {
     DIGIT1_SET;

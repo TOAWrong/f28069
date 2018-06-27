@@ -721,7 +721,30 @@ int parameter_estimation( )
         load_sci_tx_mail_box( "---!!! Skip find Jm --- \r\n");
 	}
 
-	load_sci_tx_mail_box(" send save command for saving motor parameter !!! ");
+    u32data.dword = Rs; write_code_2_eeprom(CODE_Rs,u32data);
+    u32data.dword = Rr; write_code_2_eeprom(CODE_Rr,u32data);
+    u32data.dword = Ls; write_code_2_eeprom(CODE_Ls,u32data);
+    u32data.dword = Lr; write_code_2_eeprom(CODE_Lr,u32data);
+    u32data.dword = Lm; write_code_2_eeprom(CODE_Lm,u32data);
+    u32data.dword = Jm; write_code_2_eeprom(CODE_Jm,u32data);
+
+    if( iTripCode = SaveDataProc(CODE_Rs, Rs) ) return iTripCode ;
+    if( iTripCode = SaveDataProc(CODE_Rr, Rr) ) return iTripCode ;
+    if( iTripCode = SaveDataProc(CODE_Ls, Ls) ) return iTripCode ;
+    if( iTripCode = SaveDataProc(CODE_Lr, Lr) ) return iTripCode ;
+    if( iTripCode = SaveDataProc(CODE_Lm, Lm) ) return iTripCode ;
+
+    load_sci_tx_mail_box("\n========================= r\n");delay_msecs(10);
+    load_sci_tx_mail_box("AT Result Save \r\n");delay_msecs(10);
+    snprintf(str,25,"\n Rs=%10.3e",Rs);load_sci_tx_mail_box(str);delay_msecs(10);
+    snprintf(str,25,"\n Rr=%10.3e",Rr);load_sci_tx_mail_box(str);delay_msecs(10);
+    snprintf(str,25,"\n Ls=%10.3e",Ls);load_sci_tx_mail_box(str);delay_msecs(10);
+    snprintf(str,25,"\n Lr=%10.3e",Lr);load_sci_tx_mail_box(str);delay_msecs(10);
+    snprintf(str,25,"\n Lm=%10.3e",Lm);load_sci_tx_mail_box(str);delay_msecs(10);
+    snprintf(str,25,"\n Jm=%10.3e",Jm);load_sci_tx_mail_box(str);delay_msecs(10);
+    load_sci_tx_mail_box("\n======================== \r\n");
+
+    load_sci_tx_mail_box(" send save command for saving motor parameter !!! ");
 
 	iTripCode = 0;
 	LoopCtrl = 1;
@@ -740,12 +763,12 @@ int parameter_estimation( )
 
         case CMD_SAVE:
 
-//            u32data.dword = Rs; write_code_2_eeprom(CODE_Rs,u32data);
-//            u32data.dword = Rr; write_code_2_eeprom(CODE_Rr,u32data);
-//            u32data.dword = Ls; write_code_2_eeprom(CODE_Ls,u32data);
-//            u32data.dword = Lr; write_code_2_eeprom(CODE_Lr,u32data);
-//            u32data.dword = Lm; write_code_2_eeprom(CODE_Lm,u32data);
-            // u32data.dword = Jm; write_code_2_eeprom(CODE_Jm,u32data);
+            u32data.dword = Rs; write_code_2_eeprom(CODE_Rs,u32data);
+            u32data.dword = Rr; write_code_2_eeprom(CODE_Rr,u32data);
+            u32data.dword = Ls; write_code_2_eeprom(CODE_Ls,u32data);
+            u32data.dword = Lr; write_code_2_eeprom(CODE_Lr,u32data);
+            u32data.dword = Lm; write_code_2_eeprom(CODE_Lm,u32data);
+            u32data.dword = Jm; write_code_2_eeprom(CODE_Jm,u32data);
 
             if( iTripCode = SaveDataProc(CODE_Rs, Rs) ) return iTripCode ;
             if( iTripCode = SaveDataProc(CODE_Rr, Rr) ) return iTripCode ;

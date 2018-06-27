@@ -200,7 +200,7 @@ void loadSciaTxBufAdc(int channel )
         load_scia_tx_mail_box(str);
         delay_msecs(15);
     }
-    delay_msecs(100);
+    delay_msecs(150);
     for(j = 0; j < 4 ; j++ ){
         for( i = 100 ; i < 200 ; i++){
             snprintf( str,6,"%04d,",adcData[j][i].INTEGER); load_scia_tx_mail_box(str);
@@ -210,9 +210,39 @@ void loadSciaTxBufAdc(int channel )
         load_scia_tx_mail_box(str);
         delay_msecs(15);
     }
-    delay_msecs(100);
+    delay_msecs(150);
     for(j = 0; j < 4 ; j++ ){
         for( i = 200 ; i < 300 ; i++){
+            snprintf( str,6,"%04d,",adcData[j][i].INTEGER); load_scia_tx_mail_box(str);
+        }
+        strncpy(str,"ch0\r\n",5);
+        str[2] += j;
+        load_scia_tx_mail_box(str);
+        delay_msecs(15);
+    }
+    delay_msecs(150);
+    for(j = 0; j < 4 ; j++ ){
+        for( i = 300 ; i < 400 ; i++){
+            snprintf( str,6,"%04d,",adcData[j][i].INTEGER); load_scia_tx_mail_box(str);
+        }
+        strncpy(str,"ch0\r\n",5);
+        str[2] += j;
+        load_scia_tx_mail_box(str);
+        delay_msecs(15);
+    }
+    delay_msecs(150);
+    for(j = 0; j < 4 ; j++ ){
+        for( i = 400 ; i < 500 ; i++){
+            snprintf( str,6,"%04d,",adcData[j][i].INTEGER); load_scia_tx_mail_box(str);
+        }
+        strncpy(str,"ch0\r\n",5);
+        str[2] += j;
+        load_scia_tx_mail_box(str);
+        delay_msecs(15);
+    }
+    delay_msecs(150);
+    for(j = 0; j < 4 ; j++ ){
+        for( i = 500 ; i < 600 ; i++){
             snprintf( str,6,"%04d,",adcData[j][i].INTEGER); load_scia_tx_mail_box(str);
         }
         strncpy(str,"ch0\r\n",5);

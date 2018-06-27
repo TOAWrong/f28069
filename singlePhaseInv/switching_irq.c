@@ -99,11 +99,13 @@ _PWM_TRIP:
 //---
     if( !sendAdcDataFlag ){
         if(graphCount< GRAPH_NUMBER ){
-            adcData[0][graphCount].INTEGER = adc_result[0]-adc_result[5];
-            adcData[1][graphCount].INTEGER = adc_result[1]-adc_result[5];
-            adcData[2][graphCount].INTEGER = adc_result[4];     // adc_exSense
-            adcData[3][graphCount].INTEGER = adc_result[5];     // adc_Cmd
+            adcData[0][graphCount].INTEGER = (int)(Is_abc[as] * 100);
+            adcData[1][graphCount].INTEGER = (int)(Is_abc[bs] * 100);
+            adcData[3][graphCount].INTEGER = adc_result[0]-adc_result[5];
+            adcData[4][graphCount].INTEGER = adc_result[1]-adc_result[5];
 
+//            adcData[2][graphCount].INTEGER = adc_result[4];     // adc_exSense
+//            adcData[3][graphCount].INTEGER = adc_result[5];     // adc_Cmd
 //            adcData[0][graphCount].INTEGER = (int)(Is_abc[as] * 100);
 //            adcData[1][graphCount].INTEGER = (int)(Is_abc[bs] * 100);
 //            adcData[2][graphCount].INTEGER = lpfadcIa;
