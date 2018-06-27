@@ -296,8 +296,7 @@ int estim_req_leq_loop( )
 //	INIT_CHARGE_CLEAR;
 //	MAIN_CHARGE_SET;
 //	TRIP_OUT_CLEAR;
-	common_variable_init();
-	VariableInitialization();
+	commonVariableInit();
 	if( (iTripCode = HardwareParameterVerification()) !=0 ){
 		Nop();
 		return iTripCode;
@@ -309,7 +308,6 @@ int estim_req_leq_loop( )
 	IER |= M_INT3;      // debug for PWM
 
 	Leq=0.0;	Req=0.0;		
-	
 	LPF_Is = 0.0;
 	LPF_Is_Square = 0.0;
 	LPF_Vs_Square =0.0;
@@ -359,7 +357,7 @@ int estim_req_leq_loop( )
 	gMachineState = STATE_READY;
 
 	if (Req<=1.0e-3){	
-		trip_recording( ERR_Req_Under,Req,"ERR Req Under 0.001 ");
+		trip_recording( ERR_Req_Under,Req,"ERR ReqUnder0.001");
 		return	ERR_Req_Under;			// Req <= 1m Ohm
 	}
 
@@ -368,11 +366,11 @@ int estim_req_leq_loop( )
 		return	ERR_Req_Over;			// Req >= 10.0 Ohm
 	}
 	if (Leq<=0.1e-3){
-		trip_recording( ERR_Leq_Under0,Leq,"ERR Leq Under 0.0001");
+		trip_recording( ERR_Leq_Under0,Leq,"ERRLeqUnder0.0001");
 		return	ERR_Leq_Under0;			// Leq <= 100 uH
 	}
 	if (Leq>=200.0e-3){
-		trip_recording( ERR_Leq_Over0,Leq,"ERR Leq Over 0.2    ");
+		trip_recording( ERR_Leq_Over0,Leq,"ERR Leq Over 0.2");
 		return	ERR_Leq_Over0;			// Leq <= 100 uH
 	}
 
@@ -391,13 +389,12 @@ int estim_Rs_loop()
 
 	gMachineState = STATE_READY;
 //	AutoTuningFlag=0;												// No Action
-	VariableInitialization();
+	commonVariableInit();
 
 	Vs_dq_ref[ds] = Vs_dq_ref[qs] = 0.0;
 	Is_dq_ErrInt[ds] = Is_dq_ErrInt[qs] = 0.0;
 
 	Rs=0.0;												// Rs �ʱ�ȭ
-
 	AutoTuningFlag = ID_AT_RS;
 
 	gfRunTime=0.0;
@@ -450,23 +447,9 @@ int estim_Ls_loop()
 	double In;
 
 	gMachineState = STATE_READY;
-	VariableInitialization();
-
-
-	// V/F Control Parameter
-//	VF_DeadTimeGain=1.0;
-//	VF_ExcitationTime=2.0;					//
-//	VF_Fs_Coeff=1.0;
-//	VF_Freq_TrqBoost=1.5;
-	VF_Vs_Coeff_TrqBoost=1.5*(VF_Freq_TrqBoost / codeRateHz );
-//	VF_Rs_ThermalCoeff=1.05;			
-//	VF_IR_Comp_FilterPole=100.0;		
-//	VF_Slip_Comp_FilterPole=20.0;	
-//	VF_Rs=0.0;								// ����Ʈ ���� �� --> 0
-	//---------------------------
+	commonVariableInit();
 
 	Ls=0.0;													// Ls �ʱ�ȭ
-
 	gfRunTime=0.0;
 	TuningTime	=	AT_Time_Ls + AT_Ls_Vs_RAMP + 0.2;
 
@@ -643,7 +626,7 @@ int estim_Jm_loop()
 		if( gfRunTime > 1.0 ) LoopCtrl = 0;
 	} 
 
-	VariableInitialization();
+	commonVariableInit();
 
 	TuningTime = ExcitationTime + AT_Ls_DMB_OpenTime + AT_Time_Jm ;
 						  //"01234567890123456789"	
@@ -752,6 +735,9 @@ int parameter_estimation( )
         switch(cmd)
         {
         case CMD_STOP:
+            LoopCtrl = 0;
+            break;
+
         case CMD_SAVE:
 
 //            u32data.dword = Rs; write_code_2_eeprom(CODE_Rs,u32data);
@@ -759,7 +745,7 @@ int parameter_estimation( )
 //            u32data.dword = Ls; write_code_2_eeprom(CODE_Ls,u32data);
 //            u32data.dword = Lr; write_code_2_eeprom(CODE_Lr,u32data);
 //            u32data.dword = Lm; write_code_2_eeprom(CODE_Lm,u32data);
-//            // u32data.dword = Jm; write_code_2_eeprom(CODE_Jm,u32data);
+            // u32data.dword = Jm; write_code_2_eeprom(CODE_Jm,u32data);
 
             if( iTripCode = SaveDataProc(CODE_Rs, Rs) ) return iTripCode ;
             if( iTripCode = SaveDataProc(CODE_Rr, Rr) ) return iTripCode ;

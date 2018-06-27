@@ -3,47 +3,14 @@
 
 void monitor_proc()		// need_edit
 {
-    static int monitorCount=0;
-    int i;
-	char str[50]= {0};
-
 	Uint32 RunTimeMsec=0 ;
 	static unsigned long StartTimeMsec = 0 ;
 
 	RunTimeMsec = ulGetTime_mSec( StartTimeMsec);
 	if(RunTimeMsec < 1500) return;	// 1500msec
-	StartTimeMsec = ulGetNow_mSec( );
 
-	if( gMachineState == STATE_POWER_ON ){
-        load_scia_tx_mail_box(" \n");
-		snprintf( gStr1,10,"Vdc =%.f : ",Vdc);
-		load_sci_tx_mail_box(gStr1);delay_msecs(10);
-		for( i = 0 ; i < 5 ; i++ ){
-		    snprintf( str,19,"No%d=%4d : ",i,adc_result[monitorCount]);
-	        load_scia_tx_mail_box(str);
-		}
-	}
-	else if( gMachineState == STATE_TRIP ){
-        load_scia_tx_mail_box(" \n");
-        load_scia_tx_mail_box("TRIP");
-        load_scia_tx_mail_box(TripInfoNow.MSG);
-        sprintf( gStr1,"CODE=%d : ",TripInfoNow.CODE)    ; load_scia_tx_mail_box(gStr1);
-        sprintf( gStr1,"DATA=%.2e : ",TripInfoNow.DATA)    ; load_scia_tx_mail_box(gStr1);
-        sprintf( gStr1,"Irms=%.2e : ",TripInfoNow.CURRENT) ; load_scia_tx_mail_box(gStr1);
-        sprintf( gStr1,"RPM =%.2e : ",TripInfoNow.RPM)     ; load_scia_tx_mail_box(gStr1);
-        sprintf( gStr1,"Vdc =%.2e",TripInfoNow.VDC)     ; load_scia_tx_mail_box(gStr1);
-    }
-    else {
-        load_scia_tx_mail_box("\n");
-        load_scia_tx_mail_box(MonitorMsg);
-        load_scia_tx_mail_box(" : ");
-        sprintf( gStr1,"rpm =%.1f",rpm ); load_scia_tx_mail_box(gStr1);
-        load_scia_tx_mail_box(" : ");
-        sprintf( gStr1,"Iout  =%.1f",Is_mag_rms); load_scia_tx_mail_box(gStr1);
-        load_scia_tx_mail_box(" : ");
-        sprintf( gStr1,"Vdc =%.f", Vdc); load_scia_tx_mail_box(gStr1);
-        //load_scia_tx_mail_box("Rod Mckuen Welcome to winter!\n");
-	}
+	StartTimeMsec = ulGetNow_mSec( );
+	sciaMonitor();
 }
 
 void GetInputMark(char * str)

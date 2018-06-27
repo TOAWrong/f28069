@@ -94,7 +94,8 @@ int iGetAinCmd(int * piCommand, double * pfReference)
 
 void analog_cmd_proc(double * ana_ref)
 {
-    double temp = ((double) (adcCmdAnalog)) * 0.0002441406250;
+    //    double temp = ((double) (adcCmdAnalog)) * 0.0002441406250;
+    double temp = adcExSensor * 0.0002441406250;
     * ana_ref = temp * analog_cmd_in_span1 - analog_cmd_in_zero1;
 }
 

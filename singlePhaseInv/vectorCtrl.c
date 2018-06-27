@@ -9,8 +9,7 @@ int vectorCtrlLoop()
 	int iCommand;
 	double fReference;
 
-	VariableInitialization();
-
+	commonVariableInit();
 	iTripCode = HardwareParameterVerification();
 	if( iTripCode !=0 ) return iTripCode;
 

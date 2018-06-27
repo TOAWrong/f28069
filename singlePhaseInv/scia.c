@@ -82,20 +82,20 @@ void sciaMonitor()     // need_edit
 
         fTemp = TripInfoNow.RPM;
         temp = (int)(floor(fTemp + 0.5));
-        snprintf( str,20," : TripRpm= %4d :",temp);
+        snprintf( str,30," : TripRpm= %4d :",temp);
         load_scia_tx_mail_box(str);
 
         temp = (int)(floor(TripInfoNow.VDC +0.5));
-        snprintf( str,20,"tripVDC=%4d : ",temp);
+        snprintf( str,30,"tripVDC=%4d : ",temp);
         load_scia_tx_mail_box(str);
 
         fTemp = TripInfoNow.CURRENT;
         temp = (int)(floor(fTemp*10 +0.5));
-        snprintf( str,20,"tripI = %3d.%1dA : ",(temp/10),temp%10);
+        snprintf( str,30,"tripI = %3d.%1dA : ",(temp/10),temp%10);
         load_scia_tx_mail_box(str);
 
         temp = (int)(floor(TripInfoNow.DATA +0.5));
-        snprintf( str,20,"tripData=%4d \r\n",temp);
+        snprintf( str,30,"tripData=%4d \r\n",temp);
         load_scia_tx_mail_box(str);
         // free(TripData);
         return;
@@ -104,8 +104,8 @@ void sciaMonitor()     // need_edit
     snprintf( str,20,"%s : ",MonitorMsg);
     load_scia_tx_mail_box(str);
 
-    //    fTemp = Is_mag_rms;
-    fTemp = LPF_Ia;
+    fTemp = Is_mag_rms;
+    //fTemp = LPF_Ia;
     temp = (int)(floor(fTemp*10 +0.5));
     snprintf( str,20,"lpfI = %3d.%1dA : ",(temp/10),temp%10);
     load_scia_tx_mail_box(str);

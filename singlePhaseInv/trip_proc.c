@@ -1,8 +1,6 @@
-//
 // filename 	: trip_proc.c 
-// projectname 	: F28035 inverter
-// 					PCB --> pag.ls.0503  
-// data			; start 2012.11.28 ~		
+// projectname 	: F28069 inverter PCB :
+// data			; start 2018.06.23
 //					by cheoung soon gil  
 // 
 #include	<header.h>
@@ -23,7 +21,7 @@ void trip_recording(int trip_code,double trip_data,char * st)
     else            gTripSaveFlag = 0;
 }
 
-#define OVER_I_LIMIT    20.0
+#define OVER_I_LIMIT    50.0
 int CheckOverCurrent( )
 {
 	if( adcIa > 3500){
@@ -44,12 +42,12 @@ int CheckOverCurrent( )
     }
 
     if( fabs(Is_abc[as]) > OVER_I_LIMIT ){
-        trip_recording( ERR_OVER_CURRENT_U_PHASE, fabs(Is_abc[as]) ,"I_a over 20.0A");
+        trip_recording( ERR_OVER_CURRENT_U_PHASE, fabs(Is_abc[as]) ,"I_a over 50.0A");
         return ERR_OVER_CURRENT_U_PHASE;
     }
 
     if( fabs(Is_abc[bs]) > OVER_I_LIMIT ){
-        trip_recording( ERR_OVER_CURRENT_V_PHASE, fabs(Is_abc[bs]) ,"I_b over 20.0A");
+        trip_recording( ERR_OVER_CURRENT_V_PHASE, fabs(Is_abc[bs]) ,"I_b over 50.0A");
         return ERR_OVER_CURRENT_V_PHASE;
     }
 

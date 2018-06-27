@@ -70,20 +70,19 @@ extern void InitEPwm_ACIM_Inverter();
 // MonitorProc.c
 extern void monitor_proc();     // need_edit
 // ParameterSet.c
-extern void VariableInitialization();
-extern void VariInit();
-extern void common_variable_init();
+extern void commonVariableInit();
 
 // RefFunc.c
 extern void ramp_proc(  double set_ref, double * out_ref);
 // SCI.C
 extern void GetInputMark(char * str);
 // scia.c
-extern void scia_cmd_proc(int * scic_cmd, double * scic_ref);
-extern interrupt void sciaTxFifoIsr(void);
-extern interrupt void sciaRxFifoIsr(void);
-extern void scia_fifo_init(void);
 extern void load_scia_tx_mail_box(char *st);
+extern void scia_cmd_proc(int * scic_cmd, double * scic_ref);
+extern void scia_fifo_init(void);
+extern void sciaMonitor();
+extern interrupt void sciaRxFifoIsr(void);
+extern interrupt void sciaTxFifoIsr(void);
 
 //set_Par.c
 extern int HardwareParameterVerification();
@@ -92,7 +91,6 @@ extern int COMMON_VECT_CNTL_ParameterVerification();
 extern int COMMON_SL_VECT_CNTL_ParameterVerification();
 extern int SL_TORQUE_CNTL_Parameter();
 extern int SL_SPEED_CNTL_Parameter();
-extern int AUTO_TUNING_Parameter();
 
 //SL_Vect.c
 void SL_SpeedCntl_SFRF();

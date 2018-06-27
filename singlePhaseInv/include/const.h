@@ -1,8 +1,7 @@
 #ifndef		__COMMON_CONSTANTS_
 #define		__COMMON_CONSTANTS_
 
-#define MOTOR_POLE    2       // motor pole pair
-
+#define MIN_REF       0.05    // minimum run reference
 //'math
 #define PI_2_INV	 0.15915494309		//' 1/(2*pi)
 #define	PI_120		 376.991118430		//' 2*pi*60

@@ -1,8 +1,6 @@
 #include	<header.h>
 #include	<extern.h>
 
-#define min_vf_ref  0.05
-
 int vf_loop_control(double cmd_ref)
 {
 	int LoopCtrl;
@@ -12,8 +10,7 @@ int vf_loop_control(double cmd_ref)
 
 //	simple_scalar_control_variable_init();
 
-	common_variable_init();
-    VariInit();
+	commonVariableInit();
 	trip_code = HardwareParameterVerification();
 	reference_in = cmd_ref;
 
@@ -52,6 +49,7 @@ int vf_loop_control(double cmd_ref)
 			}
 			else{
 				strncpy(MonitorMsg,"RUN",20);
+				reference_out = MIN_REF;
 				gMachineState = STATE_RUN;
 			}
 			break;
@@ -84,7 +82,7 @@ int vf_loop_control(double cmd_ref)
 				gMachineState = STATE_RUN;
 				// reference_in = reference_out; 
 			}				
-			else if ((fabs(reference_out) <= min_vf_ref )){
+            else if ((fabs(reference_out) <= MIN_REF )){
                 strncpy(MonitorMsg,"READY",20);
 				gMachineState = STATE_READY; reference_out = Freq_out = 0.0; LoopCtrl = 0;
 			}
