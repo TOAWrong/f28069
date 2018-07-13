@@ -3,12 +3,12 @@
 
 #define min_vf_ref  0.05
 
-int vf_loop_control(float cmd_ref)
+int vf_loop_control(double cmd_ref)
 {
 	int LoopCtrl;
 	int trip_code=0;
 	int command;
-	float ref_in0;
+	double ref_in0;
 
 //	simple_scalar_control_variable_init();
 

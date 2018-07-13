@@ -19,13 +19,13 @@ extern interrupt void adcIsr(void);
 extern interrupt void sciaRxFifoIsr(void);
 extern interrupt void sciaTxFifoIsr(void);
 
-float Vdc_fnd_data;
+double Vdc_fnd_data;
 
 void main( void )
 {
     int trip_code,loop_ctrl,temp;
 	int cmd;
-	float ref_in0;
+	double ref_in0;
 
 	InitSysCtrl();
 	InitGpio();

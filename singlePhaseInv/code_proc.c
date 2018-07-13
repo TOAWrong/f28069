@@ -122,7 +122,7 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
 	return 0;
 }
 
-void set_code_default(float min, float max, float defaults, float value,int open_level, CODE_INFO * codes )
+void set_code_default(double min, double max, double defaults, double value,int open_level, CODE_INFO * codes )
 {
 	codes->type 		= TYPE_float;
 	codes->open_level 	= open_level;
@@ -191,12 +191,12 @@ void backup_data_load()
         }
 	}
 }
-float CheckSum()
+double CheckSum()
 {
     return 0.0;
 }
 
-int SaveDataProc(int addr, float data)
+int SaveDataProc(int addr, double data)
 {
 	int cmd,i,return_value;
 	char SciBuf[30]={0};

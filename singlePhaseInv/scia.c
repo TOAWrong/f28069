@@ -60,7 +60,7 @@ void scia_fifo_init()
 void sciaMonitor()     // need_edit
 {
     int temp;
-    float fTemp;
+    double fTemp;
     char str[21] ={0};
 
     switch(gMachineState){
@@ -269,9 +269,9 @@ interrupt void sciaRxFifoIsr(void)
 
 // read data format   "9:4:123:x.xxxe-x"
 // write data format  "9:6:123:1.234e-3"
-void scia_cmd_proc( int * sci_cmd, float * sci_ref)
+void scia_cmd_proc( int * sci_cmd, double * sci_ref)
 {
-	float data,dbtemp;
+	double data,dbtemp;
     int addr,check,temp;
     char str[30]={0};
 

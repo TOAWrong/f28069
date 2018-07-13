@@ -91,7 +91,7 @@ __interrupt void adcIsr(void)
     return;
 }
 
-void analog_input_proc( float * referenc)
+void analog_input_proc( double * referenc)
 {
 	* referenc = analog_ref_a * analog_cmd_in_span1 - analog_cmd_in_zero1;
 }

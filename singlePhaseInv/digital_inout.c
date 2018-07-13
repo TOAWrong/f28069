@@ -25,7 +25,7 @@ void input_ext_fault_a_proc()
 	gPWMTripCode = TRIP_EXT_A;
 }
 
-void digital_input_proc(int * cmd, float * ref )
+void digital_input_proc(int * cmd, double * ref )
 {
 	if( RUN_INPUT == 0 ){
 	 	* cmd = CMD_START; //FWD LOW

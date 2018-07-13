@@ -7,8 +7,6 @@
 #include "aaa_driver.h"		    // 2011.10.12
 #include "code_proc.h"		    // 2009.08.15
 #include "singlePhaseSci.h"		// 2017.08.11   // f28069 inverter for single phase ACIM
-//#include "button_proc.h"	    // 2009.09.14
-//#include "IQmathLib.h"
 #include "const.h"					
 
 #include "fault.h"

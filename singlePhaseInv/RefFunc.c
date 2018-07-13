@@ -1,11 +1,11 @@
 #include	<header.h>
 #include	<extern.h>
 
-void ramp_proc( float SetRef,float * pOutRef)
+void ramp_proc( double SetRef,double * pOutRef)
 {
 	static unsigned long ulCount;
 
-	float OutRef;
+	double OutRef;
 	
 	OutRef = * pOutRef;
 

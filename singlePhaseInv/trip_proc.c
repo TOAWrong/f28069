@@ -8,7 +8,7 @@
 #include	<header.h>
 #include	<extern.h>
 
-void trip_recording(int trip_code,float trip_data,char * st)
+void trip_recording(int trip_code, double trip_data,char * st)
 {
 
     TripInfoNow.CODE    = trip_code;
@@ -27,19 +27,19 @@ void trip_recording(int trip_code,float trip_data,char * st)
 int CheckOverCurrent( )
 {
 	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIm) > 3500)){
-        trip_recording( ERR_OVER_CURRENT_U_PHASE, (float)(adcIm),"I adc over U ph");
+        trip_recording( ERR_OVER_CURRENT_U_PHASE, (double)(adcIm),"I adc over U ph");
 		return ERR_OVER_CURRENT_U_PHASE;
 	}
 	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIm) < 500)){
-        trip_recording( ERR_OVER_CURRENT_U_PHASE, (float)(adcIm),"I adc under U ph");
+        trip_recording( ERR_OVER_CURRENT_U_PHASE, (double)(adcIm),"I adc under U ph");
 		return ERR_OVER_CURRENT_U_PHASE;
 	}
 	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIa) > 3500)){
-        trip_recording( ERR_OVER_CURRENT_V_PHASE, (float)(adcIa),"I adc over V ph");
+        trip_recording( ERR_OVER_CURRENT_V_PHASE, (double)(adcIa),"I adc over V ph");
 		return ERR_OVER_CURRENT_V_PHASE;
 	}
 	if(( protect_reg.bit.OVER_I_ADC)&&( abs(adcIa) < 500)){
-        trip_recording( ERR_OVER_CURRENT_V_PHASE, (float)(adcIa),"I adc under V ph");
+        trip_recording( ERR_OVER_CURRENT_V_PHASE, (double)(adcIa),"I adc under V ph");
 		return ERR_OVER_CURRENT_V_PHASE;
 	}
 	return 	0; 
@@ -308,8 +308,8 @@ void ClearTripDataToEeprom()
 void tripProc()
 {
     int cmd,temp;
-    float ref_in0;
-    float dbtemp;
+    double ref_in0;
+    double dbtemp;
     char str[30]={0};
 
     gMachineState = STATE_TRIP;
