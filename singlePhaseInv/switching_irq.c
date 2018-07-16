@@ -1,8 +1,8 @@
 // FILE		: switching_irq.c
 // Project 	: KERI back2back inverter
-// PCB		: regen_dsp_110513 & regen_sen_110513
+// PCB		: tms320F28069 G0723, powerPackInv G02
 // Company  : Eunwho Power Electonics
-// date		: 2018.0608	by soonkil jung
+// date		: 2018.0714	by soonkil jung
 
 #include        <header.h>
 #include        <extern.h>
@@ -12,7 +12,7 @@ int dacCount = 0;
 interrupt void MainPWM(void)
 {
 	static int invt_PWM_Port_Set_flag = 0;
-	float modulationRatio;
+	double modulationRatio;
 
 #if TEST_ADC_CENTER
 	J8_2_SET;
@@ -71,16 +71,20 @@ interrupt void MainPWM(void)
 
 	digital_out_proc();
 //---
-    if( !sendAdcDataFlag ){
-        if(graphCount<GRAPH_NUMBER){
-            adcData[0][graphCount].INTEGER = adc_result[0];
-            adcData[1][graphCount].INTEGER = adc_result[1];
-            adcData[2][graphCount].INTEGER = adc_result[2];
-            adcData[3][graphCount].INTEGER = adc_result[3];
-            graphCount ++;
+	if(!sendAdcDataFlag){
+	    dacCount = (dacCount < 3) ? dacCount + 1 : 0 ;
+        if(dacCount == 0 ){
+            //adcData[0][graphCount].INTEGER = adc_result[0];
+            //adcData[1][graphCount].INTEGER = adc_result[1];
+            //adcData[2][graphCount].INTEGER = adc_result[2];
+            //adcData[3][graphCount].INTEGER = adc_result[4];
+            graphCount = (graphCount < ( GRAPH_NUMBER - 1 )) ? graphCount + 1 : 0;
+            adcData[0][graphCount].INTEGER = (int)(2047 * reference_out);
+            adcData[1][graphCount].INTEGER = (int)(2048 * (DutyRatio[0] - 0.5 ));
+            adcData[2][graphCount].INTEGER = (int)(2048 * (DutyRatio[1] - 0.5 ));
+            adcData[3][graphCount].INTEGER = (int)(2048 * (DutyRatio[2] - 0.5 ));
         }
-        else graphCount = 0;
-    }
+	}
     EPwm1Regs.ETCLR.bit.INT = 1;
 	PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;
 #if TEST_ADC_CENTER

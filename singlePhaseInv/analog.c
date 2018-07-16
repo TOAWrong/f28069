@@ -52,7 +52,7 @@ void ADC_SOC_CNF( )
 #define adcIvOffset     2578
 //--- 전류의 계산 : 66mV / A  :  3.3V -> 50A, 1 count = 50 / 4096 = 0.012207
 #define I_RATIO         0.012207
-__interrupt void adcIsr(void)
+interrupt void adcIsr(void)
 {
     int temp;
 

@@ -203,15 +203,15 @@ void main( void )
 void InitEPwm_ACIM_Inverter()
 {  
 	EPwm1Regs.ETSEL.bit.INTEN = 0;    		        // Enable INT
-//	MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / SWITCHING_FREQ ) * 0.5 * 0.5 * 0.5);
-	MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / codePwmFreq ) * 0.5 * 0.5 * 0.5);
+	MAX_PWM_CNT = (Uint16)( ( F_OSC * DSP28_PLLCR / codePwmFreq ) * 0.5 * 0.5 * 0.5 * 0.5);
 	inv_MAX_PWM_CNT = 1.0 / MAX_PWM_CNT;
 
 //--- PWM Module1
 	EPwm1Regs.TBPRD                 =  MAX_PWM_CNT;			// Set timer period
 	EPwm1Regs.TBPHS.half.TBPHS      = 0x0000; // Phase is 0
+    EPwm1Regs.TBCTL.bit.PHSDIR      = TB_UP;
     EPwm1Regs.TBCTL.bit.CTRMODE     = TB_COUNT_UPDOWN;  //
-    EPwm1Regs.TBCTL.bit.PHSEN       = TB_DISABLE;   // 2017.09.05
+    EPwm1Regs.TBCTL.bit.PHSEN       = TB_ENABLE;   // 2018.07.14
     EPwm1Regs.TBCTL.bit.PRDLD       = TB_SHADOW;    // 2017.09.05
     EPwm1Regs.TBCTL.bit.SYNCOSEL    = TB_CTR_ZERO;
 	EPwm1Regs.CMPCTL.bit.SHDWAMODE  = CC_SHADOW;	// Load registers every ZERO
@@ -246,7 +246,7 @@ void InitEPwm_ACIM_Inverter()
 //	EPwm2Regs.ETSEL.bit.INTEN = 0;
 
 //Set PWM3 
-	EPwm3Regs.TBPRD =  MAX_PWM_CNT;			// Set timer period
+	EPwm3Regs.TBPRD                 =  MAX_PWM_CNT;			// Set timer period
     EPwm3Regs.TBPHS.half.TBPHS      = 0x0000;               // Phase is 0
 	EPwm3Regs.TBCTL.bit.CTRMODE 	= TB_COUNT_UPDOWN; 	// Count up
 	EPwm3Regs.TBCTL.bit.PHSEN 		= TB_ENABLE; 
@@ -263,7 +263,6 @@ void InitEPwm_ACIM_Inverter()
 	EPwm3Regs.CMPA.half.CMPA 		= MAX_PWM_CNT;
 	EPwm3Regs.DBRED 				= DEAD_TIME_COUNT;
 	EPwm3Regs.DBFED 				= DEAD_TIME_COUNT;
-//	EPwm3Regs.ETSEL.bit.INTEN 		= 0;
 
 //Set PWM4 
 	EPwm4Regs.TBPRD =  MAX_PWM_CNT;			// Set timer period
@@ -294,38 +293,26 @@ void InitEPwm_ACIM_Inverter()
 	EPwm1Regs.ETPS.bit.INTPRD = 1;   // Generate interrupt on the 1st event
 	EPwm1Regs.ETCLR.bit.INT = 1;     //  
 
-//	AdcRegs.ADCTRL2.bit.EPWM_SOCA_SEQ1 = 1;// Enable SOCA from ePWM to start SEQ1
-//	AdcRegs.ADCTRL3.all = 0x00FE;  // Power up bandgap/reference/ADC circuits
-
 	EPwm1Regs.ETSEL.bit.SOCAEN = 1;   // Enable SOC on A group
 	EPwm1Regs.ETSEL.bit.SOCASEL = ET_CTR_PRD;//
 	EPwm1Regs.ETPS.bit.SOCAPRD = 1;        // Generate pulse on 1st event
 
 	PieCtrlRegs.PIEIER3.all = M_INT1;	// ePWM
-    // PieCtrlRegs.PIEIER3.bit.INTx1 = PWM1_INT_ENABLE;
 }
 
 interrupt void wakeint_isr(void)
 {
 	static int WakeCount = 0; 
-
 	WakeCount++;
-	
-	// Acknowledge this interrupt to get more from group 1
 	PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
 }
 
 void InitWatchDog()
 {
-	// Enable watch dog
-// Write to the whole SCSR register to avoid clearing WDOVERRIDE bit
-
    EALLOW;
    SysCtrlRegs.SCSR = BIT1;
    EDIS;
 
-// Enable WAKEINT in the PIE: Group 1 interrupt 8
-// Enable INT1 which is connected to WAKEINT:
    PieCtrlRegs.PIECTRL.bit.ENPIE = 1;   // Enable the PIE block
    PieCtrlRegs.PIEIER1.bit.INTx8 = 1;   // Enable PIE Gropu 1 INT8
    IER |= M_INT1;                       // Enable CPU int1
@@ -337,8 +324,5 @@ void InitWatchDog()
    SysCtrlRegs.WDCR = 0x0028;   
    EDIS;
 }
-
-//=========================================
-// No more.
-//=========================================
+//--- end of main.c
 

@@ -25,8 +25,8 @@ void singlePhaseModulation( double m, double thetaIn, double dutyRatio[3])
     else if( thetaIn < PI+PI_DIV2 )   sector = 4;
     else                            sector = 5;
 
-    vectorDuty[1] = m * sin(pwmCoeff[sector][3] - theta) / ( pwmCoeff[sector][0] * sin(pwmCoeff[sector][3] - pwmCoeff[sector][2]));
-    vectorDuty[2] = m * sin(theta - pwmCoeff[sector][2] ) / ( pwmCoeff[sector][1] * sin(pwmCoeff[sector][3] - pwmCoeff[sector][2]));
+    vectorDuty[1] = m * sin(pwmCoeff[sector][3] - thetaIn) / ( pwmCoeff[sector][0] * sin(pwmCoeff[sector][3] - pwmCoeff[sector][2]));
+    vectorDuty[2] = m * sin(thetaIn - pwmCoeff[sector][2] ) / ( pwmCoeff[sector][1] * sin(pwmCoeff[sector][3] - pwmCoeff[sector][2]));
     vectorDuty[0] = 1.0 - (vectorDuty[1] + vectorDuty[2]);
 
     switch(sector){
