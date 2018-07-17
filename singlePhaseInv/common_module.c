@@ -1,9 +1,9 @@
 #include	<header.h>
 #include	<extern.h>
 
-void LPF1(double Ts,double pole,double in,double *out)
+void LPF1(double TsIn,double pole,double in,double *out)
 {
-    *out+=pole*(in-*out)*Ts;
+    *out+=pole*(in-*out)*TsIn;
 }
 
 double linear_eq(double x1, double x2, double y1, double y2, double x )
@@ -18,9 +18,9 @@ void Nop()
 {
   asm ("      nop");
 }
-void PI_Damp_Controller(double limit,double Ts, double damp_factor, double Kp,double Ki,double ref,double feedback,double *integral,double *output)
+void PI_Damp_Controller(double limit,double TsIn, double damp_factor, double Kp,double Ki,double ref,double feedback,double *integral,double *output)
 {
-	*integral+=Ki*(ref-feedback)*Ts;
+	*integral+=Ki*(ref-feedback)*TsIn;
 	if (*integral>fabs(limit))			*integral=fabs(limit);
 	else if (*integral<-fabs(limit))	*integral=-fabs(limit);
 	*output=Kp*(damp_factor*ref-feedback)+*integral;

@@ -99,8 +99,6 @@ int vf_loop_control(double cmd_ref)
 
 void vf_simple_control()
 {
-    double Vs_ref;
-
     Freq_out = codeRateHz * reference_out;
 
     rpm_Coeff = 60.0 * inv_P_pair / PI_2;
@@ -133,7 +131,6 @@ void vf_simple_control()
 void slip_comp_scalar_ctrl()
 {
    double   Es_m;
-   double   Slip;
    double   sgn_freq;
    double   Det_slip;            // sqrt()안의 부호검사
    double   Det_emf;

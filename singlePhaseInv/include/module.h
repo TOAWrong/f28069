@@ -98,7 +98,7 @@ void SL_TorqueCntl_SFRF();
 void SL_VectCntl_SFRF();
 
 // svm.c
-extern  void SpaceVectorModulation(double *Vs_dq );
+extern  void SpaceVectorModulation( double *Vs_dqIn );
 extern  void VoltageEstimation();
 extern void singlePhaseModulation( double m, double theta, double dutyRatio[3]);
 // switching_irq.c

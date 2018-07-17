@@ -3,9 +3,6 @@
 
 void estim_ReqLeq_pwm()
 {
-	double	Vs_max;
-	double	Vs_ref;
-	double	Freq_ref;
 	double	del_Vs_Coeff;
 
 	if( gfRunTime < 0.01){
@@ -82,7 +79,6 @@ void estim_ReqLeq_pwm()
 
 void estim_Rs_pwm()
 {
-	double	Vs_max;
 	double	Is_ref;
 	
 	Is_ref=AT_Is_Coeff_Rs*Is_rat;	// AT_Is_Coeff_Rs = 1.0
@@ -105,8 +101,8 @@ void estim_Rs_pwm()
 
 void estim_Ls_pwm()
 {
-	double	Vs_max, Vs_ref, IncFreq;
-	double	Es_m, Slip, sgn_freq, Det_emf, Det_slip, Ls_in;
+	double	IncFreq;
+	double	Es_m, sgn_freq, Det_emf, Det_slip, Ls_in;
 	
 	CosDeltaTheta=cos(we*Ts); SinDeltaTheta=sin(we*Ts);
 	Us_dq[ds]=Vs_dq[ds]*CosDeltaTheta + Vs_dq[qs]*SinDeltaTheta;

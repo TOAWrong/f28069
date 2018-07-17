@@ -8,7 +8,7 @@
 #define Vdc_MIN                     10.0
 #define inv_Vdc_MIN                 0.1
 
-void SpaceVectorModulation( double *Vs_dq)
+void SpaceVectorModulation( double * Vs_dqIn )
 {
     unsigned sector;
     double  Vx,Vy;
@@ -16,32 +16,32 @@ void SpaceVectorModulation( double *Vs_dq)
     double  inv_Vdc;
     Uint16 temp;
 
-    if (Vs_dq[qs]>=0) {
-        if (fabs(0.57735*Vs_dq[qs])<fabs(Vs_dq[ds])){
-            if (Vs_dq[ds]>=0){
-                sector=1; Vx=Vs_dq[ds]-0.57735*Vs_dq[qs];   Vy=1.154701*Vs_dq[qs];
+    if (Vs_dqIn[qs]>=0) {
+        if (fabs(0.57735*Vs_dqIn[qs])<fabs(Vs_dqIn[ds])){
+            if (Vs_dqIn[ds]>=0){
+                sector=1; Vx=Vs_dqIn[ds]-0.57735*Vs_dqIn[qs];   Vy=1.154701*Vs_dqIn[qs];
             }
             else{
-                sector=3; Vx=1.154701*Vs_dq[qs]; Vy=-(Vs_dq[ds]+0.57735*Vs_dq[qs]);
+                sector=3; Vx=1.154701*Vs_dqIn[qs]; Vy=-(Vs_dqIn[ds]+0.57735*Vs_dqIn[qs]);
             }
         }
         else{
-                sector=2; Vx=Vs_dq[ds]+0.57735*Vs_dq[qs]; Vy=-Vs_dq[ds]+0.57735*Vs_dq[qs];
+                sector=2; Vx=Vs_dqIn[ds]+0.57735*Vs_dqIn[qs]; Vy=-Vs_dqIn[ds]+0.57735*Vs_dqIn[qs];
         }
     }
     else
     {
-        if  (fabs(0.57735*Vs_dq[qs])<fabs(Vs_dq[ds]))
+        if  (fabs(0.57735*Vs_dqIn[qs])<fabs(Vs_dqIn[ds]))
         {
-            if (Vs_dq[ds]>=0){
-                sector=6;   Vx=-1.154701*Vs_dq[qs]; Vy=Vs_dq[ds]+0.57735*Vs_dq[qs];
+            if (Vs_dqIn[ds]>=0){
+                sector=6;   Vx=-1.154701*Vs_dqIn[qs]; Vy=Vs_dqIn[ds]+0.57735*Vs_dqIn[qs];
             }
             else{
-                sector=4; Vx=0.57735*Vs_dq[qs]-Vs_dq[ds]; Vy=-1.154701*Vs_dq[qs];
+                sector=4; Vx=0.57735*Vs_dqIn[qs]-Vs_dqIn[ds]; Vy=-1.154701*Vs_dqIn[qs];
             }
         }
         else{
-                sector=5; Vx=-Vs_dq[ds]-0.57735*Vs_dq[qs]; Vy=Vs_dq[ds]-0.57735*Vs_dq[qs];
+                sector=5; Vx=-Vs_dqIn[ds]-0.57735*Vs_dqIn[qs]; Vy=Vs_dqIn[ds]-0.57735*Vs_dqIn[qs];
         }
     }
 

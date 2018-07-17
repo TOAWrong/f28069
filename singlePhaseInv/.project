@@ -33,7 +33,7 @@
 		<link>
 			<name>F2806x_CSMPasswords.asm</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/f2806x/common/source/F2806x_CSMPasswords.asm</locationURI>
+			<locationURI>INSTALLROOT_F2806x/common/source/F2806x_CSMPasswords.asm</locationURI>
 		</link>
 		<link>
 			<name>F2806x_CodeStartBranch.asm</name>
@@ -84,27 +84,23 @@
 	<variableList>
 		<variable>
 			<name>INSTALLROOT_F2806x</name>
-			<value>file:/home/eunwho/f28069/f2806x</value>
+			<value>file:/home/eunwho/ti/C2000Ware_1_00_05_00/device_support/f2806x</value>
 		</variable>
 		<variable>
 			<name>INSTALLROOT_F2806x_TO_MWARE</name>
-			<value>file:/home/eunwho/f28069/f2806x/MWare</value>
+			<value>file:/home/eunwho/ti/C2000Ware_1_00_05_00/device_support/f2806x/MWare</value>
 		</variable>
 		<variable>
 			<name>INSTALLROOT_FASTRTS</name>
-			<value>file:/home/eunwho/f28069/libraries/math/FPUfastRTS/c28</value>
+			<value>file:/home/eunwho/ti/C2000Ware_1_00_05_00/libraries/math/FPUfastRTS/c28</value>
 		</variable>
 		<variable>
 			<name>INSTALLROOT_HCCAL</name>
-			<value>file:/home/eunwho/f28069/libraries/calibration/hrcap</value>
+			<value>file:/home/eunwho/ti/C2000Ware_1_00_05_00/libraries/calibration/hrcap</value>
 		</variable>
 		<variable>
 			<name>INSTALLROOT_IQMATH</name>
-			<value>file:/home/eunwho/f28069/libraries/math/IQmath/c28</value>
-		</variable>
-		<variable>
-			<name>ORIGINAL_PROJECT_ROOT</name>
-			<value>file:/home/eunwho/f28069/f2806x/examples/c28/epwm_updown_aq</value>
+			<value>file:/home/eunwho/ti/C2000Ware_1_00_05_00/libraries/math/IQmath/c28</value>
 		</variable>
 	</variableList>
 </projectDescription>
