@@ -5,6 +5,8 @@
 int lpfadcIa;
 int lpfadcIb;
 
+double exSensRef;
+
 // control and flag
 CODE_INFO code_inform = {0,0,0,0,0,0,{0}};
 union PROTECT_FLAG protect_reg;
@@ -366,6 +368,7 @@ double   codeRateEffiency;       // 13
 double   codeRateHz;             // 14
 double   codeRateVolt;           // 15
 double   codeMotorPole;          // 16
+double   codePresSensRef;        // 17
 
 double   codeIaOffset;           // 20
 double   codeIbOffset;           // 21

@@ -35,12 +35,10 @@ void SpaceVectorModulation( double * Vs_dqIn )
         {
             if (Vs_dqIn[ds]>=0){
                 sector=6;   Vx=-1.154701*Vs_dqIn[qs]; Vy=Vs_dqIn[ds]+0.57735*Vs_dqIn[qs];
-            }
-            else{
+            } else{
                 sector=4; Vx=0.57735*Vs_dqIn[qs]-Vs_dqIn[ds]; Vy=-1.154701*Vs_dqIn[qs];
             }
-        }
-        else{
+        } else{
                 sector=5; Vx=-Vs_dqIn[ds]-0.57735*Vs_dqIn[qs]; Vy=Vs_dqIn[ds]-0.57735*Vs_dqIn[qs];
         }
     }

@@ -160,9 +160,10 @@ void main( void )
             case 1: trip_code = vf_loop_control(ref_in0)        ; break;        //
             case 3: trip_code = vectorCtrlLoop()                ; break;
             case 4: trip_code = vectorCtrlLoop()                ; break;    // TORQUE Ctrl
-            case 5: trip_code = parameter_estimation(); break;    // mode 5
- //           case 8 : pwm_pulse_test( ); break;
- //           case 9 : vf_conv_test(ref_in0); break;
+            case 5: trip_code = parameter_estimation()          ; break;    // mode 5
+            case 7: trip_code = hyd_unit_loop_proc()            ; break;    // hydro unit
+//           case 8 : pwm_pulse_test( ); break;
+//           case 9 : vf_conv_test(ref_in0); break;
             }
             if( trip_code !=0 ) tripProc();
         }
@@ -178,9 +179,8 @@ void InitEPwm_ACIM_Inverter()
     EPwm1Regs.TBCTR = 0x0000;
 	EPwm1Regs.TBPRD                 =  MAX_PWM_CNT;			// Set timer period
 	EPwm1Regs.TBPHS.half.TBPHS      = 0x0000; // Phase is 0
-    EPwm1Regs.TBCTL.bit.PHSDIR      = TB_UP;
     EPwm1Regs.TBCTL.bit.CTRMODE     = TB_COUNT_UPDOWN;  //
-    EPwm1Regs.TBCTL.bit.PHSEN       = TB_ENABLE;   // 2017.09.05
+    EPwm1Regs.TBCTL.bit.PHSEN       = TB_DISABLE;   // 2018.07.19 change TB_ENABLE
     EPwm1Regs.TBCTL.bit.PRDLD       = TB_SHADOW;    // 2017.09.05
     EPwm1Regs.TBCTL.bit.SYNCOSEL    = TB_CTR_ZERO;
 	EPwm1Regs.CMPCTL.bit.SHDWAMODE  = CC_SHADOW;	// Load registers every ZERO
@@ -193,12 +193,10 @@ void InitEPwm_ACIM_Inverter()
 	EPwm1Regs.DBCTL.bit.POLSEL 	    = DB_ACTV_LOC;
 	EPwm1Regs.DBRED                 = DEAD_TIME_COUNT; // debug set to 4usec
 	EPwm1Regs.DBFED                 = DEAD_TIME_COUNT;
-    EPwm1Regs.CMPA.half.CMPA        = MAX_PWM_CNT;
 //--- Set PWM2
 	EPwm2Regs.TBPRD                 =  MAX_PWM_CNT;				// Set timer period
     EPwm2Regs.TBPHS.half.TBPHS      = 0x0000;            // Phase is 0
-    EPwm2Regs.TBCTL.bit.PHSDIR      = TB_UP;
-	EPwm2Regs.TBCTL.bit.CTRMODE     = TB_COUNT_UPDOWN; 		// Count up
+    EPwm2Regs.TBCTL.bit.CTRMODE     = TB_COUNT_UPDOWN;      // Count up
     EPwm2Regs.TBCTL.bit.PHSEN       = TB_ENABLE;
     EPwm2Regs.TBCTL.bit.PRDLD       = TB_SHADOW;          // 2017.09.05
     EPwm2Regs.TBCTL.bit.SYNCOSEL    = TB_SYNC_IN;
@@ -212,17 +210,13 @@ void InitEPwm_ACIM_Inverter()
 	EPwm2Regs.DBCTL.bit.POLSEL      = DB_ACTV_LOC;
 	EPwm2Regs.DBRED                 = DEAD_TIME_COUNT;
 	EPwm2Regs.DBFED                 = DEAD_TIME_COUNT;
-    EPwm2Regs.CMPA.half.CMPA        = MAX_PWM_CNT;
-//	EPwm2Regs.ETSEL.bit.INTEN = 0;
-
 //Set PWM3 
 	EPwm3Regs.TBPRD                 =  MAX_PWM_CNT;			// Set timer period
     EPwm3Regs.TBPHS.half.TBPHS      = 0x0000;               // Phase is 0
-    EPwm3Regs.TBCTL.bit.PHSDIR      = TB_UP;
 	EPwm3Regs.TBCTL.bit.CTRMODE 	= TB_COUNT_UPDOWN; 	// Count up
 	EPwm3Regs.TBCTL.bit.PHSEN 		= TB_ENABLE;
     EPwm3Regs.TBCTL.bit.PRDLD       = TB_SHADOW;          // 2017.09.05
-	EPwm3Regs.TBCTL.bit.SYNCOSEL 	= TB_SYNC_IN;        	
+    EPwm3Regs.TBCTL.bit.SYNCOSEL    = TB_SYNC_IN;
     EPwm3Regs.CMPCTL.bit.SHDWAMODE  = CC_SHADOW;
     EPwm3Regs.CMPCTL.bit.SHDWBMODE  = CC_SHADOW;
     EPwm3Regs.CMPCTL.bit.LOADAMODE  = CC_CTR_ZERO;
@@ -233,7 +227,6 @@ void InitEPwm_ACIM_Inverter()
     EPwm3Regs.DBCTL.bit.POLSEL      = DB_ACTV_LOC;
 	EPwm3Regs.DBRED 				= DEAD_TIME_COUNT;
 	EPwm3Regs.DBFED 				= DEAD_TIME_COUNT;
-    EPwm3Regs.CMPA.half.CMPA        = MAX_PWM_CNT;
 
 //Set PWM4 
 	EPwm4Regs.TBPRD =  MAX_PWM_CNT;			// Set timer period
@@ -259,6 +252,10 @@ void InitEPwm_ACIM_Inverter()
 	EPwm4Regs.DBRED 				= DEAD_TIME_COUNT;
 	EPwm4Regs.DBFED 				= DEAD_TIME_COUNT;
 	EPwm4Regs.ETSEL.bit.INTEN 		= 0;                  
+
+    EPwm1Regs.CMPA.half.CMPA        = MAX_PWM_CNT>>1;
+    EPwm2Regs.CMPA.half.CMPA        = MAX_PWM_CNT>>1;
+    EPwm3Regs.CMPA.half.CMPA        = MAX_PWM_CNT>>1;
 
 	EPwm1Regs.ETSEL.bit.INTSEL = ET_CTR_ZERO;	// Select INT on Zero event
 	EPwm1Regs.ETPS.bit.INTPRD = 1;   // Generate interrupt on the 1st event

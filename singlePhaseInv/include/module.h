@@ -74,6 +74,8 @@ extern void commonVariableInit();
 
 // RefFunc.c
 extern void ramp_proc(  double set_ref, double * out_ref);
+extern void RefFunc( double SetRef,double * pOutRef);
+
 // SCI.C
 extern void GetInputMark(char * str);
 // scia.c

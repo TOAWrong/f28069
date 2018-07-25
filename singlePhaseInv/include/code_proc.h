@@ -25,6 +25,7 @@
 #define CODE_rate_hz				    14
 #define CODE_rate_volt                  15
 #define CODE_motor_pole					16
+#define CODE_presSensRef                17
 
 #define CODE_IaOffset                   20
 #define CODE_IbOffset                   21

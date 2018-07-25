@@ -5,6 +5,8 @@
 extern int lpfadcIa;
 extern int lpfadcIb;
 
+extern double exSensRef;
+
 // control and flag
 extern CODE_INFO code_inform;
 extern union PROTECT_FLAG protect_reg;
@@ -364,6 +366,7 @@ extern double   codeRateVolt;           // 13
 extern double   codeRateEffiency;       // 14
 extern double   codeRateHz;             // 15
 extern double   codeMotorPole;          // 16
+extern double   codePresSensRef;        // 17
 
 extern double   codeIaOffset;           // 20
 extern double   codeIbOffset;           // 21

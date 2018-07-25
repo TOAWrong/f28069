@@ -55,45 +55,38 @@ void ADC_SOC_CNF( )
 interrupt void adcIsr(void)
 {
     DIGIT1_SET;
+    double fTemp;
 
     adc_result[0] = adcIa   = AdcResult.ADCRESULT0;
     adc_result[1] = adcIb   = AdcResult.ADCRESULT1;
     adc_result[2] = adcVdc  = AdcResult.ADCRESULT2;
     adc_result[3] = adcIgbtTemperature = AdcResult.ADCRESULT3;
-    adc_result[4] = adcExSensor = AdcResult.ADCRESULT4;
+    adc_result[4] = adcExSensor = AdcResult.ADCRESULT4;        //adcExSensor
     adc_result[5] = adcCmdAnalog = AdcResult.ADCRESULT5;
 
     sensVdc = Vdc_factor * adcVdc + Vdc_calc_offset;
     lpfVdcIn[0] = sensVdc;
     lpf2nd( lpfVdcIn, lpfVdcOut, lpfVdcK);
     Vdc = (codeSetVdc > 0.5 ) ? 300.0 : lpfVdcOut[0];
-/*
-    lpfIaIn[0] = (double)adcIa;
+
+//    lpfIaIn[0] = I_sense_value * ( adc_result[0] - adc_result[5]) * I_RATIO;
+    lpfIaIn[0] = I_sense_value * ( (double)(adc_result[0]) - codeIaOffset) * I_RATIO;
     lpf2nd( lpfIaIn, lpfIaOut, lpfIrmsK);
-    lpfadcIa = (int)(lpfIaOut[0]);
+    Is_abc[as] = lpfIaOut[0];
 
-    lpfIbIn[0] = (double)(adcIb);
+    lpfIbIn[0] = I_sense_value * ( (double)(adc_result[1]) - codeIbOffset) * I_RATIO;
     lpf2nd( lpfIbIn, lpfIbOut, lpfIrmsK);
-    lpfadcIb = (int)(lpfIbOut[0]);
-
-    Is_abc[as] = I_sense_value * ( lpfadcIa - codeIaOffset) * I_RATIO;
-    Is_abc[bs] = I_sense_value * ( lpfadcIb - codeIbOffset ) * I_RATIO;
-    LPF1(Ts,1.0,fabs(Is_abc[as]),&LPF_Ia);          // debug
-*/
-    lpfIaIn[0] = I_sense_value * ( adc_result[0] - adc_result[5]) * I_RATIO;
-    lpf2nd( lpfIaIn, lpfIaOut, lpfIrmsK);
-    Is_abc[as] = (int)(lpfIaOut[0]);
-
-    lpfIbIn[0] = (double) I_sense_value * ( adc_result[1] - adc_result[5]) * I_RATIO;
-    lpf2nd( lpfIbIn, lpfIbOut, lpfIrmsK);
-    Is_abc[bs] = (int)(lpfIbOut[0]);
+    Is_abc[bs] = lpfIbOut[0];
 
     Is_abc[cs]= -(Is_abc[as]+Is_abc[bs]);
     Is_dq[ds] = Is_abc[as];
     Is_dq[qs] = 0.577350 * Is_abc[as] + 1.15470 * Is_abc[bs];
     Is_mag = sqrt( Is_abc[as] *Is_abc[as] + Is_abc[bs] *Is_abc[bs]);           // 전류크기
     Is_mag_rms = 0.707106*Is_mag;
-    LPF1(Ts,1.0,fabs(Is_abc[as]),&LPF_Ia);          // debug
+    LPF1(Ts,1.0,fabs(Is_abc[as]),&LPF_Ia);                          // debug
+
+    fTemp = adc_result[4] * 0.000244 ;
+    LPF1(Ts,0.01, fTemp, &exSensRef);            // external sensor
 
     AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;   // Acknowledge interrupt to PIE

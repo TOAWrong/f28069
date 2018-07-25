@@ -101,6 +101,12 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
         set_code_default(2,20,4,codeMotorPole,0,codes);
         break;
 
+    case CODE_presSensRef:
+        strncpy(codes->disp, "pres sens low ref",20);
+        if( cmd == CMD_WRITE_RAM ) codePresSensRef = codes->code_value;
+        set_code_default(0.2,0.9,0.5,codePresSensRef,0,codes);
+        break;
+
     case CODE_IaOffset:
         strncpy(codes->disp, "Ia Offset",20);
         if( cmd == CMD_WRITE_RAM ) codeIaOffset = codes->code_value;
@@ -116,7 +122,7 @@ int get_code_information(int address,int cmd , CODE_INFO *  codes)
     case CODE_I_sense_value:
         strncpy(codes->disp, "I_sense_value (A)",20);
         if( cmd == CMD_WRITE_RAM ) I_sense_value = codes->code_value;
-        set_code_default(5.0,2000.0, 5.0,I_sense_value ,0,codes);
+        set_code_default(5.0,2000.0, 30.0,I_sense_value ,0,codes);
         break;
 
     case CODE_u_phase_I_sense_span:
@@ -743,10 +749,11 @@ void readAllCodes()
         check = get_code_information( addr, cmd , & code_inform);
         if( !check ){
             snprintf( str, 6 ,"%4d,",addr); load_scia_tx_mail_box(str);
-            snprintf( str,20,"%.3e,",code_inform.code_value);load_scia_tx_mail_box(str);
+            snprintf( str,20,"%.3e,",code_inform.code_value);
+            load_scia_tx_mail_box(str);
             load_scia_tx_mail_box(code_inform.disp);
             load_scia_tx_mail_box(" : ");
-            delay_msecs(10);
+            delay_msecs(2);
         }
     }
     load_scia_tx_mail_box("endOfReadall.\r\n");

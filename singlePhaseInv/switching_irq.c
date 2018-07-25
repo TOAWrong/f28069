@@ -18,6 +18,7 @@ void MotorControlProc( )
     case 1: slip_comp_scalar_ctrl();break;
     case 3: SL_SpeedCntl_SFRF( );   break;
     case 4: SL_TorqueCntl_SFRF( );  break;
+    case 7: hyd_unit_control()      ; break;
     case 5:
         switch(AutoTuningFlag)
         {
@@ -36,8 +37,7 @@ void MotorControlProc( )
 interrupt void MainPWM(void)
 {
     DIGIT2_SET;
-    if( gMachineState == STATE_RUN )
-    {
+    if( gMachineState == STATE_RUN ) {
         if( Vdc > ( over_volt_set - 30.0 ))
             EPwm4Regs.CMPA.half.CMPA = MAX_PWM_CNT >> 2 ;
         else
@@ -58,17 +58,15 @@ interrupt void MainPWM(void)
     case STATE_READY:
     case STATE_POWER_ON:
     case STATE_TRIP:
-        EPwm3Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
-        EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
-        EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
+        EPwm3Regs.CMPA.half.CMPA = MAX_PWM_CNT >> 1;
+        EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT >> 1;
+        EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT >> 1;
         break;
-
     case STATE_INIT_RUN:
         EPwm3Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
         EPwm2Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
         EPwm1Regs.CMPA.half.CMPA = MAX_PWM_CNT>>1;
         break;
-
     case STATE_RUN:
     case STATE_GO_STOP:
     case STATE_WAIT_BREAK_OFF:
@@ -99,10 +97,10 @@ _PWM_TRIP:
 //---
     if( !sendAdcDataFlag ){
         if(graphCount< GRAPH_NUMBER ){
-            adcData[0][graphCount].INTEGER = (int)(Is_abc[as] * 100);
-            adcData[1][graphCount].INTEGER = (int)(Is_abc[bs] * 100);
-            adcData[3][graphCount].INTEGER = adc_result[0]-adc_result[5];
-            adcData[4][graphCount].INTEGER = adc_result[1]-adc_result[5];
+            adcData[0][graphCount].INTEGER = (int)(Is_abc[as] * 10);
+            adcData[1][graphCount].INTEGER = (int)(Is_abc[bs] * 10);
+            adcData[2][graphCount].INTEGER = adc_result[0];
+            adcData[3][graphCount].INTEGER = adc_result[1];
 
 //            adcData[2][graphCount].INTEGER = adc_result[4];     // adc_exSense
 //            adcData[3][graphCount].INTEGER = adc_result[5];     // adc_Cmd

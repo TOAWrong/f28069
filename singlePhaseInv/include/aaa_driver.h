@@ -20,9 +20,8 @@
 #define TYPE_FLOAT				1
 
 #define EEPROM_RW_DELAY			10	
-
-// #define DEAD_TIME_COUNT			320
-#define DEAD_TIME_COUNT			137			// 90Mhz
+#define DEAD_TIME_COUNT         137         //  3usec 90Mhz
+// #define DEAD_TIME_COUNT         183         // 90Mhz
 
 #define TRIP_BACKUP_ADDR		3000		
 #define EPROM_ADDR_TRIP_POINT	4010
